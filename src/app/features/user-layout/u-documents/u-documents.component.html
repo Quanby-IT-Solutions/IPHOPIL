@@ -53,7 +53,7 @@
             <tr class="hover:bg-gray-50 transition duration-300">
               <td class="py-4 px-6 text-center">
                 <div class="flex justify-center space-x-2"> 
-                  //horizontal display of QR
+                  <!-- horizontal display of QR -->
                   <button (click)="printQRCode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print QR code">
                     <img src="assets/logo/qr-code.png" class="w-8 h-8">
                   </button>
@@ -145,7 +145,7 @@
   </div>
   </div>
 
-  <!-- New Document Modal -->
+
   <dialog #newDocumentModal class="p-6 rounded-lg shadow-md bg-white w-1/3">
   <h2 class="text-2xl font-bold mb-4 text-gray-800">Create New Document</h2>
   <form (ngSubmit)="createNewDocument(); newDocumentModal.close()">
