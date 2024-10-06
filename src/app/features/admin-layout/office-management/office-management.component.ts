@@ -25,7 +25,17 @@ export class OfficeManagementComponent implements OnInit {
 
   notifications: { message: string, type: 'success' | 'error' }[] = [];
 
+  isModalVisible: boolean = false;
+
   constructor(private supabaseService: SupabaseService, private router: Router) { }
+
+  openModal(): void {
+    this.isModalVisible = true;
+  }
+
+  closeModal(): void {
+    this.isModalVisible = false;
+  }
 
   private showNotification(message: string, type: 'success' | 'error'): void {
     this.notifications.push({ message, type });

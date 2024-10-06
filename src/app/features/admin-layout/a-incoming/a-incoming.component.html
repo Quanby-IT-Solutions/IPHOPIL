@@ -1,4 +1,5 @@
-  <div class="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+<div class="px-5 mr-3 mt-5 mb-5">
+  <div class="w-full mx-auto p-6 bg-white rounded-lg shadow-lg">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold text-gray-800">Incoming Documents</h1>
       <a [routerLink]="['/admin/receive-document']" class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition duration-300 flex items-center">
@@ -137,6 +138,7 @@
       </button>
     </div>
   </div>
+</div>
 
   <!-- Add this modal at the end of your template -->
 <div *ngIf="showFilterModal()" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">

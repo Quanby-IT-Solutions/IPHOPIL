@@ -43,7 +43,8 @@
   
   
   .active-icon {
-    color: var(--color-secondary);
+    color: var(--color-accent-dark);
+    background: #ffffff;
   }
   
   

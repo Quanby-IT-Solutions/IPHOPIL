@@ -13,4 +13,15 @@ export class CatergoryManagementComponent {
     { category: 'Category1', types: ['Type1'] },
     { category: 'Category2', types: ['Type1'] }
   ];
+
+  isCreateCategoryModalOpen = false;
+
+  openCreateCategoryModal() {
+    this.isCreateCategoryModalOpen = true;
+  }
+  
+  closeCreateCategoryModal() {
+    this.isCreateCategoryModalOpen = false;
+  }
 }
+

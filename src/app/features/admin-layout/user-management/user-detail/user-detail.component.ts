@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DummyDataService, User } from '../../../../core/services/dummy-data/dummy-data.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-user-detail',
@@ -13,8 +14,13 @@ export class UserDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dummyDataService: DummyDataService
+    private dummyDataService: DummyDataService,
+    private location: Location
   ) {}
+
+  goBack(): void {
+    this.location.back(); // This method will navigate back to the previous page
+  }
 
   ngOnInit(): void {
     const userId = Number(this.route.snapshot.paramMap.get('id'));

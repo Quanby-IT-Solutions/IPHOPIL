@@ -17,6 +17,9 @@ export class UserManagementComponent implements OnInit {
   itemsPerPage: number = 10;
   totalPages: number = 0;
   visibleSubMenuUserId: number | null = null;
+  isDeleteModalVisible = false;
+  userToDelete: User | null = null;  // Store the user to be deleted
+  isCreateUserModalOpen = false;
 
   constructor(private supabaseService: SupabaseService, private router: Router) {}
 
@@ -80,5 +83,39 @@ export class UserManagementComponent implements OnInit {
 
   createUser(param: string): void {
     this.router.navigate(['/admin/create-user']);
+  }
+
+  // Method to navigate to the user detail page
+  navigateToUserDetail(accountId: number): void {
+    this.router.navigate(['/admin/user-detail', accountId]);
+  }
+
+
+  // Open delete modal and store the user to be deleted
+  openDeleteModal(user: User): void {
+    this.userToDelete = user;
+    this.isDeleteModalVisible = true;
+  }
+
+  // Method to close the modal
+  closeDeleteModal(): void {
+    this.isDeleteModalVisible = false;
+    this.userToDelete = null; // Clear the stored user
+  }
+
+  // Method to confirm deletion
+  confirmDelete(): void {
+    if (this.userToDelete) {
+      this.deleteUser(this.userToDelete); // Pass the stored user to deleteUser
+    }
+    this.closeDeleteModal(); // Close the modal after confirming
+  }
+
+  openCreateUserModal() {
+    this.isCreateUserModalOpen = true;
+  }
+
+  closeCreateUserModal() {
+    this.isCreateUserModalOpen = false;
   }
 }
