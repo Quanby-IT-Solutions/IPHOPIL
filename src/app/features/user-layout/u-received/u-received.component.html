@@ -47,11 +47,11 @@
   <td class="py-4 px-6 text-center">
     <div class="mb-2">
     </div>
-    <button (click)="printQRCode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print qrcode">
-      <img src="assets/logo/printer (1).png" class="w-[90%]">
+    <button (click)="printQRCode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print QR code">
+      <img src="assets/logo/qr-code.png" class="w-8 h-8">
     </button>
-    <button (click)="generateAndPrintBarcode(doc)" title="Print barcode">
-      <img src="assets/logo/printer (2).png" class="w-[90%]">
+    <button (click)="generateAndPrintBarcode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print barcode">
+      <img src="assets/logo/barcode.png" class="w-8 h-8">
     </button>
   </td>
 
@@ -60,11 +60,11 @@
       </div><div #qrcodeContainer [attr.data-doc-code]="doc.document_code">
       <qrcode [qrdata]="doc.document_code" [width]="100" [errorCorrectionLevel]="'M'"></qrcode>
       </div></td>
-              <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ doc.document_code }}</td>
-              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.document_subject_title }}</td>
+              <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ doc.code }}</td>
+              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.subject_title }}</td>
               <td class="py-4 px-6 text-sm text-gray-500">{{ doc.category_name }}</td>
               <td class="py-4 px-6 text-sm text-gray-500">{{ doc.type_name }}</td>
-              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.received_message }}</td>
+              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.message }}</td>
               <td class="py-4 px-6 text-sm text-gray-500">{{ doc.account_name }}</td>
               <td class="py-4 px-6 text-sm text-gray-500">{{ doc.received_date_received }}</td>
               <td class="py-4 px-6 text-sm font-medium text-center">

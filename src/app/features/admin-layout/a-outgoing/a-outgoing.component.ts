@@ -32,6 +32,7 @@ export class AOutgoingComponent implements OnInit {
   searchQuery = signal('');
   currentPage = signal(1);
   itemsPerPage = signal(20);
+  autoRefreshInterval: any;
 
   totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
 

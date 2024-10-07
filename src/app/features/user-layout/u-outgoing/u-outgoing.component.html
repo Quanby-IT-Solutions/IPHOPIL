@@ -1,5 +1,5 @@
-<div class="px-5 mr-3">
-  <div class="w-full mx-auto p-6 bg-white rounded-lg shadow-lg mt-5 mb-5">
+<div class="px-5 mr-3 mt-5 mb-5">
+  <div class="w-full mx-auto p-6 bg-white rounded-lg shadow-lg">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold text-gray-800">Outgoing Documents</h1>
     </div>
@@ -43,20 +43,19 @@
             <th class="py-3 px-6 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200 text-gray-700">
-
+        <tbody class="divide-y divide-gray-200">
           @for (doc of filteredDocuments(); track doc.code) {
             <tr class="hover:bg-gray-50 transition duration-300">
-            <td class="py-4 px-6 text-center">
-              <div class="mb-2">
-              </div>
-              <button (click)="printQRCode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print qrcode">
-                <img src="assets/logo/printer (1).png" class="w-[90%]">
-              </button>
-              <button (click)="generateAndPrintBarcode(doc)" title="Print barcode">
-                <img src="assets/logo/printer (2).png" class="w-[90%]">
-              </button>
-            </td>
+              <td class="py-4 px-6 text-center">
+                <div class="flex justify-center space-x-2">
+                  <button (click)="printQRCode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print QR code">
+                    <img src="assets/logo/qr-code.png" class="w-8 h-8">
+                  </button>
+                  <button (click)="generateAndPrintBarcode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print barcode">
+                    <img src="assets/logo/barcode.png" class="w-8 h-8">
+                  </button>
+                </div>
+              </td>
             
           <td hidden><div #barcodeContainer [attr.data-doc-code]="doc.code">
             <svg></svg> <!-- JsBarcode will render here -->
@@ -79,13 +78,11 @@
                   <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
                 </svg>
               </button>
-              <button
-    class="text-red-600 hover:text-red-900 transition duration-300"
-    (click)="cancelRelease(doc.document_id, doc.account_id, doc.message )">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-    </svg>
-  </button>
+              <button class="text-red-600 hover:text-red-900 transition duration-300" (click)="cancelRelease(doc.code)">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+              </button>
             </td>
           </tr>
         } @empty {
@@ -138,48 +135,47 @@
       </button>
     </div>
   </div>
+</div>
 
 
+<div *ngIf="showFilterModal()" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+  <div class="bg-white p-5 rounded-lg shadow-xl w-96">
+    <h2 class="text-xl font-bold mb-4">Filter Documents</h2>
+    
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="originOffice">
+        Origin Office
+      </label>
+      <select [value]="selectedOffice()" (change)="updateSelectedOffice($event)" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <option *ngFor="let office of offices()" [value]="office">{{ office }}</option>
+      </select>
+    </div>
 
-  <div *ngIf="showFilterModal()" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
-    <div class="bg-white p-5 rounded-lg shadow-xl w-96">
-      <h2 class="text-xl font-bold mb-4">Filter Documents</h2>
-      
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="originOffice">
-          Origin Office
-        </label>
-        <select [value]="selectedOffice()" (change)="updateSelectedOffice($event)" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-          <option *ngFor="let office of offices()" [value]="office">{{ office }}</option>
-        </select>
-      </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
+        Category
+      </label>
+      <select [value]="selectedCategory()" (change)="updateSelectedCategory($event)" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <option *ngFor="let category of categories()" [value]="category">{{ category }}</option>
+      </select>
+    </div>
 
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
-          Category
-        </label>
-        <select [value]="selectedCategory()" (change)="updateSelectedCategory($event)" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-          <option *ngFor="let category of categories()" [value]="category">{{ category }}</option>
-        </select>
-      </div>
+    <div class="mb-6">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="type">
+        Type
+      </label>
+      <select [value]="selectedType()" (change)="updateSelectedType($event)" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <option *ngFor="let type of types()" [value]="type">{{ type }}</option>
+      </select>
+    </div>
 
-      <div class="mb-6">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="type">
-          Type
-        </label>
-        <select [value]="selectedType()" (change)="updateSelectedType($event)" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-          <option *ngFor="let type of types()" [value]="type">{{ type }}</option>
-        </select>
-      </div>
-
-      <div class="flex items-center justify-between">
-        <button (click)="toggleFilterModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-          Cancel
-        </button>
-        <button (click)="applyFilter()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-          Apply Filter
-        </button>
-      </div>
+    <div class="flex items-center justify-between">
+      <button (click)="toggleFilterModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+        Cancel
+      </button>
+      <button (click)="applyFilter()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+        Apply Filter
+      </button>
     </div>
   </div>
 </div>

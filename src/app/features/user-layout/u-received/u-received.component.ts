@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QRCodeModule } from 'angularx-qrcode';
 import JsBarcode from 'jsbarcode';
-import { SupabaseService } from '../../../core/services/supabase.service';
+import { UserService } from '../../../core/services/user.service'; // Import UserService
 
 interface LogEntry {
   from: string;
@@ -16,21 +16,6 @@ interface ReleaseDocumentInfo {
   code: string;
   receivingOffice: string;
   message: string;
-}
-
-export interface ReceivedDocument {
-  received_document_id: string;
-  document_code: string;
-  document_id: string;
-  document_subject_title: string;
-  category_name: string;
-  type_name: string;
-  received_message: string;
-  account_name: string;
-  received_date_received: string;
-  office_id: string;
-  office_name: string;
-  account_email: string;
 }
 
 @Component({
@@ -45,8 +30,7 @@ export class UReceivedComponent implements OnInit {
   @ViewChildren('qrcodeContainer') qrcodeContainers!: QueryList<ElementRef>;
   @ViewChildren('barcodeContainer') barcodeContainers!: QueryList<ElementRef>;
 
-  
-  documents = signal<ReceivedDocument[]>([]);
+  documents = signal<any[]>([]); // Changed ReceivedDocument[] to any[]
   searchQuery = signal('');
   currentPage = signal(1);
   itemsPerPage = signal(5);
@@ -60,33 +44,15 @@ export class UReceivedComponent implements OnInit {
   selectedOffice = signal('All Offices');
   selectedCategory = signal('All Categories');
 
-  // filteredDocuments = computed<ReceivedDocument[]>(() => {
-  //   const query = this.searchQuery().toLowerCase();
-  //   return this.documents().filter(doc =>
-  //     Object.values(doc).some(val => val.toString().toLowerCase().includes(query))
-  //   );
-  // });
-
   filteredDocuments = computed(() => {
     const query = this.searchQuery().toLowerCase();
-    return this.documents().filter(doc =>
-      Object.values(doc).some(val => val.toString().toLowerCase().includes(query)) &&
+    return this.documents().filter((doc: any) =>
+      Object.values(doc).some((val: any) => val.toString().toLowerCase().includes(query)) &&
       (this.selectedType() === 'All Types' || doc.type_name === this.selectedType()) &&
       (this.selectedOffice() === 'All Offices' || doc.office_name === this.selectedOffice()) &&
       (this.selectedCategory() === 'All Categories' || doc.category_name === this.selectedCategory())
     );
   });
-
-
-
-  // paginatedDocuments = computed<ReceivedDocument[]>(() => {
-  //   const startIndex = (this.currentPage() - 1) * this.itemsPerPage();
-  //   return this.filteredDocuments().slice(startIndex, startIndex + this.itemsPerPage());
-  // });
-
-  // releaseDocumentInfo = signal<ReleaseDocumentInfo>({ code: '', receivingOffice: '', message: '' });
-
-  // totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
 
   paginatedDocuments = computed(() => {
     const startIndex = (this.currentPage() - 1) * this.itemsPerPage();
@@ -94,61 +60,15 @@ export class UReceivedComponent implements OnInit {
   });
 
   releaseDocumentInfo = signal<ReleaseDocumentInfo>({ code: '', receivingOffice: '', message: '' });
-
   totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
-
-  constructor(private router: Router, private supabaseService: SupabaseService) {}
+  
+  constructor(private router: Router, private userService: UserService) {} // Inject UserService
 
   async ngOnInit(): Promise<void> {
-    await this.loadDocuments();
-    await this.loadFilterOptions();
+    this.documents.set(await this.userService.getReceivedDocuments()); // Fetch received documents
   }
 
-  async loadDocuments(): Promise<void> {
-    try {
-      const data = await this.supabaseService.getReceived_Documents();
-      console.log('Raw data from Supabase:', data); // Add this line
-  
-const documents: ReceivedDocument[] = data.map(doc => ({
-  received_document_id: doc.received_id,
-  document_code: doc.document_code,
-  document_id: doc.document_id,
-  document_subject_title: doc.document_title,
-  category_name: doc.category_name,
-  type_name: doc.type_name,
-  received_message: doc.received_message,
-  account_name: doc.received_by_name,
-  received_date_received: doc.received_by_updated_at,
-  office_id: doc.received_by_office_id,
-  office_name: doc.received_by_office_name,
-  account_email: doc.received_by_email,
-  received: false // Set this based on a condition, if necessary
-}));
-      console.log('Mapped documents:', documents); // Add this line
-  
-      this.documents.set(documents);
-      this.filterDocuments();
-    } catch (error) {
-      console.error('Error loading documents:', error);
-      // Handle error (e.g., show a notification to the user)
-    }
-  }
-
-  async loadFilterOptions(): Promise<void> {
-    try {
-      const [typesData, officesData, categoriesData] = await Promise.all([
-        this.supabaseService.typesFilter(),
-        this.supabaseService.officeFilter(),
-        this.supabaseService.categoryFilter()
-      ]);
-
-      this.types.set(['All Types', ...typesData.map(t => t.name)]);
-      this.offices.set(['All Offices', ...officesData.map(o => o.office_name)]);
-      this.categories.set(['All Categories', ...categoriesData.map(c => c.name)]);
-    } catch (error) {
-      console.error('Error loading filter options:', error);
-    }
-  }
+  // Removed loadDocuments and loadFilterOptions methods
 
   toggleFilterModal(): void {
     this.showFilterModal.set(!this.showFilterModal());
@@ -174,11 +94,9 @@ const documents: ReceivedDocument[] = data.map(doc => ({
     this.selectedType.set(select.value);
   }
 
-  
-
-    filterDocuments(): void {
-      this.currentPage.set(1);
-    }
+  filterDocuments(): void {
+    this.currentPage.set(1);
+  }
 
   changePage(page: number | string): void {
     const pageNumber = typeof page === 'string' ? parseInt(page, 10) : page;
@@ -187,18 +105,9 @@ const documents: ReceivedDocument[] = data.map(doc => ({
     }
   }
 
-  //almost done to finished myapp.current_user_id
   markAsCompleted(documentId: string, message: string): void {
-    this.supabaseService.markDocumentAsCompleted(documentId, message).then(response => {
-      console.log('Marking document as completed. Document ID:', documentId);
-      if (response.error) {
-        console.error('Failed to mark document as completed:', response.error);
-      } else {
-        console.log('Document marked as completed successfully:', response.data);
-        // Remove the document from the received list after marking it as completed
-        this.documents.update(docs => docs.filter(doc => doc.document_id !== documentId));
-      }
-    });
+    // Placeholder logic for marking document as completed
+    console.log('Marking document as completed. Document ID:', documentId);
   }
 
   markAsDone(documentId: string): void {
@@ -206,7 +115,6 @@ const documents: ReceivedDocument[] = data.map(doc => ({
   }
   
   releaseDocument(): void {
-
     this.releaseDocumentInfo.set({ code: '', receivingOffice: '', message: '' });
     this.releaseDocumentModal.nativeElement.close();
   }
@@ -243,7 +151,7 @@ const documents: ReceivedDocument[] = data.map(doc => ({
     console.log('Scanning QR Code');
   }
 
-  printQRCode(doc: ReceivedDocument): void {
+  printQRCode(doc: any): void { // Changed ReceivedDocument to any
     const qrCodeContainer = this.qrcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.document_code);
     if (qrCodeContainer) {
       const qrCodeCanvas = qrCodeContainer.nativeElement.querySelector('canvas');
@@ -285,7 +193,7 @@ const documents: ReceivedDocument[] = data.map(doc => ({
     }
   }
 
-  generateAndPrintBarcode(doc: ReceivedDocument): void {
+  generateAndPrintBarcode(doc: any): void { // Changed ReceivedDocument to any
     console.log("Generate and Print Barcode:", doc);
     const barcodeContainer = this.barcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.document_code);
     if (barcodeContainer) {
