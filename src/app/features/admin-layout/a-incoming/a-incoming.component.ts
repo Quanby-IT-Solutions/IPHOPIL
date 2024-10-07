@@ -2,10 +2,9 @@ import { Component, OnInit, signal, computed, QueryList, ViewChildren, ElementRe
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SupabaseService } from '../../../core/services/supabase.service';
 import JsBarcode from 'jsbarcode';
 import { QRCodeModule } from 'angularx-qrcode';
-
+import { UserService } from '../../../core/services/user.service';
 
 interface Document {
   code: string;
@@ -25,7 +24,7 @@ interface Document {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, QRCodeModule],
   templateUrl: './a-incoming.component.html',
-  styleUrl: './a-incoming.component.css'
+  styleUrls: ['./a-incoming.component.css']
 })
 export class AIncomingComponent implements OnInit {
   @ViewChildren('qrcodeContainer') qrcodeContainers!: QueryList<ElementRef>;
@@ -47,56 +46,15 @@ export class AIncomingComponent implements OnInit {
   selectedOffice = signal('All Offices');
   selectedCategory = signal('All Categories');
 
-  constructor(private router: Router, private supabaseService: SupabaseService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   async ngOnInit(): Promise<void> {
-    await this.loadDocuments();
-    await this.loadFilterOptions();
-
+    await this.loadDocuments(); // Load documents from UserService
+    this.filteredDocuments.set(this.documents()); // Set initial filtered documents
   }
 
-  async loadDocuments(): Promise<void> {
-    try {
-      const data = await this.supabaseService.getAdminIncoming_Documents();
-      console.log('Raw data from Supabase:', data); // Add this line
-  
-      const documents: Document[] = data.map(doc => ({
-        code: doc.full_doc_code,
-        document_id: doc.full_incoming_doc_id,
-        subject_title: doc.full_doc_subject_title,
-        category_name: doc.full_category_name,
-        type_name: doc.full_type_name,
-        message: doc.full_doc_message,
-        office_name: doc.full_office_name,
-        account_name: doc.full_name,
-        received_date_received: doc.full_date_released,  // Correct date field
-        received: false // Set this based on a condition, if necessary
-      }));
-      console.log('Mapped documents:', documents); // Add this line
-  
-      this.documents.set(documents);
-      this.filterDocuments();
-    } catch (error) {
-      console.error('Error loading documents:', error);
-      // Handle error (e.g., show a notification to the user)
-    }
-  }
-  
-
-  async loadFilterOptions(): Promise<void> {
-    try {
-      const [typesData, officesData, categoriesData] = await Promise.all([
-        this.supabaseService.typesFilter(),
-        this.supabaseService.officeFilter(),
-        this.supabaseService.categoryFilter()
-      ]);
-
-      this.types.set(['All Types', ...typesData.map(t => t.name)]);
-      this.offices.set(['All Offices', ...officesData.map(o => o.office_name)]);
-      this.categories.set(['All Categories', ...categoriesData.map(c => c.name)]);
-    } catch (error) {
-      console.error('Error loading filter options:', error);
-    }
+  private async loadDocuments(): Promise<void> {
+    this.documents.set(await this.userService.getIncomingDocuments()); // Fetch documents from UserService
   }
 
   toggleFilterModal(): void {
@@ -107,7 +65,7 @@ export class AIncomingComponent implements OnInit {
     this.filterDocuments();
     this.toggleFilterModal();
   }
-  
+
   filterDocuments(): void {
     const filtered = this.documents().filter((doc) => {
       const matchesSearch = Object.values(doc).some((val) =>
@@ -128,17 +86,16 @@ export class AIncomingComponent implements OnInit {
     const select = event.target as HTMLSelectElement;
     this.selectedOffice.set(select.value);
   }
-  
+
   updateSelectedCategory(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.selectedCategory.set(select.value);
   }
-  
+
   updateSelectedType(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.selectedType.set(select.value);
   }
-
 
   paginateDocuments(): void {
     const startIndex = (this.currentPage() - 1) * this.itemsPerPage();
@@ -163,8 +120,8 @@ export class AIncomingComponent implements OnInit {
   receiveDocument(documentCode: string): void {
     console.log(`Receiving document: ${documentCode}`);
     // Update the document's received status
-    this.documents.update(docs => 
-      docs.map(doc => doc.code === documentCode ? {...doc, received: true} : doc)
+    this.documents.update(docs =>
+      docs.map(doc => doc.code === documentCode ? { ...doc, received: true } : doc)
     );
     this.filterDocuments(); // Refresh the filtered and paginated list
   }
@@ -225,7 +182,7 @@ export class AIncomingComponent implements OnInit {
       }
     }
   }
-  
+
   generateAndPrintBarcode(doc: Document): void {
     console.log("Generate and Print Barcode:", doc);
     const barcodeContainer = this.barcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.code);
@@ -234,7 +191,7 @@ export class AIncomingComponent implements OnInit {
       if (barcodeElement) {
         // Generate the barcode
         JsBarcode(barcodeElement, doc.code, { format: 'CODE128', width: 2, height: 40, displayValue: true });
-        
+
         // Ensure the barcode is rendered before printing
         setTimeout(() => {
           const barcodeSvg = barcodeElement.outerHTML;

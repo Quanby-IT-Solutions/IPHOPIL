@@ -31,7 +31,7 @@ export interface User {
   office_name: string;
   office_id: string;
   email: string;
-  account_status: string;
+  status: string;
   role: string;
   profile_image: string;
 }
@@ -438,8 +438,7 @@ export class SupabaseService {
       return [];
     }
   }
-
-  // Fetch all users from the office_account_view
+  
   async getUsers(): Promise<User[]> {
     if (!this.supabase) {
       console.error('Supabase client not initialized.');
@@ -447,14 +446,27 @@ export class SupabaseService {
     }
     
     const { data, error } = await this.supabase
-    .from('account')
-    .select('*');
+      .from('account')
+      .select(`
+        *,
+        office:office_id ( office_name )   // Join with the office table using office_id and get office_name
+      `);
 
     if (error) {
       console.error('Error fetching users:', error);
       return [];
     }
-    return data as User[];
+    return data.map((item: any) => ({
+      ...item,
+      account_id: item.account_id,
+      name: item.name,
+      username: item.username,
+      office_name: item.office.office_name,
+      role: item.role,
+      email: item.email,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
+    })) as User[];
   }
 
   async fetchCurrentUser(): Promise<void> {

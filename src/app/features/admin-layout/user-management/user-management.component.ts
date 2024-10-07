@@ -59,7 +59,7 @@ export class UserManagementComponent implements OnInit {
   deactivateUser(user: User): void {
     const index = this.users.findIndex(u => u.account_id === user.account_id);
     if (index !== -1) {
-      this.users[index].account_status = 'Inactive';
+      this.users[index].status = 'Inactive';
       this.updateDisplayedUsers();
     }
   }
@@ -67,7 +67,7 @@ export class UserManagementComponent implements OnInit {
   activateUser(user: User): void {
     const index = this.users.findIndex(u => u.account_id === user.account_id);
     if (index !== -1) {
-      this.users[index].account_status = 'Active';
+      this.users[index].status = 'Active';
       this.updateDisplayedUsers();
     }
   }
