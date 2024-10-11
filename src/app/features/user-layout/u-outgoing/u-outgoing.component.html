@@ -46,8 +46,8 @@
           @for (doc of filteredDocuments(); track doc.code) {
             <tr class="hover:bg-gray-50 transition duration-300">
               <td class="py-4 px-6 text-center">
-                <div class="flex justify-center space-x-2">
-                  <button (click)="printQRCode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print QR code">
+                <div class="flex justify-center flex-col">
+                  <button (click)="printQRCode(doc)" class="text-blue-600 mb-2 hover:text-blue-900 transition duration-300" title="Print QR code">
                     <img src="assets/logo/qr-code.png" class="w-8 h-8">
                   </button>
                   <button (click)="generateAndPrintBarcode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print barcode">
