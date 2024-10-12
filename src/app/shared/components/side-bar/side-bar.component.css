@@ -1,7 +1,13 @@
 .active-route {
-    position: relative;
-    background-color: #ffffff !important;
-  }
+  position: relative;
+  background-color: #ffffff !important;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border: solid;
+  border-color: orangered;
+  border-width: 1px;
+}
+
+
   
   .active-route::after {
     content: '';
@@ -35,16 +41,19 @@
     flex-shrink: 0;
   }
   .icon-size {
-    width: 24px;
-    height: 24px;
-    font-size: 24px;
-    line-height: 24px;
+    width: 22px;
+    height: 22px;
+    font-size: 22px;
+    line-height: 22px;
   }
   
+  .submenu {
+    padding-left: 20px;
+  }
   
-  .active-icon {
+  /* .active-icon {
     color: var(--color-accent-dark);
     background: #ffffff;
-  }
+  } */
   
   

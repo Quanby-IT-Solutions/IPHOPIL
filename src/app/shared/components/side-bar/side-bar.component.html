@@ -1,42 +1,48 @@
-<div class="fixed top-0 left-0 h-screen z-50 transition-all duration-300 shadow-lg scroll-none overflow-y-auto"
-     [ngStyle]="{'background-color': '#E55108'}"
-     [ngClass]="isCollapsed ? 'w-20' : 'w-64'">
+<div class="fixed top-0 left-0 h-screen z-50 transition-all duration-300 scroll-none overflow-y-auto bg-gray-100 p-3"
+     
+     [ngClass]="isCollapsed ? 'w-24' : 'w-64'">
   <div class="w-full h-full flex flex-col justify-between items-start py-4 px-2">
 
     <!-- Logo and Title -->
-    <div class="flex items-center mb-8 ">
-      <img src="assets/logo/cube.png" alt="Logo" class="w-12 h-12 mr-3" />
+    <div class="flex items-center mb-5 rounded-md">
+      <img src="assets/logo/cube.png" alt="Logo" class="w-12 h-12 mr-3 shadow-" />
       <div [ngClass]="isCollapsed ? 'hidden' : 'block'">
-        <h1 class="font-semibold text-[--color-text-light]">Intellectual Property Office of the Philippines</h1>
-        <p class="text-sm text-[--color-info-light]">{{ title }}</p>
+        <h1 class="font-semibold text-sm text-gray-800">Intellectual Property Office of the Philippines</h1>
+        <p class="text-sm text-gray-700">{{ title }}</p>
       </div>
     </div>
 
     <!-- Main Menu Title -->
-    <h2 class="text-xs font-semibold text-[--color-info-light] uppercase mb-4" 
-        [ngClass]="isCollapsed ? 'hidden' : 'block'">Main Menu</h2>
+    <!-- <h2 class="text-xs font-semibold text-gray-500 uppercase mb-4" 
+        [ngClass]="isCollapsed ? 'hidden' : 'block'">Main Menu</h2> -->
 
     <!-- Main Menu Items -->
-    <div class="w-full flex flex-col gap-2 mb-auto text-[--color-text-light]">
+    <div class="w-full flex flex-col gap-2 mb-auto text-gray-600 mt-5 select-none">
       <ng-container *ngFor="let item of currentMenu">
         
         <!-- Menu Item with Dropdown -->
         <div *ngIf="item.children; else singleMenuItem" class="relative">
           <button (click)="toggleDropdown(item.label)" 
-                  class="relative flex items-center h-12 px-3 w-full text-left rounded-full hover:bg-[--color-accent-light]"
+                  class="relative flex items-center h-12 px-3 w-full text-left rounded-full hover:bg-[--color-text-light]"
                   [ngClass]="getMenuItemClasses()">
-            <div class="icon-container">
-              <iconify-icon *ngIf="item.icon" 
-                            [icon]="item.icon" 
-                            [style.color]="isActive(item.route) ? 'var(--color-accent-light)' : 'currentColor'"
-                            class="icon-size">
-              </iconify-icon>
-            </div>
-            <p [ngClass]="getTextClasses()" 
-               class="font-medium text-base whitespace-nowrap ml-3"
-               [style.color]="isActive(item.route) ? 'var(--color-accent-light)' : 'currentColor'">
-              {{ item.label }}
-            </p>
+            
+                  <!-- ADMIN -->
+                  <div class="icon-container">
+                  <iconify-icon *ngIf="item.icon" 
+                                [icon]="item.icon" 
+                                [style.color]="isActive(item.route) ? 'var(--color-text-light)' : 'currentColor'"
+                                class="icon-size">
+                  </iconify-icon>
+
+                  </div>
+
+                  <p [ngClass]="getTextClasses()" 
+                    class="font-medium text-base whitespace-nowrap ml-3"
+                    [style.color]="isActive(item.route) ? 'var(--color-accent-light)' : 'currentColor'">
+                    {{ item.label }}
+                  </p>
+
+
             <!-- Iconify Icon for Dropdown -->
             <iconify-icon
               icon="ic:round-expand-more"
@@ -49,19 +55,20 @@
             </iconify-icon>
           </button>
 
-          <!-- Sub-menu Items with Bullet Points -->
-          <ul *ngIf="isDropdownOpen[item.label]" class="pl-10 space-y-1 mt-2">
-            <li *ngFor="let child of item.children" class="relative flex items-center">
-              <span class="mr-2 text-[--color-accent-light]">•</span>
-              <a [routerLink]="child.route" 
-                 [routerLinkActive]="'active-icon text-[--color-accent]'" 
-                 [routerLinkActiveOptions]="{exact: true}"
-                 class="flex items-center p-2 text-sm font-medium text-[--color-text-light] rounded-md hover:bg-[--color-accent-light]">
-                <span>{{ child.label }}</span>
-              </a>
-            </li>
+          <!-- ADMIN Sub-menu Items with Bullet Points -->
+          <ul *ngIf="item.label === 'SYSTEM SETTINGS' && isDropdownOpen[item.label]" class="submenu pl-5 mt-1 ">
+            <li *ngFor="let child of item.children">
+              <div class="h-6 px-3 hover:bg-[--color-accent-light] hover:text-white hover:border-[--color-accent-dark]" 
+                [ngClass]="{'text-orange-500 border-orange-500': isActive(child.route)}">
+                <iconify-icon [icon]="child.icon" class="mr-2 h-4 w-4 "></iconify-icon>
+                <a [routerLink]="child.route" 
+                  [routerLinkActive]="'active-icon'" 
+                  [routerLinkActiveOptions]="{exact: true}"
+                  class="text-gray-500 hover:text-white">
+                  {{ child.label }}
+                </a>
+              </div>
           </ul>
-          
         </div>
 
         <!-- Single Menu Item without Dropdown -->
@@ -69,16 +76,21 @@
           <div [routerLink]="item.route"
                [routerLinkActive]="'active-route'"
                [ngClass]="getMenuItemClasses()"
-               class="relative flex items-center h-12 px-3 hover:bg-[--color-accent-light]">
+               class="relative flex items-center h-12 px-3 hover:bg-[--color-accent-light] hover:text-white hover:border-[--color-accent-dark]">
             <div class="icon-container">
+
+              <!-- Text color for sidebar icon-->
               <iconify-icon *ngIf="item.icon" 
                             [icon]="item.icon" 
                             [style.color]="isActive(item.route) ? 'var(--color-accent-dark)' : 'currentColor'"
                             class="icon-size">
               </iconify-icon>
+
             </div>
+
+            <!-- Text color for sidebar items-->
             <p [ngClass]="getTextClasses()" 
-               class="font-medium text-base whitespace-nowrap ml-3"
+               class="font-medium text-sm whitespace-nowrap ml-3"
                [style.color]="isActive(item.route) ? 'var(--color-accent-dark)' : 'currentColor'">
               {{ item.label }}
             </p>
@@ -89,13 +101,13 @@
     </div>
 
     <!-- Others Menu Section -->
-    <div class="w-full mt-auto text-[--color-text-light]">
+    <div class="w-full mt-auto text-gray-600">
       <div class="flex flex-col gap-2">
         <div *ngFor="let item of othersMenu"
              [routerLink]="item.route"
              (click)="item.label === 'Sign Out' ? signOut() : null"
              [ngClass]="getMenuItemClasses()"
-             class="relative flex items-center h-12 px-3 hover:bg-[--color-accent-light]">
+             class="relative flex items-center h-12 px-3 hover:bg-[--color-error] hover:text-white">
           <div class="icon-container">
             <iconify-icon *ngIf="item.icon" [icon]="item.icon" [class.rotate-180]="item.label === 'Sign Out'" class="icon-size"></iconify-icon>
           </div>
@@ -108,7 +120,7 @@
 
   <!-- Adjusted collapse button -->
   <button (click)="toggleSidebar()"
-          class="fixed top-7 bg-[var(--color-accent-light)] rounded-full p-1 shadow-md focus:outline-none hover:brightness-90 z-[9999] transition-all duration-300"
+          class="fixed top-7 bg-[var(--color-accent-dark)] rounded-full p-1 shadow-md focus:outline-none hover:brightness-90 z-[9999] transition-all duration-300"
           [ngClass]="{'left-[calc(5rem-8px)]': isCollapsed, 'left-[calc(16rem-8px)]': !isCollapsed}">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white transition-transform duration-300 ease-in-out"
          [ngClass]="{'rotate-180': isCollapsed}"
