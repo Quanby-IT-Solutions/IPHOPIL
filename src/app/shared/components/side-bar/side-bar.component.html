@@ -1,4 +1,4 @@
-<div class="fixed top-0 left-0 h-screen z-50 transition-all duration-300 scroll-none overflow-y-auto bg-white p-3"
+<div class="fixed top-0 left-0 h-screen z-50 transition-all duration-300 mt-3  rounded-lg scroll-none overflow-y-auto bg-white px-3 items-center"
      
      [ngClass]="isCollapsed ? 'w-24' : 'w-64'">
   <div class="w-full h-full flex flex-col justify-between items-start py-4 px-2">
@@ -101,47 +101,55 @@
     </div>
 
     <!-- Others Menu Section -->
-    <div class="w-full mt-auto text-gray-600">
-      <div class="flex flex-col gap-2">
-
-        
-
-        <!-- <div class="flex flex-row items-center">
-          <div class="relative w-10 h-10">
-            <img class="w-full h-full rounded-full object-cover border-2 border-white shadow-lg" [src]="profileImageUrl" alt="User Profile">
-          </div>
-          <div class="flex flex-col ml-2">
-            <span class="font-bold text-base">{{ userName || 'Unnamed User' }}</span>
-            <div class="flex gap-2 text-sm">
-              <button (click)="navigateToProfile()" class=" hover:underline">View Profile</button>
+    <div class="w-full mt-auto text-gray-600 justify-center">
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center w-full justify-center hover:bg-[--color-accent-light] rounded-md">
+          <button (click)="navigateToProfile()"
+            class="w-full h-12 flex items-center hover:text-white"
+            [ngClass]="{
+              'justify-center': isCollapsed, 
+              'justify-start': !isCollapsed
+            }">
+            
+            <img class="w-10 h-10 rounded-full object-cover border-2 shadow-lg transition-all duration-300"
+              [ngClass]="isCollapsed ? 'ml-0' : 'ml-4'" 
+              [src]="profileImageUrl" 
+              alt="User Profile"
+            >
+            
+            <div class="flex-grow transition-all duration-300 text-start" *ngIf="!isCollapsed">
+              <div class="ml-3 flex-col flex">
+                <span class="font-bold text-base">{{ userName || 'First Name' }}</span>
+                <span class="text-sm">User Type</span>
+              </div>
             </div>
-          </div>
-        </div> -->
-
-        <div class="flex flex-row items-center justify-start ml-5">
-          <!-- Profile Pic here -->   
-          
-          <button (click)="navigateToProfile()" class="relative w-12 h-12 hover:scale-110">
-            <img class="w-full h-full rounded-full object-cover border-2 border-white shadow-lg" [src]="profileImageUrl" alt="User Profile">
           </button>
-          
-          
+        </div>
+
+        <div class="flex flex-row items-center justify-center w-full">
           <div *ngFor="let item of othersMenu"
             [routerLink]="item.route"
             (click)="item.label === 'Sign Out' ? signOut() : null"
             [ngClass]="getMenuItemClasses()"
-            class="relative flex items-center h-12 px-3 hover:bg-[--color-error] hover:text-white ml-5">
-
-            <div class="icon-container">
-              <iconify-icon *ngIf="item.icon" [icon]="item.icon" [class.rotate-180]="item.label === 'Sign Out'" class="icon-size"></iconify-icon>
+            class="relative flex items-center h-12 w-full hover:bg-[--color-error] hover:text-white">
+      
+            <div class="flex justify-start items-center w-full">
+              <p [ngClass]="getTextClasses()" class="font-medium text-base whitespace-nowrap">{{ item.label }}</p>
+              <iconify-icon *ngIf="item.icon" [icon]="item.icon" 
+                [class.rotate-180]="item.label === 'Sign Out'" 
+                class="icon-size ml-10" 
+                [ngClass]="isCollapsed ? 'ml-0' : 'ml-4'" >
+              </iconify-icon>
             </div>
-
-            <!-- <p [ngClass]="getTextClasses()" class="font-medium text-base whitespace-nowrap ml-3">{{ item.label }}</p> -->
+      
             <div class="active-indicator"></div>
           </div>
         </div>
+
       </div>
+
     </div>
+
   </div>
 
   <!-- Adjusted collapse button -->
