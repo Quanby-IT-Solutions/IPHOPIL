@@ -1,156 +1,158 @@
-<div class="px-5 mt-5 mb-5 ">
-  <div class="w-full mx-auto p-6 bg-white rounded-lg shadow-lg">
-    <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold text-gray-800">Documents</h1>
-    <button (click)="onNewDocumentClick()" (click)="newDocumentModal.showModal()" class="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition duration-300 flex items-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-      </svg>
-      New Document
-    </button>    
-  </div>
-
-
-  <div class="flex mb-4">
-    <div class="flex-grow flex items-center border rounded-l-lg px-2 bg-white">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-      </svg>
-      <input
-        type="text"
-        placeholder="Search"
-        [ngModel]="searchQuery()"
-        (ngModelChange)="searchQuery.set($event); filterDocuments()"
-        class="w-full p-2 focus:outline-none"
-      />
-    
+<div class="min-h-screen mt-3 px-5 bg-white rounded-lg ml-5 mb-3">
+  <div class="w-full mx-auto  py-3">
+    <div class="flex justify-between items-center mb-6 py-3">
+      <h5 class="ml-3 text-gray-800">User/<span>Documents</span>
+      </h5>
+      <button (click)="onNewDocumentClick()" (click)="newDocumentModal.showModal()" class="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition duration-300 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+        </svg>
+        New Document
+      </button>    
     </div>
-    <button (click)="openFilterModal()" class="bg-gray-100 px-4 py-2 rounded-r-lg hover:bg-gray-200 transition duration-300 flex items-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-      </svg>
-      Filter
-    </button>
-  </div>
 
-  <div class="overflow-x-auto bg-white rounded-lg shadow">
-    <table class="min-w-full">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Print</th>
-          <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Code</th>
-          <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Subject/Title</th>
-          <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Category</th>
-          <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Type</th>
-          <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Created By</th>
-          <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Date Created</th>
-          <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Origin Office</th>
-          <th class="py-3 px-6 text-center text-xs font-medium text-black uppercase tracking-wider">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-200">
-        @for (doc of filteredDocuments(); track doc.code) {
-          <tr class="hover:bg-gray-50 transition duration-300">
-            <td class="py-4 px-6 text-center">
-              <div class="flex justify-center flex-col">
-                <button (click)="printQRCode(doc)" class="text-blue-600 mb-2 hover:text-blue-900 transition duration-300" title="Print QR code">
-                  <img src="assets/logo/qr-code.png" class="w-8 h-8">
-                </button>
-                <button (click)="generateAndPrintBarcode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print barcode">
-                  <img src="assets/logo/barcode.png" class="w-8 h-8">
-                </button>
-              </div>
-            </td>
-          
-        <td hidden><div #barcodeContainer [attr.data-doc-code]="doc.code">
-          <svg></svg> <!-- JsBarcode will render here -->
-        </div><div #qrcodeContainer [attr.data-doc-code]="doc.code">
-          <qrcode [qrdata]="doc.code" [width]="100" [errorCorrectionLevel]="'M'"></qrcode>
-        </div></td>
+    <h1 class="text-3xl font-bold text-gray-700 flex items-center text-start ml-3 mb-3">Documents</h1>
 
-            <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ doc.code }}</td>
-            <td class="py-4 px-6 text-sm text-gray-500">{{ doc.subject }}</td>
-            <td class="py-4 px-6 text-sm text-gray-500">{{ doc.category }}</td>
-            <td class="py-4 px-6 text-sm text-gray-500">{{ doc.type }}</td>
-            <td class="py-4 px-6 text-sm text-gray-500">{{ doc.createdBy }}</td>
-            <td class="py-4 px-6 text-sm text-gray-500">{{ doc.dateCreated | date:'short' }}</td>
-            <td class="py-4 px-6 text-sm text-gray-500">{{ doc.originOffice }}</td>
-            <td class="py-4 px-6 text-sm font-medium text-center">
-              <div class="flex justify-center space-x-2">
-                <button (click)="viewDetails(doc.code)" class="text-indigo-600 hover:text-indigo-900" title="View Details">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                  </svg>
-                </button>
-                <button (click)="openReleaseModal(doc.code)" class="text-emerald-600 hover:text-emerald-900" title="Release Document">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
-                  </svg>
-                </button>
-            
-              </div>
-            </td>
-          </tr>
-        } @empty {
+    <div class="flex mb-4 border border-gray-500 rounded-md">
+      <div class="flex-grow flex items-center border rounded-l-lg px-2 bg-white">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+        </svg>
+        <input
+          type="text"
+          placeholder="Search"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event); filterDocuments()"
+          class="w-full p-2 focus:outline-none"
+        />
+      
+      </div>
+      <button (click)="openFilterModal()" class="bg-gray-100 px-4 py-2 rounded-r-lg hover:bg-gray-200 transition duration-300 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+        </svg>
+        Filter
+      </button>
+    </div>
+
+    <div class="overflow-x-auto bg-white rounded-md shadow border border-gray-500">
+      <table class="min-w-full">
+        <thead class="bg-gray-50">
           <tr>
-            <td colspan="9" class="py-4 px-6 text-sm text-center text-gray-500">No documents found</td>
+            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Print</th>
+            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Code</th>
+            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Subject/Title</th>
+            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Category</th>
+            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Type</th>
+            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Created By</th>
+            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Date Created</th>
+            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Origin Office</th>
+            <th class="py-3 px-6 text-center text-xs font-medium text-black uppercase tracking-wider">Actions</th>
           </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          @for (doc of filteredDocuments(); track doc.code) {
+            <tr class="hover:bg-gray-50 transition duration-300">
+              <td class="py-4 px-6 text-center">
+                <div class="flex justify-center flex-col">
+                  <button (click)="printQRCode(doc)" class="text-blue-600 mb-2 hover:text-blue-900 transition duration-300" title="Print QR code">
+                    <img src="assets/logo/qr-code.png" class="w-8 h-8">
+                  </button>
+                  <button (click)="generateAndPrintBarcode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print barcode">
+                    <img src="assets/logo/barcode.png" class="w-8 h-8">
+                  </button>
+                </div>
+              </td>
+            
+          <td hidden><div #barcodeContainer [attr.data-doc-code]="doc.code">
+            <svg></svg> <!-- JsBarcode will render here -->
+          </div><div #qrcodeContainer [attr.data-doc-code]="doc.code">
+            <qrcode [qrdata]="doc.code" [width]="100" [errorCorrectionLevel]="'M'"></qrcode>
+          </div></td>
 
-
-
-  <div class="flex items-center justify-between mt-4">
-    <!-- Previous Button -->
-    <button 
-      (click)="changePage(currentPage() - 1)" 
-      [disabled]="currentPage() === 1"
-      class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-      </svg>
-      Previous
-    </button>
-
-    <!-- Pagination Numbers -->
-    <div class="flex space-x-2">
-      <!-- Loop through page numbers -->
-      <ng-container *ngFor="let page of getPaginationArray(); let i = index">
-        <ng-container *ngIf="page === '...'">
-          <span class="px-3 py-1 rounded-lg bg-gray-100 text-gray-700">{{ page }}</span>
-        </ng-container>
-        <ng-container *ngIf="page !== '...'">
-          <button 
-            (click)="changePage(page)" 
-            [class.bg-indigo-600]="page === currentPage()"
-            [class.text-white]="page === currentPage()"
-            [class.bg-gray-100]="page !== currentPage()"
-            [class.text-gray-700]="page !== currentPage()"
-            class="px-3 py-1 rounded-lg transition duration-300"
-          >
-            {{ page }}
-          </button>
-        </ng-container>
-      </ng-container>
+              <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ doc.code }}</td>
+              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.subject }}</td>
+              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.category }}</td>
+              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.type }}</td>
+              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.createdBy }}</td>
+              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.dateCreated | date:'short' }}</td>
+              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.originOffice }}</td>
+              <td class="py-4 px-6 text-sm font-medium text-center">
+                <div class="flex justify-center space-x-2">
+                  <button (click)="viewDetails(doc.code)" class="text-indigo-600 hover:text-indigo-900" title="View Details">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  <button (click)="openReleaseModal(doc.code)" class="text-emerald-600 hover:text-emerald-900" title="Release Document">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+              
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="9" class="py-4 px-6 text-sm text-center text-gray-500">No documents found</td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
 
-    <!-- Next Button -->
-    <button 
-      (click)="changePage(currentPage() + 1)" 
-      [disabled]="currentPage() === totalPages()"
-      class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      Next
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline ml-1" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 011.414-1.414l4 4a1 1 010 1.414l-4 4a1 1 01-1.414 0z" clip-rule="evenodd" />
-      </svg>
-    </button>
+
+
+    <div class="flex items-center justify-between mt-4">
+      <!-- Previous Button -->
+      <button 
+        (click)="changePage(currentPage() - 1)" 
+        [disabled]="currentPage() === 1"
+        class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        Previous
+      </button>
+
+      <!-- Pagination Numbers -->
+      <div class="flex space-x-2">
+        <!-- Loop through page numbers -->
+        <ng-container *ngFor="let page of getPaginationArray(); let i = index">
+          <ng-container *ngIf="page === '...'">
+            <span class="px-3 py-1 rounded-lg bg-gray-100 text-gray-700">{{ page }}</span>
+          </ng-container>
+          <ng-container *ngIf="page !== '...'">
+            <button 
+              (click)="changePage(page)" 
+              [class.bg-indigo-600]="page === currentPage()"
+              [class.text-white]="page === currentPage()"
+              [class.bg-gray-100]="page !== currentPage()"
+              [class.text-gray-700]="page !== currentPage()"
+              class="px-3 py-1 rounded-lg transition duration-300"
+            >
+              {{ page }}
+            </button>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <!-- Next Button -->
+      <button 
+        (click)="changePage(currentPage() + 1)" 
+        [disabled]="currentPage() === totalPages()"
+        class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Next
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline ml-1" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 011.414-1.414l4 4a1 1 010 1.414l-4 4a1 1 01-1.414 0z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
   </div>
-</div>
 
   <!-- New Document Modal -->
   <dialog #newDocumentModal class="p-6 rounded-lg shadow-xl bg-white">
@@ -246,7 +248,7 @@
   </form>
   </dialog>
 
-  <dialog #filterModal class="p-8 max-w-lg mx-auto rounded-2xl shadow-2xl bg-white relative">
+  <dialog #filterModal class=" w-80 p-3 mx-auto rounded-md shadow-lg bg-white relative">
     <!-- Close button -->
     <button type="button" (click)="filterModal.close()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition duration-300">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -256,15 +258,15 @@
     </button>
   
     <!-- Modal Title -->
-    <h2 class="text-3xl font-bold mb-6 text-gray-800 text-center">Filter Documents</h2>
+    <h2 class="text-2xl font-semibold mb-3 text-gray-700 text-start">Filter Documents</h2>
   
     <!-- Filter Form -->
-    <form (ngSubmit)="applyFilter()" class="space-y-6">
+    <form (ngSubmit)="applyFilter()" class="space-y-3">
   
       <!-- Origin Office Filter -->
       <div>
-        <label for="filterOffice" class="block text-lg font-medium text-gray-700 mb-2">Origin Office</label>
-        <select id="filterOffice" [(ngModel)]="filterData.office" name="office" class="block w-full rounded-lg border border-gray-300 shadow-md bg-gray-100 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+        <label for="filterOffice" class="block text-lg font-medium text-gray-700 mb-1">Origin Office</label>
+        <select id="filterOffice" [(ngModel)]="filterData.office" name="office" class="block w-full rounded-md border border-gray-300 shadow-sm bg-gray-100 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
           <option value="">All Offices</option>
           <option *ngFor="let office of offices" [value]="office.office_id">{{ office.office_name }}</option>
         </select>
@@ -272,8 +274,8 @@
   
       <!-- Category Filter -->
       <div>
-        <label for="filterCategory" class="block text-lg font-medium text-gray-700 mb-2">Category</label>
-        <select id="filterCategory" [(ngModel)]="filterData.category" name="category" class="block w-full rounded-lg border border-gray-300 shadow-md bg-gray-100 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+        <label for="filterCategory" class="block text-lg font-medium text-gray-700 mb-1">Category</label>
+        <select id="filterCategory" [(ngModel)]="filterData.category" name="category" class="block w-full rounded-md border border-gray-300 shadow-sm bg-gray-100 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
           <option value="">All Categories</option>
           <option *ngFor="let category of categories" [value]="category.category_id">{{ category.name }}</option>
         </select>
@@ -281,19 +283,19 @@
   
       <!-- Type Filter -->
       <div>
-        <label for="filterType" class="block text-lg font-medium text-gray-700 mb-2">Type</label>
-        <select id="filterType" [(ngModel)]="filterData.type" name="type" class="block w-full rounded-lg border border-gray-300 shadow-md bg-gray-100 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+        <label for="filterType" class="block text-lg font-medium text-gray-700 mb-1">Type</label>
+        <select id="filterType" [(ngModel)]="filterData.type" name="type" class="block w-full rounded-md border border-gray-300 shadow-sm bg-gray-100 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
           <option value="">All Types</option>
           <option *ngFor="let type of types" [value]="type.type_id">{{ type.name }}</option>
         </select>
       </div>
   
       <!-- Filter Buttons -->
-      <div class="flex justify-between items-center mt-6">
-        <button type="button" (click)="filterModal.close()" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 hover:text-gray-800 transition duration-300 shadow-md">
+      <div class="flex justify-around items-center">
+        <button type="button" (click)="filterModal.close()" class="px-6 py-3 mt-5 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 hover:text-gray-800 transition duration-300 shadow-md">
           Cancel
         </button>
-        <button type="submit" class="px-6 py-3 bg-emerald-500 text-white rounded-full hover:bg-emerald-600 transition duration-300 shadow-md">
+        <button type="submit" class="px-6 py-3 mt-5 bg-emerald-500 text-white rounded-md hover:bg-emerald-600 transition duration-300 shadow-md">
           Apply Filter
         </button>
       </div>

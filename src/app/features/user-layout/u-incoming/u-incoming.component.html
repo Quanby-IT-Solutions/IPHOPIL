@@ -1,7 +1,7 @@
-<div class="px-5">
-  <div class="mx-auto p-6 bg-white rounded-lg shadow-lg w-auto mr-3 mt-5 mb-5">
+<div class=" min-h-screen mt-3 px-5 bg-white rounded-lg ml-5 mb-3">
+  <div class="mx-auto bg-white w-auto mr-3 py-3">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold text-gray-800">Incoming Documents</h1>
+      <h5 class="ml-3 text-gray-800">User/<span>Incoming</span></h5>
       <a [routerLink]="['/user/receive-document']" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd" />
@@ -10,7 +10,9 @@
       </a>
     </div>
 
-    <div class="flex mb-4">
+    <h1 class="text-3xl font-bold text-gray-700 flex items-center text-start ml-3 mb-3">Incoming Documents</h1>
+
+    <div class="flex mb-4 border border-gray-500 rounded-md">
       <div class="flex-grow flex items-center border rounded-l-lg px-2 bg-white">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -22,8 +24,9 @@
           (ngModelChange)="searchQuery.set($event); filterDocuments()"
           class="w-full p-2 focus:outline-none"
         />
+      
       </div>
-      <button (click)="toggleFilterModal()" class="bg-gray-100 px-4 py-2 rounded-lg hover:bg-gray-200 transition duration-300 flex items-center">
+      <button (click)="toggleFilterModal()" class="bg-gray-100 px-4 py-2 rounded-r-lg hover:bg-gray-200 transition duration-300 flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
         </svg>
@@ -31,7 +34,7 @@
       </button>
     </div>
 
-    <div class="overflow-x-auto bg-white rounded-lg shadow">
+    <div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-500">
       <table class="min-w-full">
         <thead class="bg-gray-50">
           <tr>
@@ -138,12 +141,12 @@
   </div>
 
   <!-- Add this modal at the end of your template -->
-  <div *ngIf="showFilterModal()" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
-    <div class="bg-white p-5 rounded-lg shadow-xl w-96">
-      <h2 class="text-xl font-bold mb-4">Filter Documents</h2>
+  <div *ngIf="showFilterModal()" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full flex items-center justify-center">
+    <div class="bg-white p-5 rounded-md shadow-xl w-80 px-3">
+      <h2 class="text-2xl font-semibold mb-3 text-gray-700 text-start">Filter Documents</h2>
       
       <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="originOffice">
+        <label class="block text-lg font-medium text-gray-700 mb-1" for="originOffice">
           Origin Office
         </label>
         <select [value]="selectedOffice()" (change)="updateSelectedOffice($event)" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -152,7 +155,7 @@
       </div>
 
       <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
+        <label class="block text-lg font-medium text-gray-700 mb-1" for="category">
           Category
         </label>
         <select [value]="selectedCategory()" (change)="updateSelectedCategory($event)" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -160,8 +163,8 @@
         </select>
       </div>
 
-      <div class="mb-6">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="type">
+      <div class="mb-5">
+        <label class="block text-lg font-medium text-gray-700 mb-1" for="type">
           Type
         </label>
         <select [value]="selectedType()" (change)="updateSelectedType($event)" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -169,11 +172,18 @@
         </select>
       </div>
 
-      <div class="flex items-center justify-between">
-        <button (click)="toggleFilterModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+      <div class="flex justify-around items-center">
+        <!-- <button (click)="toggleFilterModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
           Cancel
         </button>
         <button (click)="applyFilter()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+          Apply Filter
+        </button> -->
+
+        <button type="button" (click)="toggleFilterModal()" class="px-6 py-3 mt-5 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 hover:text-gray-800 transition duration-300 shadow-md">
+          Cancel
+        </button>
+        <button (click)="applyFilter()" type="submit" class="px-6 py-3 mt-5 bg-emerald-500 text-white rounded-md hover:bg-emerald-600 transition duration-300 shadow-md">
           Apply Filter
         </button>
       </div>

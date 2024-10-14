@@ -25,6 +25,9 @@ export class SideBarComponent implements OnInit {
   isDropdownOpen: { [key: string]: boolean } = {};  // Track dropdown state
 
   title: string = ''; // New title property
+  userName: string | null = ''; // Initialize as empty
+  profileImageUrl: string = 'assets/profile/default-profile.jpg'; // Default profile image
+  userRole: string | null = '';
 
   AdminMenu: MenuItem[] = [
     {
@@ -112,7 +115,7 @@ export class SideBarComponent implements OnInit {
     },
     {
       label: 'OUTGOING',
-      icon: 'ic:sharp-shortcut',
+      icon: 'cib:telegram-plane',
       route: '/user/outgoing',
     },
     {
@@ -128,7 +131,7 @@ export class SideBarComponent implements OnInit {
   ];
 
   generalMenu: MenuItem[] = [
-    { label: 'Report a Problem', icon: 'ic:baseline-report-problem', route: '/report' },
+    // { label: 'Report a Problem', icon: 'ic:baseline-report-problem', route: '/report' },
     { label: 'Sign Out', icon: 'ic:outline-logout', route: '/login' },
   ];
 
@@ -194,5 +197,14 @@ export class SideBarComponent implements OnInit {
       fragment: 'ignored',
       matrixParams: 'ignored'
     });
+  }
+
+  navigateToProfile() {
+    // Navigate based on the user's role
+    if (this.userRole === 'admin') {
+      this.router.navigate(['/admin/a-profile']);
+    } else {
+      this.router.navigate(['/user/u-profile']);
+    }
   }
 }

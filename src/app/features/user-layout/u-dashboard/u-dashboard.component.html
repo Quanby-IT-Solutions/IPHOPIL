@@ -1,34 +1,33 @@
 <div class="min-h-screen mt-3 px-5 bg-white rounded-lg ml-5">
   <div class="flex flex-row justify-between items-center h-20">
     
-    <h5 class="ml-3 text-gray-800">User/ 
-      <span>Dashboard</span>
+    <h5 class="ml-3 text-gray-800">User/<span>Dashboard</span>
     </h5>
     
     <!-- Quick Links -->
     <div class="flex flex-wrap gap-4">
-      <button (click)="quickAction('receive')" class="px-6 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-700 transitio n-colors flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <button (click)="quickAction('receive')" class="px-6 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-700 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
         </svg>
         <span>Receive</span>
       </button>
-      <button (click)="quickAction('transmit')" class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <button (click)="quickAction('transmit')" class="px-6 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-700 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
         </svg>
         <span>Release</span>
       </button>
-      <button (click)="quickAction('add')" class="px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <button (click)="quickAction('add')" class="px-6 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-700 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        <span>New Document</span>
+        <span>New</span>
       </button>
     </div>
   </div>
 
-  <h1 class="text-3xl font-bold text-gray-800 flex items-center text-start ml-3">
+  <h1 class="text-3xl font-bold text-gray-700 flex items-center text-start ml-3">
     <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-3 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
     </svg> -->
@@ -36,25 +35,27 @@
   </h1>
 
   <!-- Overview Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mb-5 mt-3">
-    <div *ngFor="let stat of documentStats" class="stat-card bg-white p-6 rounded-md border border-solid border-gray-700">
-      <div class="flex items-center justify- mb-4">
-        <h3 class="text-base font-bold text-gray-800">{{ stat.title }}</h3>
-        <i [ngClass]="stat.icon + ' ' + stat.iconColor" class="h-8 w-8"></i>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 mb-5 mt-3">
+    <div *ngFor="let stat of documentStats" class="stat-card bg-white p-6 rounded-md border border-solid border-gray-500">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold text-gray-700">{{ stat.title }}</h3>
+        <i [ngClass]="stat.icon + ' ' + stat.iconColor" class="text-xl ml-3 align-middle"></i>
       </div>
-      <p class="text-3xl font-bold">{{ stat.value }}</p>
+      <p class="text-3xl font-bold text-gray-700 text-start">{{ stat.value }}</p>
     </div>
   </div>
   
+  
+  
 
   <!-- Document Status Chart -->
-  <div class="bg-white p-8 rounded-md mb-5 border border-solid border-gray-700">
+  <div class="bg-white p-8 rounded-md mb-5 border border-solid border-gray-500">
     <h2 class="text-2xl font-semibold mb-3 text-gray-800">Document Status Overview</h2>
     <canvas #chartCanvas class="max-w-full h-64"></canvas>
   </div>
 
   <!-- Alerts and Notifications -->
-  <div class="bg-white p-8 rounded-md border border-solid pb-5 mb-5 border-gray-700">
+  <div class="bg-white p-8 rounded-md border border-solid pb-5 mb-5 border-gray-500">
     <h2 class="text-2xl font-bold mb-6 text-gray-800">Alerts & Notifications</h2>
     <div class="space-y-4">
       <div *ngFor="let alert of alerts" 
