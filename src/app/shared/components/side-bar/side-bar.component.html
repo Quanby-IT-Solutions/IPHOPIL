@@ -1,4 +1,4 @@
-<div class="fixed top-0 left-0 h-screen z-50 transition-all duration-300 mt-3  rounded-lg scroll-none overflow-y-auto bg-white px-3 items-center"
+<div class="fixed top-0 left-0 h-screen z-50 transition-all duration-300 scroll-none overflow-y-auto bg-white px-3 items-center"
      
      [ngClass]="isCollapsed ? 'w-24' : 'w-64'">
   <div class="w-full h-full flex flex-col justify-between items-start py-4 px-2">
@@ -111,14 +111,14 @@
               'justify-start': !isCollapsed
             }">
             
-            <img class="w-10 h-10 rounded-full object-cover border-2 shadow-lg transition-all duration-300"
+            <img [src]="profileImageUrl" class="w-10 h-10 rounded-full object-cover border-2 shadow-lg transition-all duration-300" 
               [ngClass]="isCollapsed ? 'ml-0' : 'ml-4'" 
-              [src]="profileImageUrl" 
+               
               alt="User Profile"
             >
             
             <div class="flex-grow transition-all duration-300 text-start" *ngIf="!isCollapsed">
-              <div class="ml-3 flex-col flex">
+              <div class="ml-5 flex-col flex">
                 <span class="font-bold text-base">{{ userName || 'First Name' }}</span>
                 <span class="text-sm">User Type</span>
               </div>
@@ -137,7 +137,7 @@
               <p [ngClass]="getTextClasses()" class="font-medium text-base whitespace-nowrap">{{ item.label }}</p>
               <iconify-icon *ngIf="item.icon" [icon]="item.icon" 
                 [class.rotate-180]="item.label === 'Sign Out'" 
-                class="icon-size ml-10" 
+                class="icon-size ml-0" 
                 [ngClass]="isCollapsed ? 'ml-0' : 'ml-4'" >
               </iconify-icon>
             </div>
