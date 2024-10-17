@@ -111,9 +111,9 @@
               'justify-start': !isCollapsed
             }">
             
-            <img [src]="profileImageUrl" class="w-10 h-10 rounded-full object-cover border-2 shadow-lg transition-all duration-300" 
+            <img class="w-10 h-10 rounded-full object-cover border-2 shadow-lg transition-all duration-300"
               [ngClass]="isCollapsed ? 'ml-0' : 'ml-4'" 
-               
+              [src]="profileImageUrl" 
               alt="User Profile"
             >
             
