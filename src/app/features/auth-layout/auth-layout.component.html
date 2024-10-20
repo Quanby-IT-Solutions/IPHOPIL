@@ -1,57 +1,39 @@
-<div class="w-dvw h-dvh bg-cover bg-center relative bg-white flex flex-row justify-center">
+<div class="w-full h-full bg-cover bg-center relative bg-white flex flex-col md:flex-row justify-center">
 
-    <!-- <section class="w-full h-full flex justify-center items-center relative">
-        
-        <div class="absolute w-full">
-            <img class="left-0" src="assets/login/IPOPHL 1.png" alt="">
-        </div>
-
-        <img loading="lazy" src="assets/logo/cube.png"
-            class="absolute  right-52 top-[40%] transform -translate-y-1/2 object-contain w-[550px] p-5" />
-
-        
-        <div class="absolute top-[15%] left-[25%]">
-            <app-login-form></app-login-form>
-        </div>
-
-        
-        <div class="absolute bottom-10 right-10 text-right">
-            <h1 class="text-5xl font-bold text-amber-500 max-md:text-4xl">Intellectual Property Office of The Philippines</h1>
-            <h2 class="text-5xl font-medium text-black max-md:text-4xl">Document Management System</h2>
-        </div>
-    </section> - -->
-
-    <div class="flex w-full h-screen bg-white p-5">
+    <div class="flex w-full h-screen lg:flex-row bg-white p-5 flex-col">
         <!-- Left Section -->
-        <div class="w-1/2 flex flex-col justify-center items-center p-5">
+        <div class="w-full md:w-1/2 hidden lg:flex flex-col justify-center items-center p-5">
             <div class="flex flex-row items-center justify-center gap-x-4">
-                <img class="h-20 w-auto" src="assets/logo/cube.png" alt="">
-                <div class="flex flex-col justify-center">
-                    <h1 class="text-2xl text-[--color-accent-dark] font-bold font-sans">Intellectual Property Office of the Philippines</h1>
-                    <h3 class="text-2xl font-sans text-[--color-accent-dark] font-semibold">Document Management System</h3>
+                <img class="h-16 md:h-20 w-auto" src="assets/logo/cube.png" alt="">
+                <div class="flex flex-col justify-center text-center md:text-left">
+                    <h1 class="text-xl md:text-2xl text-[--color-accent-dark] font-bold font-sans">
+                        Intellectual Property Office of the Philippines
+                    </h1>
+                    <h3 class="text-xl md:text-2xl font-sans text-[--color-accent-dark] font-semibold">
+                        Document Management System
+                    </h3>
                 </div>
             </div>
-            
-            <!-- LOTTIE ANIMATION HERE -->
-            <img class="h-80 w-auto mt-5" src="assets/logo/cube.png" alt="">
-        </div>
-    
-        <!-- Right Section -->
 
-        <div class="w-1/2 flex flex-col justify-center items-center border-l-2">
+            <!-- LOTTIE ANIMATION HERE -->
+            <img class="h-60 md:h-80 w-auto mt-5 " src="assets/logo/cube.png" alt="">
+        </div>
+
+        <!-- Right Section -->
+        <div class="w-full md:w-1/2 flex flex-col justify-center border-l-0 items-center">
             <div class="text-center p-5 text-gray-700">
-                <h1 class="text-3xl font-semibold">Welcome Back!</h1>
-                <h6 class="mt-3 text-lg">The Intellectual Property System relates to rights and obligations, <br> as well as privileges and incentives. (change this excerpt)</h6>
+                <h1 class="text-xl md:text-2xl lg:hidden text-[--color-accent-dark] font-bold font-sans">
+                    IPO Philippines
+                </h1>
+                <h3 class="text-lg md:text-2xl lg:hidden font-sans text-[--color-accent-dark] font-semibold">
+                    Document Management System
+                </h3>
+                <h1 class="text-xl md:text-3xl font-semibold mt-3">Welcome Back!</h1>
+                <h6 class="mt-3 text-sm md:text-lg">
+                    The Intellectual Property System relates to rights and obligations, <br> as well as privileges and incentives.
+                </h6>
             </div>
             <app-login-form></app-login-form>
         </div>
-        
-        
-        
     </div>
-    
-    
-
-    
- 
 </div>
