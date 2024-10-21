@@ -6,23 +6,23 @@
     
     <!-- Quick Links -->
     <div class="flex flex-wrap gap-4">
-      <button (click)="quickAction('receive')" class="px-6 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-700 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
+      <button (click)="quickAction('receive')" class="px-4 py-2 gap-x-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
         </svg>
         <span>Receive</span>
       </button>
-      <button (click)="quickAction('transmit')" class="px-6 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-700 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
+      <button (click)="quickAction('transmit')" class="px-4 py-2 gap-x-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition duration-300 flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
         </svg>
         <span>Release</span>
       </button>
-      <button (click)="quickAction('add')" class="px-6 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-700 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
+      <button (click)="quickAction('add')" class="px-4 py-2 gap-x-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition duration-300 flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        <span>New</span>
+        <span>Create new</span>
       </button>
     </div>
   </div>
