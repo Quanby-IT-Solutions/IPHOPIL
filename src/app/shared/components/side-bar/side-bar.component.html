@@ -134,12 +134,13 @@
             class="relative flex items-center h-12 w-full hover:bg-[--color-error] hover:text-white">
       
             <div class="flex justify-start items-center w-full">
-              <p [ngClass]="getTextClasses()" class="font-medium text-base whitespace-nowrap">{{ item.label }}</p>
               <iconify-icon *ngIf="item.icon" [icon]="item.icon" 
                 [class.rotate-180]="item.label === 'Sign Out'" 
                 class="icon-size ml-0" 
-                [ngClass]="isCollapsed ? 'ml-0' : 'ml-4'" >
+                [ngClass]="isCollapsed ? 'ml-0' : 'ml-0'" >
               </iconify-icon>
+              <p [ngClass]="getTextClasses()" class="font-medium text-base whitespace-nowrap ml-3">{{ item.label }}</p>
+              
             </div>
       
             <div class="active-indicator"></div>
