@@ -48,7 +48,7 @@ export class ACompletedComponent implements OnInit {
   @ViewChildren('qrcodeContainer') qrcodeContainers!: QueryList<ElementRef>;
   @ViewChildren('barcodeContainer') barcodeContainers!: QueryList<ElementRef>;
 
-  constructor(private router: Router, private userService: UserService) {} // Inject UserService
+  constructor(private router: Router, private userService: UserService) { } // Inject UserService
 
   async ngOnInit(): Promise<void> {
     this.loadDocuments(); // Load documents from UserService
@@ -181,7 +181,7 @@ export class ACompletedComponent implements OnInit {
       }
     }
   }
-  
+
   generateAndPrintBarcode(doc: Document): void {
     console.log("Generate and Print Barcode:", doc);
     const barcodeContainer = this.barcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.code);
@@ -190,7 +190,7 @@ export class ACompletedComponent implements OnInit {
       if (barcodeElement) {
         // Generate the barcode
         JsBarcode(barcodeElement, doc.code, { format: 'CODE128', width: 2, height: 40, displayValue: true });
-        
+
         // Ensure the barcode is rendered before printing
         setTimeout(() => {
           const barcodeSvg = barcodeElement.outerHTML;
