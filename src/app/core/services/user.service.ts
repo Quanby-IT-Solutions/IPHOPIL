@@ -144,7 +144,7 @@ export class UserService {
       received: true,
     },
   ];
-  
+
   private outgoingDocuments: Document[] = [
     {
       code: 'DOC001',
@@ -272,7 +272,7 @@ export class UserService {
     },
   ];
 
-  constructor() {}
+  constructor() { }
 
   // Updated method to return incoming_documents
   getIncomingDocuments(): Document[] {

@@ -5,7 +5,7 @@ import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const userRole = localStorage.getItem('userRole');

@@ -1,7 +1,7 @@
-<div class="fixed top-0 left-0 h-screen z-50 transition-all duration-300 scroll-none overflow-y-auto bg-white px-3 items-center"
-     
+<div class="fixed top-0 left-0 z-50 items-center h-screen px-3 overflow-y-auto transition-all duration-300 bg-white scroll-none"
+
      [ngClass]="isCollapsed ? 'w-24' : 'w-64'">
-  <div class="w-full h-full flex flex-col justify-between items-start py-4 px-2">
+  <div class="flex flex-col items-start justify-between w-full h-full px-2 py-4">
 
     <!-- Logo and Title -->
     <div class="flex items-center mb-5 rounded-md border-b-2">
@@ -13,63 +13,70 @@
     </div>
 
     <!-- Main Menu Title -->
-    <!-- <h2 class="text-xs font-semibold text-gray-500 uppercase mb-4" 
+    <!-- <h2 class="mb-4 text-xs font-semibold text-gray-500 uppercase"
         [ngClass]="isCollapsed ? 'hidden' : 'block'">Main Menu</h2> -->
 
     <!-- Main Menu Items -->
-    <div class="w-full flex flex-col gap-2 mb-auto text-gray-600 mt-5 select-none">
+    <div class="flex flex-col w-full gap-2 mt-5 mb-auto text-gray-600 select-none">
       <ng-container *ngFor="let item of currentMenu">
-        
+
         <!-- Menu Item with Dropdown -->
-        <div *ngIf="item.children; else singleMenuItem" class="relative">
-          <button (click)="toggleDropdown(item.label)" 
-                  class="relative flex items-center h-12 px-3 w-full text-left rounded-full hover:bg-[--color-text-light]"
-                  [ngClass]="getMenuItemClasses()">
-            
-                  <!-- ADMIN -->
-                  <div class="icon-container">
-                  <iconify-icon *ngIf="item.icon" 
-                                [icon]="item.icon" 
-                                [style.color]="isActive(item.route) ? 'var(--color-text-light)' : 'currentColor'"
-                                class="icon-size">
-                  </iconify-icon>
+     <!-- Menu Item with Dropdown -->
+<div *ngIf="item.children; else singleMenuItem" class="relative">
+  <button (click)="toggleDropdown(item.label)"
+          class="relative flex items-center h-12 px-3 w-full text-left rounded-full hover:bg-[--color-text-light]"
+          [ngClass]="getMenuItemClasses()">
 
-                  </div>
+    <!-- ADMIN -->
+    <div class="icon-container">
+      <iconify-icon *ngIf="item.icon"
+                    [icon]="item.icon"
+                    [style.color]="isDropdownOpen[item.label] || isActive(item.route) ? 'var(--color-accent-dark)' : 'currentColor'"
+                    class="icon-size">
+      </iconify-icon>
+    </div>
 
-                  <p [ngClass]="getTextClasses()" 
-                    class="font-medium text-base whitespace-nowrap ml-3"
-                    [style.color]="isActive(item.route) ? 'var(--color-accent-light)' : 'currentColor'">
-                    {{ item.label }}
-                  </p>
+    <p [ngClass]="getTextClasses()"
+       class="ml-3 text-base font-medium whitespace-nowrap"
+       [style.color]="isDropdownOpen[item.label] || isActive(item.route) ? 'var(--color-accent-dark)' : 'currentColor'">
+      {{ item.label }}
+    </p>
 
+    <!-- Iconify Icon for Dropdown -->
+    <iconify-icon
+      icon="ic:round-expand-more"
+      class="ml-auto text-2xl transition-transform duration-300"
+      [ngClass]="{
+        'rotate-180': isDropdownOpen[item.label],
+        'text-gray-400': !isDropdownOpen[item.label],
+        'text-[--color-accent-dark]': isDropdownOpen[item.label]
+      }">
+    </iconify-icon>
+  </button>
 
-            <!-- Iconify Icon for Dropdown -->
-            <iconify-icon
-              icon="ic:round-expand-more"
-              class="ml-auto text-2xl transition-transform duration-300"
-              [ngClass]="{
-                'rotate-180': isDropdownOpen[item.label],
-                'text-gray-400': !isDropdownOpen[item.label],
-                'text-[--color-accent-light]': isDropdownOpen[item.label]
-              }">
-            </iconify-icon>
-          </button>
+  <!-- Sub-menu Items -->
+  <ul *ngIf="isDropdownOpen[item.label]" class="pl-5 mt-1 submenu">
+    <li *ngFor="let child of item.children">
+      <div [routerLink]="child.route"
+           [routerLinkActive]="'active-icon'"
+           [routerLinkActiveOptions]="{exact: true}"
+           class="relative flex items-center h-10 px-3 w-full rounded-full hover:bg-[--color-accent-light] hover:text-white">
 
-          <!-- ADMIN Sub-menu Items with Bullet Points -->
-          <ul *ngIf="item.label === 'SYSTEM SETTINGS' && isDropdownOpen[item.label]" class="submenu pl-5 mt-1 ">
-            <li *ngFor="let child of item.children">
-              <div class="h-6 px-3 hover:bg-[--color-accent-light] hover:text-white hover:border-[--color-accent-dark]" 
-                [ngClass]="{'text-orange-500 border-orange-500': isActive(child.route)}">
-                <iconify-icon [icon]="child.icon" class="mr-2 h-4 w-4 "></iconify-icon>
-                <a [routerLink]="child.route" 
-                  [routerLinkActive]="'active-icon'" 
-                  [routerLinkActiveOptions]="{exact: true}"
-                  class="text-gray-500 hover:text-white">
-                  {{ child.label }}
-                </a>
-              </div>
-          </ul>
-        </div>
+        <iconify-icon [icon]="child.icon"
+                      class="w-4 h-4 mr-3"
+                      [style.color]="isActive(child.route) ? 'var(--color-accent-dark)' : 'currentColor'">
+        </iconify-icon>
+
+        <p [ngClass]="getTextClasses()"
+           class="text-sm font-medium"
+           [style.color]="isActive(child.route) ? 'var(--color-accent-dark)' : 'currentColor'">
+          {{ child.label }}
+        </p>
+      </div>
+    </li>
+  </ul>
+</div>
+
 
         <!-- Single Menu Item without Dropdown -->
         <ng-template #singleMenuItem>
@@ -80,8 +87,8 @@
             <div class="icon-container">
 
               <!-- Text color for sidebar icon-->
-              <iconify-icon *ngIf="item.icon" 
-                            [icon]="item.icon" 
+              <iconify-icon *ngIf="item.icon"
+                            [icon]="item.icon"
                             [style.color]="isActive(item.route) ? 'var(--color-accent-dark)' : 'currentColor'"
                             class="icon-size">
               </iconify-icon>
@@ -89,8 +96,8 @@
             </div>
 
             <!-- Text color for sidebar items-->
-            <p [ngClass]="getTextClasses()" 
-               class="font-medium text-sm whitespace-nowrap ml-3"
+            <p [ngClass]="getTextClasses()"
+               class="ml-3 text-sm font-medium whitespace-nowrap"
                [style.color]="isActive(item.route) ? 'var(--color-accent-dark)' : 'currentColor'">
               {{ item.label }}
             </p>
@@ -105,21 +112,21 @@
       <div class="flex flex-col gap-3">
         <div class="flex items-center w-full justify-center hover:bg-[--color-accent-light] rounded-md mt-2">
           <button (click)="navigateToProfile()"
-            class="w-full h-12 flex items-center hover:text-white"
+            class="flex items-center w-full h-12 hover:text-white"
             [ngClass]="{
-              'justify-center': isCollapsed, 
+              'justify-center': isCollapsed,
               'justify-start': !isCollapsed
             }">
-            
-            <img class="w-10 h-10 rounded-full object-cover border-2 shadow-lg transition-all duration-300"
-              [ngClass]="isCollapsed ? 'ml-0' : 'ml-4'" 
-              [src]="profileImageUrl" 
+
+            <img class="object-cover w-10 h-10 transition-all duration-300 border-2 rounded-full shadow-lg"
+              [ngClass]="isCollapsed ? 'ml-0' : 'ml-4'"
+              [src]="profileImageUrl"
               alt="User Profile"
             >
-            
+
             <div class="flex-grow transition-all duration-300 text-start" *ngIf="!isCollapsed">
-              <div class="ml-5 flex-col flex">
-                <span class="font-bold text-base">{{ userName || 'First Name' }}</span>
+              <div class="flex flex-col ml-5">
+                <span class="text-base font-bold">{{ userName || 'First Name' }}</span>
                 <span class="text-sm">User Type</span>
               </div>
             </div>
@@ -132,17 +139,17 @@
             (click)="item.label === 'Sign Out' ? signOut() : null"
             [ngClass]="getMenuItemClasses()"
             class="relative flex items-center h-12 w-full hover:bg-[--color-error] hover:text-white">
-      
-            <div class="flex justify-start items-center w-full">
-              <iconify-icon *ngIf="item.icon" [icon]="item.icon" 
-                [class.rotate-180]="item.label === 'Sign Out'" 
-                class="icon-size ml-0" 
+
+            <div class="flex items-center justify-start w-full">
+              <iconify-icon *ngIf="item.icon" [icon]="item.icon"
+                [class.rotate-180]="item.label === 'Sign Out'"
+                class="ml-0 icon-size"
                 [ngClass]="isCollapsed ? 'ml-0' : 'ml-0'" >
               </iconify-icon>
-              <p [ngClass]="getTextClasses()" class="font-medium text-base whitespace-nowrap ml-3">{{ item.label }}</p>
-              
+              <p [ngClass]="getTextClasses()" class="ml-3 text-base font-medium whitespace-nowrap">{{ item.label }}</p>
+
             </div>
-      
+
             <div class="active-indicator"></div>
           </div>
         </div>
