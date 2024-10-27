@@ -1,49 +1,69 @@
-<div class="p-4 bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen">
-  <h1 class="text-2xl font-bold mb-4 text-indigo-800">Document Dashboard</h1>
+<div class="min-h-screen mt-3 px-5 bg-white rounded-lg ml-5 mb-5">
   
-  <div class="grid grid-cols-3 gap-3 mb-4">
-    <button *ngFor="let action of quickActions" 
-            (click)="quickAction(action.type)"
-            class="p-2 rounded-lg text-white text-sm font-medium flex items-center justify-center"
-            [ngClass]="action.bgClass">
-      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" ></svg>
-      <span>{{action.label}}</span>
-    </button>
+  
+  <div class="mb-4 flex items-center justify-between p-3">
+  
+    <!-- Aligns h5 to the start -->
+    <h5 class="ml-3 text-start text-gray-800">
+      User/<span>Dashboard</span>
+    </h5>
+  
+    <!-- Aligns buttons to the end -->
+    <div class="flex flex-row space-x-3">
+      <button *ngFor="let action of quickActions" 
+              (click)="quickAction(action.type)"
+              class="p-2 rounded-lg text-white text-sm font-medium items-center justify-center h-10 w-40"
+              [ngClass]="action.bgClass">
+        <!-- <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"></svg> -->
+        <span>{{ action.label }}</span>
+      </button>
+    </div>
+    
   </div>
+  
 
-  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+  <h1 class="text-3xl font-bold text-gray-800 flex items-center text-start ml-3">
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-3 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg> -->
+    Dashboard
+  </h1>
+
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 mt-3">
     <div *ngFor="let stat of documentStats" 
-         class="bg-white p-3 rounded-lg shadow-sm">
+         class="bg-white p-3  rounded-md border border-solid border-gray-400">
       <div class="flex justify-between items-center mb-1">
-        <h3 class="text-xs font-medium text-gray-500">{{stat.title}}</h3>
+        <h3 class="text-base font-medium text-gray-800">{{stat.title}}</h3>
         <svg [ngClass]="stat.iconColor" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" [innerHTML]="stat.icon"></svg>
       </div>
       <p class="text-lg font-bold">{{stat.value}}</p>
     </div>
   </div>
 
-  <div class="bg-white p-4 rounded-lg shadow-sm mb-4">
-    <h2 class="text-lg font-semibold mb-2">Document Status Overview</h2>
-    <canvas #chartCanvas class="w-full h-48"></canvas>
-  </div>
+  <div class="flex flex-row w-full h-1/2 space-x-3">
+    <div class="bg-white w-1/2 p-4 mb-4 rounded-md border border-solid border-gray-400">
+      <h2 class="text-2xl font-semibold mb-2">Document Status Overview</h2>
+      <canvas #chartCanvas class="w-full"></canvas>
+    </div>
 
-  <div class="bg-white p-4 rounded-lg shadow-sm">
-    <h2 class="text-lg font-semibold mb-2">Alerts & Notifications</h2>
-    <div class="space-y-2">
-      <div *ngFor="let alert of alerts" 
-           [ngClass]="{'bg-yellow-50 border-l-4 border-yellow-400': alert.type === 'warning',
-                       'bg-blue-50 border-l-4 border-blue-400': alert.type === 'info'}"
-           class="p-2 rounded-r-md">
-        <div class="flex items-center">
-          <svg *ngIf="alert.type === 'warning'" class="h-5 w-5 text-yellow-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          <svg *ngIf="alert.type === 'info'" class="h-5 w-5 text-blue-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div>
-            <h4 class="font-medium text-sm">{{alert.title}}</h4>
-            <p class="text-xs text-gray-600">{{alert.message}}</p>
+    <div class="bg-white w-1/2 h-3/4 p-4 border rounded-md border-solid border-gray-400 pb-5">
+      <h2 class="text-lg font-semibold mb-2">Alerts & Notifications</h2>
+      <div class="space-y-2">
+        <div *ngFor="let alert of alerts" 
+            [ngClass]="{'bg-yellow-50 border-l-4 border-yellow-400': alert.type === 'warning',
+                        'bg-blue-50 border-l-4 border-blue-400': alert.type === 'info'}"
+            class="p-2 rounded-r-md">
+          <div class="flex items-center">
+            <svg *ngIf="alert.type === 'warning'" class="h-5 w-5 text-yellow-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <svg *ngIf="alert.type === 'info'" class="h-5 w-5 text-blue-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <h4 class="font-medium text-sm">{{alert.title}}</h4>
+              <p class="text-xs text-gray-600">{{alert.message}}</p>
+            </div>
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
 
-interface Category{
+interface Category {
   category_id: string;
   name: string;
 }
@@ -31,7 +31,7 @@ export interface User {
   office_name: string;
   office_id: string;
   email: string;
-  account_status: string;
+  status: string;
   role: string;
   profile_image: string;
 }
@@ -48,7 +48,7 @@ export interface Document {
   category_id: string;
   type_id: string;
   created_by: string;
-  created_at: string; 
+  created_at: string;
   office_id: string;
   office_name: string; // New field for office name
   category_name?: string; // New field for category name
@@ -57,7 +57,7 @@ export interface Document {
 
 
 }
-  
+
 export interface ReceivedDocument {
   received_document_id: string;
   document_code: string;
@@ -127,12 +127,12 @@ export class SupabaseService {
     if (!this.supabase) {
       throw new Error('Supabase client is not initialized.');
     }
-  
+
     const categories$ = from(this.supabase.from('categories').select('*').then(response => response.data || []));
     const types$ = from(this.supabase.from('types').select('*').then(response => response.data || []));
     const account$ = from(this.supabase.from('account').select('*').then(response => response.data || []));
     const office$ = from(this.supabase.from('office').select('*').then(response => response.data || []));
-  
+
     // Combine all observables into one
     return combineLatest([categories$, types$, account$, office$]).pipe(
       map(([categories, types, account, office]) => {
@@ -146,57 +146,57 @@ export class SupabaseService {
       console.error('Supabase client not initialized.');
       return null;
     }
-  
+
     const { data, error } = await this.supabase
       .from('accounts')  // Use table name without type argument
       .select('office_id')
       .eq('id', userId)
       .single();
-  
+
     if (error) {
       console.error('Error fetching user office ID:', error.message);
       return null;
     }
-  
+
     return data?.office_id || null;
   }
-  
+
   async getOfficeById(officeId: string): Promise<OfficeData | null> {
     if (!this.supabase) {
       console.error('Supabase client not initialized.');
       return null;
     }
-  
+
     const { data, error } = await this.supabase
       .from('office')  // Use table name without type argument
       .select('*')
       .eq('office_id', officeId)
       .single();
-  
+
     if (error) {
       console.error('Error fetching office details:', error.message);
       return null;
     }
-  
+
     return data || null;
   }
 
   //Added
   private checkSession(): void {
     if (!this.supabase) {
-        console.error('Supabase client not initialized.');
-        return;
+      console.error('Supabase client not initialized.');
+      return;
     }
 
     this.supabase.auth.getSession().then(({ data: { session }, error }) => {
-        if (error) {
-            console.error('Error fetching session:', error.message);
-        } else if (session) {
-        } else {
-            console.error('No active session.');
-        }
+      if (error) {
+        console.error('Error fetching session:', error.message);
+      } else if (session) {
+      } else {
+        console.error('No active session.');
+      }
     });
-}
+  }
 
   async getDocumentByCode(code: string) {
     if (!this.supabase) {
@@ -213,14 +213,14 @@ export class SupabaseService {
   async ngOnInit(): Promise<void> {
     this.fetchDocuments();
     await this.fetchCurrentUser();
-  } 
+  }
 
   async getCurrentUserId(): Promise<string | null> {
     if (!this.supabase) {
       console.error('Supabase client not initialized.');
       return null;
     }
-  
+
     try {
       const { data: { user } } = await this.supabase.auth.getUser(); // Await the promise and destructure the user
       return user?.id || null; // Return the user ID if it exists
@@ -235,7 +235,7 @@ export class SupabaseService {
       console.error('Supabase client not initialized.');
       return { data: null, error: { message: 'Supabase client not initialized' } as PostgrestError };
     }
-    
+
     try {
       const { data, error } = await this.supabase
         .from('documents')
@@ -273,9 +273,9 @@ export class SupabaseService {
     }
   }
 
-  
 
- 
+
+
   async getDocuments(): Promise<any> {
     await this.ensureSupabaseInitialized();
 
@@ -302,7 +302,7 @@ export class SupabaseService {
 
 
 
-  
+
   fetchDocuments(): void {
     this.supabaseInitPromise?.then(() => {
       this.getDocuments().then(({ data, error }) => {
@@ -344,8 +344,8 @@ export class SupabaseService {
         console.error('Sign-in error:', (error as Error).message);
         return { data: null, error };
       }
-      
-      this.checkSession(); //Added 
+
+      this.checkSession(); //Added
 
       // Fetch current user details to store them
       const userResponse = await this.supabase
@@ -373,28 +373,28 @@ export class SupabaseService {
       console.error('Supabase client or user not initialized.');
       return [];
     }
-  
+
     try {
       const { data, error } = await this.supabase
         .rpc('get_account_documents');
-  
+
       if (error) {
         console.error('Error fetching account documents:', error.message);
         return [];
       }
-  
+
       if (this.currentUser && this.currentUser.role === 'admin') {
         return data as Document[];
       } else if (this.currentUser) {
         return (data as Document[]).filter((doc: Document) => doc.office_name === this.currentUser?.office_name);
       }
-  
+
       return [];
     } catch (error) {
       console.error('Error:', (error as Error).message);
       return [];
     }
-  }  
+  }
 
   // ================================
   // User Management Methods
@@ -439,22 +439,34 @@ export class SupabaseService {
     }
   }
 
-  // Fetch all users from the office_account_view
   async getUsers(): Promise<User[]> {
     if (!this.supabase) {
       console.error('Supabase client not initialized.');
       return [];
     }
-    
+
     const { data, error } = await this.supabase
-    .from('account')
-    .select('*');
+      .from('account')
+      .select(`
+        *,
+        office:office_id ( office_name )   // Join with the office table using office_id and get office_name
+      `);
 
     if (error) {
       console.error('Error fetching users:', error);
       return [];
     }
-    return data as User[];
+    return data.map((item: any) => ({
+      ...item,
+      account_id: item.account_id,
+      name: item.name,
+      username: item.username,
+      office_name: item.office.office_name,
+      role: item.role,
+      email: item.email,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
+    })) as User[];
   }
 
   async fetchCurrentUser(): Promise<void> {
@@ -463,16 +475,16 @@ export class SupabaseService {
       this.currentUser = null;
       return;
     }
-  
+
     try {
       const { data, error } = await this.supabase.auth.getSession();
-  
+
       if (error) {
         console.error('Error fetching session:', error.message);
         this.currentUser = null;
         return;
       }
-  
+
       // Ensure data and session are not null
       if (data?.session?.user) {
         const appUser = data.session.user as AppUser;
@@ -575,7 +587,7 @@ export class SupabaseService {
   fetchTypesByCategory(categoryId: string): void {
     console.log('Fetching types for category ID:', categoryId); // Debug log
     if (!this.supabase) return;
-  
+
     this.supabase
       .from('types')
       .select('*')
@@ -633,57 +645,57 @@ export class SupabaseService {
       console.error('Supabase client not initialized.');
       return null;
     }
-  
+
     const { data, error } = await this.supabase
       .from('office')
       .select('*')
       .eq('office_id', agencyId)
       .single();
-  
+
     if (error) {
       console.error('Error fetching agency:', error.message);
       return null;
     }
-  
+
     return data;
   }
-  
+
   // Update agency details
   async updateAgency(agencyId: string, newAgencyName: string): Promise<{ error: PostgrestError | null }> {
     if (!this.supabase) {
       console.error('Supabase client not initialized.');
       return { error: { message: 'Supabase client not initialized' } as PostgrestError };
     }
-  
+
     try {
       const { error } = await this.supabase
         .from('office')
         .update({ office_name: newAgencyName })
         .eq('office_id', agencyId);
-  
+
       if (error) {
         console.error('Error updating agency:', error.message);
       }
-  
+
       return { error };
     } catch (error) {
       console.error('Error updating agency:', (error as Error).message);
       return { error: { message: (error as Error).message } as PostgrestError };
     }
   }
-  
+
   // Delete agency by ID
   async deleteAgency(office_id: number): Promise<{ error?: PostgrestError | null }> {
     if (!this.supabase) {
       console.error('Supabase client not initialized.');
       return { error: null };
     }
-  
+
     const { error } = await this.supabase
       .from('office')
       .delete()
       .eq('office_id', office_id);
-    
+
     return { error };
   }
 
@@ -739,19 +751,19 @@ export class SupabaseService {
   //         created_by,
   //         created_at,
   //         office_id,
-  //         categories!inner(name),  
-  //         types!inner(name),       
-  //         account!inner(name),     
-  //         office!inner(office_name)  
+  //         categories!inner(name),
+  //         types!inner(name),
+  //         account!inner(name),
+  //         office!inner(office_name)
   //       `);
-  
+
   //     if (error) {
   //       console.error('Error fetching Documents', error.message);
   //       return [];
   //     }
-  
+
   //     console.log('Fetched Documents:', data); // Log the fetched data
-  
+
   //     // Map the data to add the joined names
   //     const documents = data.map((doc: any) => ({
   //       document_id: doc.document_id,
@@ -767,14 +779,14 @@ export class SupabaseService {
   //       creator_name: doc.account.name,
   //       office_name: doc.office.office_name,
   //     }));
-  
+
   //     return documents as Document[];
   //   } catch (error) {
   //     console.error('Error fetching documents:', (error as Error).message);
   //     return [];
   //   }
   // }
-  
+
 
   // documents table for admin
 
@@ -798,10 +810,10 @@ export class SupabaseService {
           created_by,
           created_at,
           office_id,
-          categories!inner(name),  
-          types!inner(name),       
-          account!inner(name),     
-          office!inner(office_name)  
+          categories!inner(name),
+          types!inner(name),
+          account!inner(name),
+          office!inner(office_name)
         `);
 
       if (error) {
@@ -834,401 +846,401 @@ export class SupabaseService {
   }
 
 
-  
+
 
   // Ensure this method is correctly implemented to fetch the current user
-async getCurrentUser(): Promise<User | null> {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return null;
-  }
-
-  try {
-    const { data, error } = await this.supabase.auth.getSession();
-    if (error || !data.session) {
-      console.error('Error fetching user session or no session found:', error?.message);
+  async getCurrentUser(): Promise<User | null> {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
       return null;
     }
 
-    const user = data.session.user;
-    if (!user) {
-      console.error('No user is logged in.');
+    try {
+      const { data, error } = await this.supabase.auth.getSession();
+      if (error || !data.session) {
+        console.error('Error fetching user session or no session found:', error?.message);
+        return null;
+      }
+
+      const user = data.session.user;
+      if (!user) {
+        console.error('No user is logged in.');
+        return null;
+      }
+
+      // Fetch user details based on the correct column names in the account table
+      const { data: userDetails, error: userError } = await this.supabase
+        .from('account') // Make sure this is the correct table name
+        .select('*') // Ensure to select the correct columns
+        .eq('email', user.email) // Adjust the condition based on your table schema
+        .single();
+
+      if (userError) {
+        console.error('Error fetching user details:', userError.message);
+        return null;
+      }
+
+      return userDetails as User;
+    } catch (err) {
+      console.error('Unexpected error fetching current user:', err);
+      return null;
+    }
+  }
+  async getDocumentDetails(documentId: string): Promise<any> {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
       return null;
     }
 
-    // Fetch user details based on the correct column names in the account table
-    const { data: userDetails, error: userError } = await this.supabase
-      .from('account') // Make sure this is the correct table name
-      .select('*') // Ensure to select the correct columns
-      .eq('email', user.email) // Adjust the condition based on your table schema
-      .single();
+    try {
+      const { data, error } = await this.supabase
+        .from('documents')
+        .select('code, document_id, category_id:category_id(name), type_id:type_id(name), subject_title, created_at, office_id:office_id(office_name),created_by ')
+        .eq('code', documentId)
+        .single();
 
-    if (userError) {
-      console.error('Error fetching user details:', userError.message);
+      if (error) {
+        console.error('Error fetching document details:', error.message);
+        return null;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error:', (error as Error).message);
       return null;
     }
-
-    return userDetails as User;
-  } catch (err) {
-    console.error('Unexpected error fetching current user:', err);
-    return null;
-  }
-}
-async getDocumentDetails(documentId: string): Promise<any> {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return null;
   }
 
-  try {
-    const { data, error } = await this.supabase
-      .from('documents')
-      .select('code, document_id, category_id:category_id(name), type_id:type_id(name), subject_title, created_at, office_id:office_id(office_name),created_by ')
-      .eq('code', documentId)
-      .single();
-
-    if (error) {
-      console.error('Error fetching document details:', error.message);
-      return null;
-    }
-
-    return data;
-  } catch (error) {
-    console.error('Error:', (error as Error).message);
-    return null;
-  }
-}
-  
-//almost done to finished myapp.current_user_id // Added
-async markDocumentAsCompleted(documentId: string, message: string): Promise<{ data: any, error: any }> {
-  if (!this.supabase || !this.currentUser) {
+  //almost done to finished myapp.current_user_id // Added
+  async markDocumentAsCompleted(documentId: string, message: string): Promise<{ data: any, error: any }> {
+    if (!this.supabase || !this.currentUser) {
       console.error('Supabase client not initialized or user not logged in.');
       return { data: null, error: 'Supabase client not initialized or user not logged in' };
-  }
+    }
 
-  try {
+    try {
       // Insert into completed_documents
       const { data: completedData, error: insertError } = await this.supabase
-          .from('completed_documents')
-          .insert({
-              document_id: documentId,
-              completed_by: this.currentUser.account_id,
-              message: message
-          });
+        .from('completed_documents')
+        .insert({
+          document_id: documentId,
+          completed_by: this.currentUser.account_id,
+          message: message
+        });
 
       if (insertError) {
-          console.error('Error inserting into completed_documents:', insertError.message);
-          return { data: null, error: insertError };
+        console.error('Error inserting into completed_documents:', insertError.message);
+        return { data: null, error: insertError };
       }
 
       // Remove from received_documents
       const { error: deleteError } = await this.supabase
-          .from('received_documents')
-          .delete()
-          .eq('document_id', documentId);
+        .from('received_documents')
+        .delete()
+        .eq('document_id', documentId);
 
       if (deleteError) {
-          console.error('Error deleting from received_documents:', deleteError.message);
-          return { data: null, error: deleteError };
+        console.error('Error deleting from received_documents:', deleteError.message);
+        return { data: null, error: deleteError };
       }
 
       return { data: completedData, error: null };
-  } catch (error) {
+    } catch (error) {
       console.error('Error marking document as completed:', (error as Error).message);
       return { data: null, error: 'Error marking document as completed' };
-  }
-}
-
-//almost done to finished myapp.current_user_id // Added
-async getCompletedDocuments(): Promise<CompletedDocument[]> {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return [];
+    }
   }
 
-  try {
-    const { data, error } = await this.supabase
-      .from('view_completed_documents')
-      .select('*');
-
-    if (error) {
-      console.error('Error fetching completed documents:', error.message);
+  //almost done to finished myapp.current_user_id // Added
+  async getCompletedDocuments(): Promise<CompletedDocument[]> {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
       return [];
     }
 
-    return data as CompletedDocument[];
-  } catch (error) {
-    console.error('Error fetching completed documents:', (error as Error).message);
-    return [];
-  }
-}
-  
-async getAdminIncoming_Documents() {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return [];
+    try {
+      const { data, error } = await this.supabase
+        .from('view_completed_documents')
+        .select('*');
+
+      if (error) {
+        console.error('Error fetching completed documents:', error.message);
+        return [];
+      }
+
+      return data as CompletedDocument[];
+    } catch (error) {
+      console.error('Error fetching completed documents:', (error as Error).message);
+      return [];
+    }
   }
 
-  try {
-    const { data, error } = await this.supabase
-      .from('view_all_incoming')
-      .select('*'); 
+  async getAdminIncoming_Documents() {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return [];
+    }
 
-    if (error) {
+    try {
+      const { data, error } = await this.supabase
+        .from('view_all_incoming')
+        .select('*');
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching incoming documents:', error);
       throw error;
     }
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching incoming documents:', error);
-    throw error;
-  }
-}
-
-async getAdminOutgoing_Documents() {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return [];
   }
 
-  try {
-    const { data, error } = await this.supabase
-      .from('view_all_outgoing')
-      .select('*'); 
+  async getAdminOutgoing_Documents() {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return [];
+    }
 
-    if (error) {
+    try {
+      const { data, error } = await this.supabase
+        .from('view_all_outgoing')
+        .select('*');
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching incoming documents:', error);
       throw error;
     }
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching incoming documents:', error);
-    throw error;
-  }
-}
-
-async getOutgoing_Documents() {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return [];
   }
 
-  try {
-    const { data, error } = await this.supabase
-      .from('view_all_outgoing')
-      .select('*'); 
+  async getOutgoing_Documents() {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return [];
+    }
 
-    if (error) {
+    try {
+      const { data, error } = await this.supabase
+        .from('view_all_outgoing')
+        .select('*');
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching incoming documents:', error);
       throw error;
     }
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching incoming documents:', error);
-    throw error;
-  }
-}
-
-
-async getReceived_Documents() {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return [];
   }
 
-  try {
-    const { data, error } = await this.supabase
-      .from('received_documents_full_view')
-      .select('*'); 
 
-    if (error) {
+  async getReceived_Documents() {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return [];
+    }
+
+    try {
+      const { data, error } = await this.supabase
+        .from('received_documents_full_view')
+        .select('*');
+
+      if (error) {
+        throw error;
+      }
+      console.log('Sean', data)
+      return data;
+    } catch (error) {
+      console.error('Error fetching incoming documents:', error);
       throw error;
     }
-    console.log('Sean', data)
-    return data;
-  } catch (error) {
-    console.error('Error fetching incoming documents:', error);
-    throw error;
-  }
-}
-
-
-async typesFilter() {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return [];
   }
 
-  try {
-    const { data, error } = await this.supabase
-      .from('types')
-      .select('name'); 
 
-    if (error) {
+  async typesFilter() {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return [];
+    }
+
+    try {
+      const { data, error } = await this.supabase
+        .from('types')
+        .select('name');
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching incoming documents:', error);
       throw error;
     }
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching incoming documents:', error);
-    throw error;
-  }
-}
-
-async officeFilter() {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return [];
   }
 
-  try {
-    const { data, error } = await this.supabase
-      .from('office')
-      .select('office_name'); 
+  async officeFilter() {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return [];
+    }
 
-    if (error) {
+    try {
+      const { data, error } = await this.supabase
+        .from('office')
+        .select('office_name');
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching incoming documents:', error);
       throw error;
     }
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching incoming documents:', error);
-    throw error;
-  }
-}
-
-
-async categoryFilter() {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return [];
   }
 
-  try {
-    const { data, error } = await this.supabase
-      .from('categories')
-      .select('name'); 
-    if (error) {
+
+  async categoryFilter() {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return [];
+    }
+
+    try {
+      const { data, error } = await this.supabase
+        .from('categories')
+        .select('name');
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching incoming documents:', error);
       throw error;
     }
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching incoming documents:', error);
-    throw error;
-  }
-}
-
-
-
-
-async getCompleted_Documents() {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return [];
   }
 
-  try {
-    const { data, error } = await this.supabase
-      .from('view_completed_documents')
-      .select('*'); 
 
-    if (error) {
+
+
+  async getCompleted_Documents() {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return [];
+    }
+
+    try {
+      const { data, error } = await this.supabase
+        .from('view_completed_documents')
+        .select('*');
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching incoming documents:', error);
       throw error;
     }
-
-    return data;
-  } catch (error) {
-    console.error('Error fetching incoming documents:', error);
-    throw error;
-  }
-}
-
-
-
-async insertOutgoingDocument(releaseData: {
-  documentId: string;
-  message: string;
-  receivingOffice: string;
-  dateReleased: string;
-}): Promise<void> {
-  if (!this.supabase) {
-    throw new Error('Supabase client is not initialized.');
   }
 
-  const { data, error } = await this.supabase
-  .from('outgoing_documents')
-  .insert([
-    {
-      document_id: releaseData.documentId,
-      message: releaseData.message,
-      receiving_office: releaseData.receivingOffice,
-      date_realesed: releaseData.dateReleased
+
+
+  async insertOutgoingDocument(releaseData: {
+    documentId: string;
+    message: string;
+    receivingOffice: string;
+    dateReleased: string;
+  }): Promise<void> {
+    if (!this.supabase) {
+      throw new Error('Supabase client is not initialized.');
     }
-  ]);
 
-  if (error) {
-    console.error('Error inserting outgoing document:', error);
-    throw error;
-  }
-}
+    const { data, error } = await this.supabase
+      .from('outgoing_documents')
+      .insert([
+        {
+          document_id: releaseData.documentId,
+          message: releaseData.message,
+          receiving_office: releaseData.receivingOffice,
+          date_realesed: releaseData.dateReleased
+        }
+      ]);
 
-
-async insertIntoCompletedDocuments(documentId: string, accountName: string, message: string) {
-  if (!this.supabase) {
-    throw new Error('Supabase client is not initialized.');
-  }
-  
-  const { data, error } = await this.supabase
-    .from('completed_documents')
-    .insert([{ document_id: documentId, completed_by: accountName, message: message }]);
-  
-  if (error) {
-    console.error('Error inserting document:', error);
-    return { data: null, error };
-  }
-  
-  return { data, error: null };
-}
-
-async deleteDocument(documentId: string) {
-  if (!this.supabase) {
-    throw new Error('Supabase client is not initialized.');
-  }
-  
-  const { data, error } = await this.supabase
-    .from('outgoing_documents') // Replace with your actual table name
-    .delete()
-    .eq('document_id', documentId);
-  
-  if (error) {
-    console.error('Error deleting document:', error);
-    return { data: null, error };
-  }
-  
-  return { data, error: null };
-}
-
-
-//user dashboard
-async countDocuments(tableName: string): Promise<number> {
-  if (!this.supabase) {
-    console.error('Supabase client not initialized.');
-    return 0; // Or throw an error
+    if (error) {
+      console.error('Error inserting outgoing document:', error);
+      throw error;
+    }
   }
 
-  const { error, count } = await this.supabase
-    .from(tableName)
-    .select('*', { count: 'exact' });
 
-  if (error) {
-    console.error(`Error fetching count from ${tableName}:`, error.message);
-    return 0;
+  async insertIntoCompletedDocuments(documentId: string, accountName: string, message: string) {
+    if (!this.supabase) {
+      throw new Error('Supabase client is not initialized.');
+    }
+
+    const { data, error } = await this.supabase
+      .from('completed_documents')
+      .insert([{ document_id: documentId, completed_by: accountName, message: message }]);
+
+    if (error) {
+      console.error('Error inserting document:', error);
+      return { data: null, error };
+    }
+
+    return { data, error: null };
   }
 
-  // Use optional chaining to safely return count or 0
-  return count ?? 0;
-}
+  async deleteDocument(documentId: string) {
+    if (!this.supabase) {
+      throw new Error('Supabase client is not initialized.');
+    }
+
+    const { data, error } = await this.supabase
+      .from('outgoing_documents') // Replace with your actual table name
+      .delete()
+      .eq('document_id', documentId);
+
+    if (error) {
+      console.error('Error deleting document:', error);
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  }
+
+
+  //user dashboard
+  async countDocuments(tableName: string): Promise<number> {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return 0; // Or throw an error
+    }
+
+    const { error, count } = await this.supabase
+      .from(tableName)
+      .select('*', { count: 'exact' });
+
+    if (error) {
+      console.error(`Error fetching count from ${tableName}:`, error.message);
+      return 0;
+    }
+
+    // Use optional chaining to safely return count or 0
+    return count ?? 0;
+  }
 
 
 }

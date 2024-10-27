@@ -13,6 +13,8 @@ import { SupabaseService, User } from '../../../core/services/supabase.service';
 export class LoginFormComponent {
   email: string = '';
   password: string = '';
+  isPasswordVisible = false;
+  rememberMe = false;
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
@@ -59,5 +61,11 @@ export class LoginFormComponent {
     this.email = 'admin@gmail.com';
     this.password = 'password';
     this.signIn();
+  }
+
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
+    const passwordInput = document.getElementById('password') as HTMLInputElement;
+    passwordInput.type = this.isPasswordVisible ? 'text' : 'password';
   }
 }

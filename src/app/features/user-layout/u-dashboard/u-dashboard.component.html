@@ -1,78 +1,108 @@
-<div class="min-h-screen px-5">
+<div class="min-h-screen mt-3 px-5 bg-white rounded-lg ml-5">
   <div class="flex flex-row justify-between items-center h-20">
-    <h1 class="text-4xl font-bold text-gray-800 flex items-center text-start ml-6">
-      <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-3 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-      </svg> -->
-      User Dashboard
-    </h1>
+    
+    <h5 class="ml-3 text-gray-800">User/<span>Dashboard</span>
+    </h5>
     
     <!-- Quick Links -->
     <div class="flex flex-wrap gap-4">
-      <button (click)="quickAction('receive')" class="px-6 py-3 bg-orange-500 text-white rounded-md hover:bg-orange-700 transitio n-colors flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <button (click)="quickAction('receive')" class="px-4 py-2 gap-x-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
         </svg>
         <span>Receive</span>
       </button>
-      <button (click)="quickAction('transmit')" class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <button (click)="quickAction('transmit')" class="px-4 py-2 gap-x-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition duration-300 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
         </svg>
         <span>Release</span>
       </button>
-      <button (click)="quickAction('add')" class="px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-transform">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <button (click)="quickAction('add')" class="px-4 py-2 gap-x-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition duration-300 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        <span>New Document</span>
+        <span>Create new</span>
       </button>
     </div>
   </div>
 
+  <h1 class="text-3xl font-bold text-gray-700 flex items-center text-start ml-3">
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-3 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg> -->
+    Dashboard
+  </h1>
+
   <!-- Overview Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mb-5">
-    <div *ngFor="let stat of documentStats" class="stat-card bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-base font-bold text-gray-800">{{ stat.title }}</h3>
-        <svg [ngClass]="stat.iconColor" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path *ngIf="stat.icon === 'hourglass-half'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          <path *ngIf="stat.icon === 'check-circle'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          <path *ngIf="stat.icon === 'exclamation-circle'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          <path *ngIf="stat.icon === 'file-alt'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 mb-3 mt-3">
+      <div *ngFor="let stat of documentStats" class="stat-card bg-white p-6 rounded-md border border-solid border-gray-400">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-bold text-gray-700">{{ stat.title }}</h3>
+          <i [ngClass]="stat.icon + ' ' + stat.iconColor" class="text-xl ml-3 align-middle"></i>
+        </div>
+        <p class="text-3xl font-bold text-gray-700 text-start">{{ stat.value }}</p>
       </div>
-      <p class="text-3xl font-bold">{{ stat.value }}</p>
+  </div>
+
+  <!-- <div class="flex flex-row gap-x-5">
+    <div class="h-96 w-1/2 border border-gray-400">
     </div>
-  </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 w-1/2">
+      <div *ngFor="let stat of documentStats" 
+           class="stat-card bg-white p-6 rounded-md border border-solid border-gray-400 h-40 w-full">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-bold text-gray-700">{{ stat.title }}</h3>
+          <i [ngClass]="stat.icon + ' ' + stat.iconColor" class="text-xl ml-3 align-middle"></i>
+        </div>
+        <p class="text-3xl font-bold text-gray-700 text-start">{{ stat.value }}</p>
+      </div>
+    </div>
+  </div> -->
+  
+  
+  
+  
+  <div class="flex flex-col md:flex-row w-full h-full gap-x-3">
+    <!-- Document Status Chart -->
+    <div class="bg-white p-8 rounded-md mb-5 border border-solid border-gray-400 h-full md:w-2/3 w-full">
+      <h2 class="text-2xl font-semibold mb-3 text-gray-800">Document Status Overview</h2>
+      <canvas #chartCanvas class="max-w-full"></canvas>
+    </div>
 
-  <!-- Document Status Chart -->
-  <div class="bg-white p-8 rounded-xl shadow-md mb-5">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">Document Status Overview</h2>
-    <canvas #chartCanvas class="max-w-full h-64"></canvas>
-  </div>
-
-  <!-- Alerts and Notifications -->
-  <div class="bg-white p-8 rounded-xl shadow-md mb-5">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">Alerts & Notifications</h2>
-    <div class="space-y-4">
-      <div *ngFor="let alert of alerts" 
-           [ngClass]="{'bg-yellow-50 border-l-4 border-yellow-400': alert.type === 'warning',
-                       'bg-blue-50 border-l-4 border-blue-400': alert.type === 'info'}"
-           class="p-4 rounded-r-md transition-all duration-300 hover:shadow-md">
-        <div class="flex items-center">
-          <svg *ngIf="alert.type === 'warning'" class="h-6 w-6 text-yellow-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          <svg *ngIf="alert.type === 'info'" class="h-6 w-6 text-blue-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div>
-            <h4 class="font-semibold text-gray-800">{{ alert.title }}</h4>
-            <p class="text-sm text-gray-600">{{ alert.message }}</p>
+    <div class="flex flex-col gap-y-3 md:w-1/3   w-full flex-1">
+      <!-- Alerts and Notifications -->
+      <div class="bg-white p-3 rounded-md border border-solid  border-gray-400 ">
+        <h2 class="text-2xl font-bold mb-3 text-gray-800">Alerts & Notifications</h2>
+        <div class="space-y-4 h-1/2 overflow-y-auto">
+          <div *ngFor="let alert of alerts" 
+              [ngClass]="{'bg-yellow-50 border-l-4 border-yellow-400': alert.type === 'warning',
+                          'bg-blue-50 border-l-4 border-blue-400': alert.type === 'info'}"
+              class="p-4 rounded-r-md transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center">
+              <svg *ngIf="alert.type === 'warning'" class="h-6 w-6 text-yellow-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <svg *ngIf="alert.type === 'info'" class="h-6 w-6 text-blue-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <h4 class="font-semibold text-gray-800">{{ alert.title }}</h4>
+                <p class="text-sm text-gray-600">{{ alert.message }}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="h-1/2 border border-gray-400 mb-5 rounded-md items-center justify-center flex">
+
+        <span class="">calendar here</span>
+
+      </div>
     </div>
+
+
+
   </div>
 </div>

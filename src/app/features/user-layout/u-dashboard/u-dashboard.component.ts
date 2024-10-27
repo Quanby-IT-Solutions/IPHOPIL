@@ -5,6 +5,7 @@ import { Chart, registerables } from 'chart.js';
 import { gsap } from 'gsap';
 import { SupabaseService } from '../../../core/services/supabase.service';
 
+
 Chart.register(...registerables);
 
 @Component({
@@ -38,12 +39,14 @@ export class UDashboardComponent implements OnInit, AfterViewInit {
       const outgoingCount = await this.supabaseService.countDocuments('outgoing_documents');
 
       this.documentStats = [
-        { title: 'Total Documents', value: incomingCount + receivedCount + outgoingCount, icon: 'fa-folder', iconColor: 'text-blue-500' },
-        { title: 'Total Incoming', value: incomingCount, icon: 'fa-inbox', iconColor: 'text-green-500' },
-        { title: 'Total Received', value: receivedCount, icon: 'fa-check-circle', iconColor: 'text-yellow-500' },
-        { title: 'Total Outgoing', value: receivedCount, icon: 'fa-check-circle', iconColor: 'text-yellow-500' },
-        { title: 'Total Completed', value: outgoingCount, icon: 'fa-paper-plane', iconColor: 'text-red-500' }
+        { title: 'Total Documents', value: incomingCount + receivedCount + outgoingCount, icon: 'fas fa-file-alt', iconColor: 'text-emerald-500' }, // file icon
+        { title: 'Total Incoming', value: incomingCount, icon: 'fas fa-inbox', iconColor: 'text-orange-500' }, // inbox icon
+        { title: 'Total Received', value: receivedCount, icon: 'fas fa-folder-open', iconColor: 'text-yellow-500' }, // folder-open icon
+        { title: 'Total Outgoing', value: outgoingCount, icon: 'fas fa-paper-plane', iconColor: 'text-blue-500' }, // paper-plane icon
+        { title: 'Total Completed', value: outgoingCount, icon: 'fas fa-check-circle', iconColor: 'text-red-500' } // check-circle icon
       ];
+      
+      
 
       // Initialize chart with fetched document stats
       this.initChart(incomingCount, receivedCount, outgoingCount);

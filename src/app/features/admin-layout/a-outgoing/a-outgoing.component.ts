@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChildren, QueryList, ElementRef,signal,computed} from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, ElementRef, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QRCodeModule } from 'angularx-qrcode';
 import JsBarcode from 'jsbarcode';
-import { SupabaseService } from '../../../core/services/supabase.service';
+import { UserService } from '../../../core/services/user.service'; // Import UserService
 
 interface Document {
   code: string;
@@ -32,6 +32,7 @@ export class AOutgoingComponent implements OnInit {
   searchQuery = signal('');
   currentPage = signal(1);
   itemsPerPage = signal(20);
+  autoRefreshInterval: any;
 
   totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
 
@@ -46,90 +47,34 @@ export class AOutgoingComponent implements OnInit {
 
   @ViewChildren('qrcodeContainer') qrcodeContainers!: QueryList<ElementRef>;
   @ViewChildren('barcodeContainer') barcodeContainers!: QueryList<ElementRef>;
-  constructor(private router: Router, private supabaseService: SupabaseService) {}
+
+  constructor(private router: Router, private userService: UserService) {} // Inject UserService
 
   async ngOnInit(): Promise<void> {
     await this.loadDocuments();
     await this.loadFilterOptions();
-
   }
-
-  // async loadDocuments(): Promise<void> {
-  //   try {
-  //     const data = await this.supabaseService.getAdminOutgoing_Documents();
-  //     console.log('Raw data from Supabase:', data); // Add this line
-  
-  //     const documents: Document[] = data.map(doc => ({
-  //       code: doc.full_doc_code,
-  //       document_id: doc.full_outgoing_doc_id,
-  //       subject_title: doc.full_doc_subject_title,
-  //       category_name: doc.full_category_name,
-  //       type_name: doc.full_type_name,
-  //       message: doc.full_doc_message,
-  //       office_name: doc.full_office_name,
-  //       account_name: doc.full_name,
-  //       received_date_received: doc.full_date_released,  // Correct date field
-  //       received: false // Set this based on a condition, if necessary
-  //     }));
-  //     console.log('Mapped documents:', documents); // Add this line
-  
-  //     this.documents.set(documents);
-  //     this.filterDocuments();
-  //   } catch (error) {
-  //     console.error('Error loading documents:', error);
-  //     // Handle error (e.g., show a notification to the user)
-  //   }
-  // }
 
   async loadDocuments(): Promise<void> {
     try {
-      const data = await this.supabaseService.getOutgoing_Documents();
-      console.log('Raw data from Supabase:', data);
+      // Fetch dummy data from UserService
+      const data = this.userService.getOutgoingDocuments(); // Use the UserService to get documents
+      console.log('Fetched documents:', data);
 
-      const documents: Document[] = data.map(doc => ({
-        code: doc.full_doc_code,
-        document_id: doc.full_outgoing_doc_id,
-        subject_title: doc.full_doc_subject_title,
-        category_name: doc.full_category_name,
-        type_name: doc.full_type_name,
-        message: doc.full_doc_message,
-        office_name: doc.full_office_name,
-        account_name: doc.full_name,
-        received_date_received: doc.full_date_released,
-        received: false
-      }));
-      console.log('Mapped documents:', documents);
-
-      this.documents.set(documents);
+      this.documents.set(data);
       this.filterDocuments();
     } catch (error) {
       console.error('Error loading documents:', error);
     }
   }
 
-  
-  // filterDocuments(): void {
-  //   const filtered = this.documents().filter((doc) =>
-  //     Object.values(doc).some((val) =>
-  //       val.toString().toLowerCase().includes(this.searchQuery().toLowerCase())
-  //     )
-  //   );
-  //   this.filteredDocuments.set(filtered);
-  //   this.currentPage.set(1);
-  //   this.paginateDocuments();
-  // }
-
   async loadFilterOptions(): Promise<void> {
     try {
-      const [typesData, officesData, categoriesData] = await Promise.all([
-        this.supabaseService.typesFilter(),
-        this.supabaseService.officeFilter(),
-        this.supabaseService.categoryFilter()
-      ]);
-
-      this.types.set(['All Types', ...typesData.map(t => t.name)]);
-      this.offices.set(['All Offices', ...officesData.map(o => o.office_name)]);
-      this.categories.set(['All Categories', ...categoriesData.map(c => c.name)]);
+      // You can implement filter options here if needed
+      // For example, you can set static filter options if necessary
+      this.types.set(['All Types', 'Type 1', 'Type 2']);
+      this.offices.set(['All Offices', 'Office 1', 'Office 2']);
+      this.categories.set(['All Categories', 'Category 1', 'Category 2']);
     } catch (error) {
       console.error('Error loading filter options:', error);
     }
@@ -151,21 +96,12 @@ export class AOutgoingComponent implements OnInit {
     this.paginateDocuments();
   }
 
-
   paginateDocuments(): void {
     const startIndex = (this.currentPage() - 1) * this.itemsPerPage();
     const endIndex = startIndex + this.itemsPerPage();
     const paginatedDocs = this.filteredDocuments().slice(startIndex, endIndex);
     this.filteredDocuments.set(paginatedDocs);
   }
-
-  // changePage(page: number | string): void {
-  //   const pageNumber = typeof page === 'string' ? parseInt(page, 10) : page;
-  //   if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= this.totalPages()) {
-  //     this.currentPage.set(pageNumber);
-  //     this.paginateDocuments();
-  //   }
-  // }
 
   changePage(page: number | string): void {
     const pageNumber = typeof page === 'string' ? parseInt(page, 10) : page;
@@ -175,8 +111,6 @@ export class AOutgoingComponent implements OnInit {
     }
   }
 
-
-  
   toggleFilterModal(): void {
     this.showFilterModal.set(!this.showFilterModal());
   }
@@ -195,8 +129,6 @@ export class AOutgoingComponent implements OnInit {
     const select = event.target as HTMLSelectElement;
     this.selectedCategory.set(select.value);
   }
-
-  
 
   updateSelectedType(event: Event): void {
     const select = event.target as HTMLSelectElement;
@@ -223,10 +155,6 @@ export class AOutgoingComponent implements OnInit {
     this.router.navigate(['/admin/view-details', documentCode]);
   }
 
-  cancelRelease(documentCode: string): void {
-
-  }
-
   printQRCode(doc: Document): void {
     const qrCodeContainer = this.qrcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.code);
     if (qrCodeContainer) {
@@ -246,7 +174,7 @@ export class AOutgoingComponent implements OnInit {
                     padding: 0;
                     height: 100%;
                     width: 100%;
-                    overflow: hidden; /* Prevent scrollbars */
+                    overflow: hidden;
                   }
                   img {
                     position: absolute;
@@ -271,7 +199,11 @@ export class AOutgoingComponent implements OnInit {
       }
     }
   }
-  
+
+  cancelRelease(documentCode: string): void {
+
+  }
+
   generateAndPrintBarcode(doc: Document): void {
     console.log("Generate and Print Barcode:", doc);
     const barcodeContainer = this.barcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.code);
@@ -315,7 +247,7 @@ export class AOutgoingComponent implements OnInit {
             printWindow.focus();
             printWindow.print();
           }
-        }, 100); // Adjust the timeout if necessary
+        }, 100);
       }
     }
   }

@@ -25,56 +25,62 @@ export class SideBarComponent implements OnInit {
   isDropdownOpen: { [key: string]: boolean } = {};  // Track dropdown state
 
   title: string = ''; // New title property
+  userName: string | null = ''; // Initialize as empty
+  profileImageUrl: string = 'assets/profile/default-profile.jpg'; // Default profile image
+  userRole: string | null = '';
 
   AdminMenu: MenuItem[] = [
     {
-      label: 'Dashboard',
+      label: 'DASHBOARD',
       icon: 'ic:sharp-dashboard',
       route: '/admin/dashboard',
     },
     {
-      label: 'Documents',
-      icon: 'ic:outline-school',
+      label: 'DOCUMENTS',
+      icon: 'ic:sharp-description',
       route: '/admin/a-documents',
     },
-    { label: 'Incoming', icon: 'ic:baseline-format-list-bulleted', route: '/admin/a-incoming' },
+    { label: 'INCOMING', 
+      icon: 'ic:sharp-move-to-inbox', 
+      route: '/admin/a-incoming' 
+    },
     {
-      label: 'Received',
-      icon: 'ic:baseline-format-list-bulleted',
+      label: 'RECEIVED',
+      icon: 'ri:folder-received-fill',
       route: '/admin/a-received',
     },
     {
-      label: 'Outgoing',
-      icon: 'ic:baseline-format-list-bulleted',
+      label: 'OUTGOING',
+      icon: 'ic:sharp-shortcut',
       route: '/admin/a-outgoing',
     },
     {
-      label: 'Completed',
-      icon: 'ic:baseline-format-list-bulleted',
+      label: 'COMPLETED',
+      icon: 'ic:sharp-check-circle',
       route: '/admin/a-completed',
     },
     {
-      label: 'Reports',
+      label: 'REPORTS',
       icon: 'ic:baseline-assessment',
       route: '/admin/a-reports',
     },
     {
-      label: 'System Settings',
+      label: 'SYSTEM SETTINGS',
       icon: 'ic:baseline-settings',
       route: '',  // Empty route since it will have sub-items
       children: [
         {
-          label: 'User Management',
+          label: 'USERS',
           icon: 'ic:baseline-manage-accounts',
           route: '/admin/user-management',
         },
         {
-          label: 'Office Management',
+          label: 'OFFICE',
           icon: 'ic:baseline-business',
           route: '/admin/office-management',
         },
         {
-          label: 'Category Management',
+          label: 'CATEGORY',
           icon: 'ic:baseline-category',
           route: '/admin/category-management',
         },
@@ -89,40 +95,43 @@ export class SideBarComponent implements OnInit {
 
   UserMenu: MenuItem[] = [
     {
-      label: 'Dashboard',
+      label: 'DASHBOARD',
       icon: 'ic:sharp-dashboard',
       route: '/user/dashboard',
     },
     {
-      label: 'Documents',
-      icon: 'ic:outline-school',
+      label: 'DOCUMENTS',
+      icon: 'ic:sharp-description',
       route: '/user/documents',
     },
-    { label: 'Incoming', icon: 'ic:baseline-format-list-bulleted', route: '/user/incoming' },
+    { label: 'INCOMING', 
+      icon: 'ic:sharp-move-to-inbox', 
+      route: '/user/incoming',
+    },
     {
-      label: 'Received',
-      icon: 'ic:baseline-format-list-bulleted',
+      label: 'RECEIVED',
+      icon: 'ri:folder-received-fill',
       route: '/user/received',
     },
     {
-      label: 'Outgoing',
-      icon: 'ic:baseline-format-list-bulleted',
+      label: 'OUTGOING',
+      icon: 'cib:telegram-plane',
       route: '/user/outgoing',
     },
     {
-      label: 'Completed',
-      icon: 'ic:baseline-format-list-bulleted',
+      label: 'COMPLETED',
+      icon: 'ic:sharp-check-circle',
       route: '/user/completed',
     },
     {
-      label: 'Reports',
+      label: 'REPORTS',
       icon: 'ic:baseline-list-alt',
       route: '/user/e-logs',
     },
   ];
 
   generalMenu: MenuItem[] = [
-    { label: 'Report a Problem', icon: 'ic:baseline-report-problem', route: '/report' },
+    // { label: 'Report a Problem', icon: 'ic:baseline-report-problem', route: '/report' },
     { label: 'Sign Out', icon: 'ic:outline-logout', route: '/login' },
   ];
 
@@ -188,5 +197,14 @@ export class SideBarComponent implements OnInit {
       fragment: 'ignored',
       matrixParams: 'ignored'
     });
+  }
+
+  navigateToProfile() {
+    // Navigate based on the user's role
+    if (this.userRole === 'admin') {
+      this.router.navigate(['/admin/a-profile']);
+    } else {
+      this.router.navigate(['/user/u-profile']);
+    }
   }
 }

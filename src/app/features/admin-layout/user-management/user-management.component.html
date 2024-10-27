@@ -123,13 +123,13 @@
         </thead>
         <tbody class="divide-y divide-gray-200">
           <tr *ngFor="let user of displayedUsers" class="hover:bg-gray-50 transition duration-300">
-            <td class="py-4 px-6 text-center text-sm font-medium text-gray-900">{{ user.username }}</td>
+            <td class="py-4 px-6 text-center text-sm font-medium text-gray-900">{{ user.name }}</td>
             <td class="py-4 px-6 text-center text-sm text-gray-500">{{ user.email }}</td>
             <td class="py-4 px-6 text-center text-sm text-gray-500">{{ user.office_name }}</td>
             <td class="py-4 px-6 text-center text-sm">
-              <div [ngStyle]="{'background-color': user.account_status === 'active' ? '#16a34a' : (user.account_status === 'inactive' ? '#dc2626' : 'transparent')}"
+              <div [ngStyle]="{'background-color': user.status === 'active' ? '#16a34a' : (user.status === 'inactive' ? '#dc2626' : 'transparent')}"
                   class="text-white py-1 px-2 rounded-full">
-                {{ user.account_status }}
+                {{ user.status }}
               </div>
             </td>
             <td class="py-4 px-6 text-center text-sm text-gray-500">{{ user.role }}</td>

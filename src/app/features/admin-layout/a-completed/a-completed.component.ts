@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QRCodeModule } from 'angularx-qrcode';
 import JsBarcode from 'jsbarcode';
-import { SupabaseService } from '../../../core/services/supabase.service';
+import { UserService } from '../../../core/services/user.service';
 
 interface Document {
   code: string;
@@ -19,11 +19,10 @@ interface Document {
   received: boolean;
 }
 
-
 @Component({
   selector: 'app-a-completed',
   standalone: true,
-  imports: [CommonModule, FormsModule, QRCodeModule, RouterLink],  // Ensure QRCodeModule is included here
+  imports: [CommonModule, FormsModule, QRCodeModule, RouterLink],
   templateUrl: './a-completed.component.html',
   styleUrls: ['./a-completed.component.css']
 })
@@ -46,89 +45,26 @@ export class ACompletedComponent implements OnInit {
   selectedOffice = signal('All Offices');
   selectedCategory = signal('All Categories');
 
-
   @ViewChildren('qrcodeContainer') qrcodeContainers!: QueryList<ElementRef>;
   @ViewChildren('barcodeContainer') barcodeContainers!: QueryList<ElementRef>;
 
-  constructor(private router: Router, private supabaseService: SupabaseService) {
-  }
-
-  // async ngOnInit(): Promise<void> {
-  //   try {
-  //     const data = await this.supabaseService.getCompleted_Documents();
-  //     this.documents = data.map(doc => ({
-  //       code: doc.document_code,
-  //       subjectTitle: doc.subject_title,
-  //       category: doc.category_name,
-  //       type: doc.type_name,
-  //       messageRemarks: doc.message,
-  //       receivedBy: doc.completed_by_name,
-  //       dateCompleted: new Date(doc.date_completed).toLocaleString()
-  //     }));
-  //     this.filterDocuments();
-  //   } catch (error) {
-  //     console.error('Error fetching completed documents:', error);
-  //     // Handle error (e.g., show an error message to the user)
-  //   }
-  // }
+  constructor(private router: Router, private userService: UserService) { } // Inject UserService
 
   async ngOnInit(): Promise<void> {
-    await this.loadDocuments();
-    await this.loadFilterOptions();
+    this.loadDocuments(); // Load documents from UserService
+    this.loadDummyFilterOptions(); // Load dummy filter options instead of fetching from Supabase
   }
 
-
-  // filterDocuments(): void {
-  //   this.filteredDocuments = this.documents.filter((doc) =>
-  //     Object.values(doc).some((val) =>
-  //       val.toLowerCase().includes(this.searchQuery.toLowerCase())
-  //     )
-  //   );
-  //   this.currentPage = 1;
-  //   this.paginateDocuments();
-  // }
-
-  
-  async loadDocuments(): Promise<void> {
-    try {
-      const data = await this.supabaseService.getCompleted_Documents();
-      console.log('Raw data from Supabase:', data);
-
-      const documents: Document[] = data.map(doc => ({
-        code: doc.document_code,
-        document_id: doc.document_id,
-        subject_title: doc.subject_title,
-        category_name: doc.category_name,
-        type_name: doc.type_name,
-        message: doc.message,
-        office_name: doc.office_name,
-        account_name: doc.completed_by_name,
-        received_date_received: new Date(doc.date_completed).toLocaleString(),
-        received: true
-      }));
-      console.log('Mapped documents:', documents);
-
-      this.documents.set(documents);
-      this.filterDocuments();
-    } catch (error) {
-      console.error('Error loading documents:', error);
-    }
+  loadDocuments(): void {
+    // Fetch completed documents from UserService
+    this.documents.set(this.userService.getCompletedDocuments());
+    this.filterDocuments(); // Apply the filter to the documents
   }
 
-  async loadFilterOptions(): Promise<void> {
-    try {
-      const [typesData, officesData, categoriesData] = await Promise.all([
-        this.supabaseService.typesFilter(),
-        this.supabaseService.officeFilter(),
-        this.supabaseService.categoryFilter()
-      ]);
-
-      this.types.set(['All Types', ...typesData.map(t => t.name)]);
-      this.offices.set(['All Offices', ...officesData.map(o => o.office_name)]);
-      this.categories.set(['All Categories', ...categoriesData.map(c => c.name)]);
-    } catch (error) {
-      console.error('Error loading filter options:', error);
-    }
+  loadDummyFilterOptions(): void {
+    this.types.set(['All Types', 'Type A', 'Type B', 'Type C']);
+    this.offices.set(['All Offices', 'Office A', 'Office B', 'Office C']);
+    this.categories.set(['All Categories', 'Category 1', 'Category 2', 'Category 3']);
   }
 
   filterDocuments(): void {
@@ -245,7 +181,7 @@ export class ACompletedComponent implements OnInit {
       }
     }
   }
-  
+
   generateAndPrintBarcode(doc: Document): void {
     console.log("Generate and Print Barcode:", doc);
     const barcodeContainer = this.barcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.code);
@@ -254,7 +190,7 @@ export class ACompletedComponent implements OnInit {
       if (barcodeElement) {
         // Generate the barcode
         JsBarcode(barcodeElement, doc.code, { format: 'CODE128', width: 2, height: 40, displayValue: true });
-        
+
         // Ensure the barcode is rendered before printing
         setTimeout(() => {
           const barcodeSvg = barcodeElement.outerHTML;
@@ -293,6 +229,4 @@ export class ACompletedComponent implements OnInit {
       }
     }
   }
-
-  
 }
