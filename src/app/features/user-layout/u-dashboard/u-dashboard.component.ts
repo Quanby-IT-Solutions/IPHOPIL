@@ -18,13 +18,15 @@ Chart.register(...registerables);
 export class UDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
+  totalDocuments: number = 0;
+
   documentStats: { title: string; value: number; icon: string; iconColor: string }[] = [];
   alerts = [
     { type: 'warning', title: 'Urgent Review Needed', message: '3 documents require immediate attention.' },
     { type: 'info', title: 'System Update', message: 'Scheduled maintenance on Saturday, 10 PM - 2 AM.' }
   ];
 
-  private chart: Chart | undefined;
+  private chart: Chart<"doughnut", number[], string> | null = null;
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
@@ -37,19 +39,23 @@ export class UDashboardComponent implements OnInit, AfterViewInit {
       const incomingCount = await this.supabaseService.countDocuments('incoming_documents');
       const receivedCount = await this.supabaseService.countDocuments('received_documents');
       const outgoingCount = await this.supabaseService.countDocuments('outgoing_documents');
+      const completedCount = await this.supabaseService.countDocuments('outgoing_documents');
+
+      this.totalDocuments = incomingCount + receivedCount + outgoingCount + completedCount;
 
       this.documentStats = [
         //{ title: 'Total Documents', value: incomingCount + receivedCount + outgoingCount, icon: 'fas fa-file-alt', iconColor: 'text-emerald-500' }, // file icon
         { title: 'TOTAL INCOMING', value: incomingCount, icon: 'fas fa-inbox', iconColor: 'text-orange-500' }, // inbox icon
         { title: 'TOTAL RECEIVED', value: receivedCount, icon: 'fas fa-folder-open', iconColor: 'text-yellow-500' }, // folder-open icon
         { title: 'TOTAL OUTGOING', value: outgoingCount, icon: 'fas fa-paper-plane', iconColor: 'text-blue-500' }, // paper-plane icon
-        { title: 'TOTAL COMPLETED', value: outgoingCount, icon: 'fas fa-check-circle', iconColor: 'text-red-500' } // check-circle icon
+        { title: 'TOTAL COMPLETED', value: completedCount, icon: 'fas fa-check-circle', iconColor: 'text-red-500' } // check-circle icon
       ];
       
       
 
       // Initialize chart with fetched document stats
-      this.initChart(incomingCount, receivedCount, outgoingCount);
+      this.initChart(incomingCount, receivedCount, outgoingCount, completedCount);
+
     } catch (error) {
       console.error('Error fetching document stats:', error);
     }
@@ -59,43 +65,53 @@ export class UDashboardComponent implements OnInit, AfterViewInit {
     this.animateStats();
   }
 
-  private initChart(incoming: number, received: number, outgoing: number): void {
+  private initChart(incoming: number, received: number, outgoing: number, completed:number): void {
     const ctx = this.chartCanvas.nativeElement.getContext('2d')!;
+    const logoImage = new Image();
+    logoImage.src = 'assets/logo/cube.png';
 
+    const centerImagePlugin = {
+      id: 'centerImage',
+      beforeDraw: function(chart: Chart<"doughnut">) {
+        const ctx = chart.ctx;
+        const { top, bottom, left, right } = chart.chartArea;
+        const xCenter = (left + right) / 2;
+        const yCenter = (top + bottom) / 2;
+    
+        // Ensure the image is fully loaded before drawing
+        if (logoImage.complete) {
+          const imgSize = 100; // Set image size
+          ctx.drawImage(logoImage, xCenter - imgSize / 2, yCenter - imgSize / 2, imgSize, imgSize);
+        }}}
+
+    
+    
     // Destroy the existing chart if it exists to prevent memory leaks
     if (this.chart) {
       this.chart.destroy();
     }
 
-    // Create new chart
+    // Create new donut chart
     this.chart = new Chart(ctx, {
-      type: 'bar',
+      type: 'doughnut',
       data: {
-        labels: ['Incoming', 'Received', 'Outgoing'],
+        labels: ['Incoming', 'Received', 'Outgoing', 'Completed'],
         datasets: [{
-          data: [incoming, received, outgoing],
-          backgroundColor: ['#FCD34D', '#34D399', '#F87171'],
-          borderColor: ['#FBBF24', '#10B981', '#EF4444'],
+          data: [incoming, received, outgoing, completed],
+          backgroundColor: ['#FCD34D', '#34D399', '#F87171', '#EF8844'],
+          borderColor: ['#FBBF24', '#10B981', '#EF4444', '#FA7E2D'],
           borderWidth: 1
         }]
       },
       options: {
         responsive: true,
+        cutout:'50%',
         plugins: {
-          legend: { display: false },
-          title: { display: true, text: 'Document Status Overview' }
-        },
-        scales: {
-          x: {
-            beginAtZero: true,
-            title: { display: true, text: 'Status' }
-          },
-          y: {
-            beginAtZero: true,
-            title: { display: true, text: 'Count' }
-          }
+          legend: { display: false }, // Show legend for donut chart
+          title: { display: false, text: 'Document Status Overview' }
         }
-      }
+      },
+      plugins: [centerImagePlugin]
     });
   }
 

@@ -1,14 +1,14 @@
-<div class="fixed top-0 left-0 z-50 items-center h-screen px-3 overflow-y-auto transition-all duration-300 bg-white scroll-none"
+<div class="fixed top-0 left-0 z-50 items-center h-screen px-3 overflow-y-auto transition-all duration-300 bg-[#162239] scroll-none"
 
      [ngClass]="isCollapsed ? 'w-24' : 'w-64'">
   <div class="flex flex-col items-start justify-between w-full h-full px-2 py-4">
 
     <!-- Logo and Title -->
-    <div class="flex items-center mb-5 rounded-md border-b-2">
+    <div class="flex items-center mb-5  border-b-2">
       <img src="assets/logo/cube.png" alt="Logo" class="w-12 h-12 mr-3 mb-2" />
       <div [ngClass]="isCollapsed ? 'hidden' : 'block'">
-        <h1 class="font-semibold text-sm text-gray-800">Intellectual Property Office of the Philippines</h1>
-        <p class="text-sm text-gray-700 mb-2">{{ title }}</p>
+        <h1 class="font-semibold text-sm text-white">Intellectual Property Office of the Philippines</h1>
+        <p class="text-sm text-white mb-2">{{ title }}</p>
       </div>
     </div>
 
@@ -17,7 +17,7 @@
         [ngClass]="isCollapsed ? 'hidden' : 'block'">Main Menu</h2> -->
 
     <!-- Main Menu Items -->
-    <div class="flex flex-col w-full gap-2 mt-5 mb-auto text-gray-600 select-none">
+    <div class="flex flex-col w-full gap-2 mt-5 mb-auto text-white select-none">
       <ng-container *ngFor="let item of currentMenu">
 
         <!-- Menu Item with Dropdown -->
@@ -108,7 +108,7 @@
     </div>
 
     <!-- Others Menu Section -->
-    <div class="w-full mt-auto text-gray-600 justify-center border-t-2">
+    <div class="w-full mt-auto text-white justify-center border-t-2">
       <div class="flex flex-col gap-3">
         <div class="flex items-center w-full justify-center hover:bg-[--color-accent-light] rounded-md mt-2">
           <button (click)="navigateToProfile()"
