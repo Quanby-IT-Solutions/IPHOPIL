@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { SupabaseService } from '../../../core/services/supabase.service'; // Import your Supabase service
+import { SupabaseService } from '../../../core/services/supabase.service';
 
 @Component({
   selector: 'app-header',
@@ -8,30 +8,42 @@ import { SupabaseService } from '../../../core/services/supabase.service'; // Im
   styleUrls: ['./header.component.css'],
   standalone: true
 })
-export class HeaderComponent implements OnInit {
-  userName: string | null = ''; // Initialize as empty
-  profileImageUrl: string = 'assets/profile/default-profile.jpg'; // Default profile image
-  userRole: string | null = ''; // Initialize role
+export class HeaderComponent implements OnInit, OnDestroy {
+  userName: string | null = '';
+  profileImageUrl: string = 'assets/profile/default-profile.jpg';
+  userRole: string | null = '';
+  currentTime: string = ''; // New property for current time
+  private intervalId: any; // Store the interval ID
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
   async ngOnInit() {
     try {
-      // Fetch the current user from Supabase
       const user = await this.supabaseService.getCurrentUser();
 
       if (user) {
-        this.userName = user.name || 'Unnamed User'; // Display 'Unnamed User' if name is not set
-        this.profileImageUrl = user.profile_image || 'assets/profile/default-profile.jpg'; // Use default if profile image is not set
-        this.userRole = user.role || ''; // Fetch the role of the user from the `account` table
+        this.userName = user.name || 'Unnamed User';
+        this.profileImageUrl = user.profile_image || 'assets/profile/default-profile.jpg';
+        this.userRole = user.role || '';
       }
     } catch (err) {
       console.error('Error fetching user data:', err);
     }
+
+    this.updateCurrentTime(); // Initialize the time display
+    this.intervalId = setInterval(() => this.updateCurrentTime(), 1000); // Update time every second
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.intervalId); // Clear interval when component is destroyed
+  }
+
+  updateCurrentTime() {
+    const now = new Date();
+    this.currentTime = now.toLocaleTimeString(); // Format time as needed
   }
 
   navigateToProfile() {
-    // Navigate based on the user's role
     if (this.userRole === 'admin') {
       this.router.navigate(['/admin/a-profile']);
     } else {
