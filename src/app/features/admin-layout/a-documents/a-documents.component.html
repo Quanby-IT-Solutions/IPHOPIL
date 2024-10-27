@@ -61,13 +61,11 @@
                 </button>
               </div>
             </td>
-          
         <td hidden><div #barcodeContainer [attr.data-doc-code]="doc.code">
           <svg></svg> <!-- JsBarcode will render here -->
         </div><div #qrcodeContainer [attr.data-doc-code]="doc.code">
           <qrcode [qrdata]="doc.code" [width]="100" [errorCorrectionLevel]="'M'"></qrcode>
         </div></td>
-
             <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ doc.code }}</td>
             <td class="py-4 px-6 text-sm text-gray-500">{{ doc.subject }}</td>
             <td class="py-4 px-6 text-sm text-gray-500">{{ doc.category }}</td>
@@ -100,9 +98,6 @@
       </tbody>
     </table>
   </div>
-
-
-
   <div class="flex items-center justify-between mt-4">
     <!-- Previous Button -->
     <button 
@@ -115,7 +110,6 @@
       </svg>
       Previous
     </button>
-
     <!-- Pagination Numbers -->
     <div class="flex space-x-2">
       <!-- Loop through page numbers -->
@@ -152,7 +146,7 @@
   </div>
 </div>
 
-  <!-- New Document Modal -->
+  <!-- New Document Modal this is on the document part-->
   <dialog #newDocumentModal class="p-6 rounded-lg shadow-xl bg-white">
   <h2 class="text-2xl font-bold mb-4 text-gray-800">Create New Document</h2>
   <form (ngSubmit)="createNewDocument(); newDocumentModal.close()">
