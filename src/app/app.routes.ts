@@ -28,10 +28,7 @@ import { UCompletedComponent } from './features/user-layout/u-completed/u-comple
 import { CreateUserComponent } from './features/admin-layout/user-management/create-user/create-user.component';
 import { ACompletedComponent } from './features/admin-layout/a-completed/a-completed.component';
 import { AReceiveDocumentComponent } from './features/admin-layout/receive-document/receive-document.component';
-import { AReceiveDocumentProceedComponent } from './features/admin-layout/receive-document/receive-document-proceed/receive-document-proceed.component';
 import { AReleaseDocumentComponent } from './features/admin-layout/release-document/release-document.component';
-import { AReleaseDocumentProceedComponent } from './features/admin-layout/release-document/release-document-proceed/release-document-proceed.component';
-import { UReleaseDocumentProceedComponent } from './features/user-layout/release-document/release-document-proceed/release-document-proceed.component';
 import { UReleaseDocumentComponent } from './features/user-layout/release-document/release-document.component';
 import { UReceiveDocumentProceedComponent } from './features/user-layout/receive-document/receive-document-proceed/receive-document-proceed.component';
 import { UReceiveDocumentComponent } from './features/user-layout/receive-document/receive-document.component';
@@ -64,7 +61,6 @@ export const routes: Routes = [
       { path: 'receive-document', component: UReceiveDocumentComponent },
       { path: 'receive-document-proceed/:documentCode', component: UReceiveDocumentProceedComponent },
       { path: 'release-document', component: UReleaseDocumentComponent },
-      { path: 'release-document-proceed/:documentCode', component: UReleaseDocumentProceedComponent },
       { path: 'view-details/:documentCode', component: ViewDetailsComponent }, // Updated route with parameter
       { path: 'u-profile', component: UProfileComponent },    
     ],
@@ -91,9 +87,7 @@ export const routes: Routes = [
       { path: 'office-edit/:id', component: OfficeEditComponent },
       { path: 'create-user', component: CreateUserComponent},
       { path: 'receive-document', component: AReceiveDocumentComponent },
-      { path: 'receive-document-proceed/:documentCode', component: AReceiveDocumentProceedComponent },
       { path: 'release-document', component: AReleaseDocumentComponent },
-      { path: 'release-document-proceed/:documentCode', component: AReleaseDocumentProceedComponent },
       { path: 'view-details/:documentCode', component: ViewDetailsComponent }, // Updated route with parameter
       { path: 'a-profile', component: AProfileComponent },    
     ],
