@@ -80,7 +80,7 @@ export class SideBarComponent implements OnInit {
           route: '/admin/office-management',
         },
         {
-          label: 'CATEGORY',
+          label: 'CLASSIFICATION',
           icon: 'ic:baseline-category',
           route: '/admin/category-management',
         },

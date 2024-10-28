@@ -10,8 +10,8 @@ import { CommonModule } from '@angular/common';
 })
 export class CatergoryManagementComponent {
   categories = [
-    { category: 'Category1', types: ['Type1'] },
-    { category: 'Category2', types: ['Type1'] }
+    { category: 'classification1', types: ['Type1'] },
+    { category: 'classification2', types: ['Type1'] }
   ];
 
   isCreateCategoryModalOpen = false;

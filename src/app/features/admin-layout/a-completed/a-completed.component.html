@@ -71,7 +71,7 @@
             <th
               class="px-6 py-3 text-xs font-medium tracking-wider text-left text-black uppercase"
             >
-              Category
+            classification
             </th>
             <th
               class="px-6 py-3 text-xs font-medium tracking-wider text-left text-black uppercase"
@@ -243,18 +243,9 @@
   <div class="p-5 bg-white rounded-lg shadow-xl w-96">
     <h2 class="mb-4 text-xl font-bold">Filter Documents</h2>
 
-    <!-- <div class="mb-4">
-      <label class="block mb-2 text-sm font-bold text-gray-700" for="originOffice">
-        Origin Office
-      </label>
-      <select [value]="selectedOffice()" (change)="updateSelectedOffice($event)" class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline">
-        <option *ngFor="let office of offices()" [value]="office">{{ office }}</option>
-      </select>
-    </div> -->
-
     <div class="mb-4">
       <label class="block mb-2 text-sm font-bold text-gray-700" for="category">
-        Category
+        classification
       </label>
       <select
         [value]="selectedCategory()"

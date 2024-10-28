@@ -74,12 +74,7 @@ export class ACompletedComponent implements OnInit {
   loadDummyFilterOptions(): void {
     this.types.set(['All Types', 'Type A', 'Type B', 'Type C']);
     this.offices.set(['All Offices', 'Office A', 'Office B', 'Office C']);
-    this.categories.set([
-      'All Categories',
-      'Category 1',
-      'Category 2',
-      'Category 3',
-    ]);
+    this.categories.set(['All classification', 'classification 1', 'classification 2', 'classification 3' ]);
   }
 
   filterDocuments(): void {

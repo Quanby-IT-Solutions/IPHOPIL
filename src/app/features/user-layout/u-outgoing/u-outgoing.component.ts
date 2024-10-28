@@ -74,7 +74,7 @@ export class UOutgoingComponent implements OnInit {
       // For example, you can set static filter options if necessary
       this.types.set(['All Types', 'Type 1', 'Type 2']);
       this.offices.set(['All Offices', 'Office 1', 'Office 2']);
-      this.categories.set(['All Categories', 'Category 1', 'Category 2']);
+      this.categories.set(['All classification', 'classification 1', 'classification 2']);
     } catch (error) {
       console.error('Error loading filter options:', error);
     }
