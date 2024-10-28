@@ -1,8 +1,10 @@
-<div class=" min-h-screen mt-3 px-5 bg-white rounded-lg ml-5 mb-3">
-  <div class="mx-auto bg-white w-auto mr-3 py-3">
-    <div class="flex justify-between items-center mb-6">
-      <h5 class="ml-3 text-gray-800">User/<span>Incoming</span></h5>
-      <a [routerLink]="['/user/receive-document']" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center">
+<div class=" min-h-screen mt-3 px-5 rounded-lg ml-5 mb-3">
+  <div class="mx-auto  w-auto mr-3 py-3 ">
+    <div class="flex justify-between items-center">
+
+      <h1 class="text-3xl font-bold text-gray-700 flex items-center text-start ml-3 mb-3">Incoming Documents</h1>
+
+      <a [routerLink]="['/user/receive-document']" class="px-4 mb-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd" />
         </svg>
@@ -10,92 +12,92 @@
       </a>
     </div>
 
-    <h1 class="text-3xl font-bold text-gray-700 flex items-center text-start ml-3 mb-3">Incoming Documents</h1>
-
-    <div class="flex mb-4 border border-gray-400 rounded-md">
-      <div class="flex-grow flex items-center border rounded-l-lg px-2 bg-white">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-        </svg>
-        <input
-          type="text"
-          placeholder="Search"
-          [ngModel]="searchQuery()"
-          (ngModelChange)="searchQuery.set($event); filterDocuments()"
-          class="w-full p-2 focus:outline-none"
-        />
-      
+    <div class="shadow-lg rounded-lg bg-white p-3">
+      <div class="flex mb-4 border rounded-lg">
+        <div class="flex-grow flex items-center rounded-lg px-2 bg-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Search"
+            [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event); filterDocuments()"
+            class="w-full p-2 focus:outline-none"
+          />
+        
+        </div>
+        <button (click)="toggleFilterModal()" class="bg-gray-100 px-4 py-2 rounded-r-lg hover:bg-gray-200 transition duration-300 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+          </svg>
+          Filter
+        </button>
       </div>
-      <button (click)="toggleFilterModal()" class="bg-gray-100 px-4 py-2 rounded-r-lg hover:bg-gray-200 transition duration-300 flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-        </svg>
-        Filter
-      </button>
-    </div>
 
-    <div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-400">
-      <table class="min-w-full">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Print</th>
-            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Code</th>
-            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Subject/Title</th>
-            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Category</th>
-            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Type</th>
-            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Message/Remarks</th>
-            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Released From</th>
-            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Released By</th>
-            <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Date Released</th>
-            <th class="py-3 px-6 text-center text-xs font-medium text-black uppercase tracking-wider">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-          @for (doc of filteredDocuments(); track doc.code) {
-            <tr class="hover:bg-gray-50 transition duration-300">
-              <td class="py-4 px-6 text-center">
-                <div class="flex justify-center flex-col">
-                  <button (click)="printQRCode(doc)" class="text-blue-600 mb-2 hover:text-blue-900 transition duration-300" title="Print QR code">
-                    <img src="assets/logo/qr-code.png" class="w-8 h-8">
-                  </button>
-                  <button (click)="generateAndPrintBarcode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print barcode">
-                    <img src="assets/logo/barcode.png" class="w-8 h-8">
-                  </button>
-                </div>
+      <div class="overflow-x-auto bg-white rounded-lg">
+        <table class="min-w-full">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Print</th>
+              <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Code</th>
+              <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Subject/Title</th>
+              <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Category</th>
+              <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Type</th>
+              <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Message/Remarks</th>
+              <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Released From</th>
+              <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Released By</th>
+              <th class="py-3 px-6 text-left text-xs font-medium text-black uppercase tracking-wider">Date Released</th>
+              <th class="py-3 px-6 text-center text-xs font-medium text-black uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            @for (doc of filteredDocuments(); track doc.code) {
+              <tr class="hover:bg-gray-50 transition duration-300">
+                <td class="py-4 px-6 text-center">
+                  <div class="flex justify-center flex-col">
+                    <button (click)="printQRCode(doc)" class="text-blue-600 mb-2 hover:text-blue-900 transition duration-300" title="Print QR code">
+                      <img src="assets/logo/qr-code.png" class="w-8 h-8">
+                    </button>
+                    <button (click)="generateAndPrintBarcode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print barcode">
+                      <img src="assets/logo/barcode.png" class="w-8 h-8">
+                    </button>
+                  </div>
+                </td>
+              
+            <td hidden><div #barcodeContainer [attr.data-doc-code]="doc.code">
+              <svg></svg> <!-- JsBarcode will render here -->
+            </div><div #qrcodeContainer [attr.data-doc-code]="doc.code">
+              <qrcode [qrdata]="doc.code" [width]="100" [errorCorrectionLevel]="'M'"></qrcode>
+            </div></td>
+                <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ doc.code }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">{{ doc.subject_title }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">{{ doc.category_name }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">{{ doc.type_name }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">{{ doc.message }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">{{ doc.office_name }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">{{ doc.account_name }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">{{ doc.received_date_received | date:'short' }}</td>
+                <td class="py-4 px-6 text-sm font-medium text-center">
+                  <button
+                  (click)="receiveDocument(doc.code)"
+                  class="text-green-600 hover:text-green-900 transition duration-300"
+                  title="Receive Document"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </button>
               </td>
-            
-          <td hidden><div #barcodeContainer [attr.data-doc-code]="doc.code">
-            <svg></svg> <!-- JsBarcode will render here -->
-          </div><div #qrcodeContainer [attr.data-doc-code]="doc.code">
-            <qrcode [qrdata]="doc.code" [width]="100" [errorCorrectionLevel]="'M'"></qrcode>
-          </div></td>
-              <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ doc.code }}</td>
-              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.subject_title }}</td>
-              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.category_name }}</td>
-              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.type_name }}</td>
-              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.message }}</td>
-              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.office_name }}</td>
-              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.account_name }}</td>
-              <td class="py-4 px-6 text-sm text-gray-500">{{ doc.received_date_received | date:'short' }}</td>
-              <td class="py-4 px-6 text-sm font-medium text-center">
-                <button
-                (click)="receiveDocument(doc.code)"
-                class="text-green-600 hover:text-green-900 transition duration-300"
-                title="Receive Document"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
-              </button>
-            </td>
-          </tr>
-        } @empty {
-          <tr>
-            <td colspan="8" class="py-4 px-6 text-sm text-center text-gray-500">No documents found</td>
-          </tr>
-        }
-      </tbody>
-      </table>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="8" class="py-4 px-6 text-sm text-center text-gray-500">No documents found</td>
+            </tr>
+          }
+        </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="flex items-center justify-between mt-4">
