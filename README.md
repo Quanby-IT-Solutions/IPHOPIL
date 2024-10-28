@@ -11,4 +11,8 @@
 
 - [ ] [Prisma](https://www.prisma.io/) Integration
 - [ ] [tRPC](https://trpc.io/) Integration
-- [ ] [Cypress](https://www.cypress.io/) for Tests
+- [/] [Cypress](https://www.cypress.io/) for Tests
+
+## References
+
+- [Table Test](https://glebbahmutov.com/blog/cy-table/)
