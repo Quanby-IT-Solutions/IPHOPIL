@@ -15,9 +15,17 @@
       <!-- Password Field -->
       <!-- <label for="password" class="sr-only mt-4">Password</label> -->
       <div class="flex flex-col w-full relative">
-        <input type="password" id="password" [(ngModel)]="password" placeholder="Enter password" name="password"
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          [ngModelOptions]="{ standalone: true }"
+          placeholder="Enter password"
+          name="password"
           class="flex overflow-hidden items-center px-3 py-2 mt-1 w-full leading-none bg-white rounded-lg border border-solid border-zinc-300 min-w-[200px] text-gray-600 text-sm"
-          aria-label="Enter your password" />
+          aria-label="Enter your password"
+        />
+
 
         <!-- Eye Icon for Show/Hide Password -->
         <button type="button" class="absolute right-3 top-2/4 transform -translate-y-2/4 text-gray-400"
@@ -28,6 +36,7 @@
 
       <div class="flex justify-start items-center mt-2">
         <input type="checkbox" id="rememberMe" [(ngModel)]="rememberMe"
+        [ngModelOptions]="{ standalone: true }"
           class="mr-2 w-4 h-4 rounded-full border-none checked:bg-blue-500 checked:border-none " />
         <label for="rememberMe" class="text-sm text-gray-600">Remember me</label>
       </div>
