@@ -1,7 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef, QueryList, ViewChildren, signal, computed } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  QueryList,
+  ViewChildren,
+  computed,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { QRCodeModule } from 'angularx-qrcode';
 import JsBarcode from 'jsbarcode';
 import { UserService } from '../../../core/services/user.service';
@@ -24,7 +32,7 @@ interface Document {
   standalone: true,
   imports: [CommonModule, FormsModule, QRCodeModule, RouterLink],
   templateUrl: './a-completed.component.html',
-  styleUrls: ['./a-completed.component.css']
+  styleUrls: ['./a-completed.component.css'],
 })
 export class ACompletedComponent implements OnInit {
   documents = signal<Document[]>([]);
@@ -34,7 +42,9 @@ export class ACompletedComponent implements OnInit {
   currentPage = signal(1);
   itemsPerPage = signal(5);
 
-  totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
+  totalPages = computed(() =>
+    Math.ceil(this.filteredDocuments().length / this.itemsPerPage())
+  );
 
   showFilterModal = signal(false);
   types = signal<string[]>([]);
@@ -48,7 +58,7 @@ export class ACompletedComponent implements OnInit {
   @ViewChildren('qrcodeContainer') qrcodeContainers!: QueryList<ElementRef>;
   @ViewChildren('barcodeContainer') barcodeContainers!: QueryList<ElementRef>;
 
-  constructor(private router: Router, private userService: UserService) { } // Inject UserService
+  constructor(private router: Router, private userService: UserService) {} // Inject UserService
 
   async ngOnInit(): Promise<void> {
     this.loadDocuments(); // Load documents from UserService
@@ -64,7 +74,12 @@ export class ACompletedComponent implements OnInit {
   loadDummyFilterOptions(): void {
     this.types.set(['All Types', 'Type A', 'Type B', 'Type C']);
     this.offices.set(['All Offices', 'Office A', 'Office B', 'Office C']);
-    this.categories.set(['All Categories', 'Category 1', 'Category 2', 'Category 3']);
+    this.categories.set([
+      'All Categories',
+      'Category 1',
+      'Category 2',
+      'Category 3',
+    ]);
   }
 
   filterDocuments(): void {
@@ -72,9 +87,15 @@ export class ACompletedComponent implements OnInit {
       const matchesSearch = Object.values(doc).some((val) =>
         val.toString().toLowerCase().includes(this.searchQuery().toLowerCase())
       );
-      const matchesType = this.selectedType() === 'All Types' || doc.type_name === this.selectedType();
-      const matchesOffice = this.selectedOffice() === 'All Offices' || doc.office_name === this.selectedOffice();
-      const matchesCategory = this.selectedCategory() === 'All Categories' || doc.category_name === this.selectedCategory();
+      const matchesType =
+        this.selectedType() === 'All Types' ||
+        doc.type_name === this.selectedType();
+      const matchesOffice =
+        this.selectedOffice() === 'All Offices' ||
+        doc.office_name === this.selectedOffice();
+      const matchesCategory =
+        this.selectedCategory() === 'All Categories' ||
+        doc.category_name === this.selectedCategory();
 
       return matchesSearch && matchesType && matchesOffice && matchesCategory;
     });
@@ -86,12 +107,18 @@ export class ACompletedComponent implements OnInit {
   paginateDocuments(): void {
     const startIndex = (this.currentPage() - 1) * this.itemsPerPage();
     const endIndex = startIndex + this.itemsPerPage();
-    this.paginatedDocuments.set(this.filteredDocuments().slice(startIndex, endIndex));
+    this.paginatedDocuments.set(
+      this.filteredDocuments().slice(startIndex, endIndex)
+    );
   }
 
   changePage(page: number | string): void {
     const pageNumber = typeof page === 'string' ? parseInt(page, 10) : page;
-    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= this.totalPages()) {
+    if (
+      !isNaN(pageNumber) &&
+      pageNumber >= 1 &&
+      pageNumber <= this.totalPages()
+    ) {
       this.currentPage.set(pageNumber);
       this.paginateDocuments();
     }
@@ -131,19 +158,39 @@ export class ACompletedComponent implements OnInit {
       return [1, 2, 3, 4, '...', totalPages - 1, totalPages];
     }
     if (currentPage >= totalPages - 2) {
-      return [1, 2, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+      return [
+        1,
+        2,
+        '...',
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      ];
     }
-    return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+    return [
+      1,
+      '...',
+      currentPage - 1,
+      currentPage,
+      currentPage + 1,
+      '...',
+      totalPages,
+    ];
   }
 
   viewDetails(documentCode: string): void {
-    this.router.navigate(['/user/view-details', documentCode]);
+    this.router.navigate(['/admin/view-details', documentCode]);
   }
 
   printQRCode(doc: Document): void {
-    const qrCodeContainer = this.qrcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.code);
+    const qrCodeContainer = this.qrcodeContainers.find(
+      (container) =>
+        container.nativeElement.getAttribute('data-doc-code') === doc.code
+    );
     if (qrCodeContainer) {
-      const qrCodeCanvas = qrCodeContainer.nativeElement.querySelector('canvas');
+      const qrCodeCanvas =
+        qrCodeContainer.nativeElement.querySelector('canvas');
       if (qrCodeCanvas) {
         const printWindow = window.open('', '', 'height=600,width=800');
         if (printWindow) {
@@ -183,13 +230,22 @@ export class ACompletedComponent implements OnInit {
   }
 
   generateAndPrintBarcode(doc: Document): void {
-    console.log("Generate and Print Barcode:", doc);
-    const barcodeContainer = this.barcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.code);
+    console.log('Generate and Print Barcode:', doc);
+    const barcodeContainer = this.barcodeContainers.find(
+      (container) =>
+        container.nativeElement.getAttribute('data-doc-code') === doc.code
+    );
     if (barcodeContainer) {
-      const barcodeElement = barcodeContainer.nativeElement.querySelector('svg');
+      const barcodeElement =
+        barcodeContainer.nativeElement.querySelector('svg');
       if (barcodeElement) {
         // Generate the barcode
-        JsBarcode(barcodeElement, doc.code, { format: 'CODE128', width: 2, height: 40, displayValue: true });
+        JsBarcode(barcodeElement, doc.code, {
+          format: 'CODE128',
+          width: 2,
+          height: 40,
+          displayValue: true,
+        });
 
         // Ensure the barcode is rendered before printing
         setTimeout(() => {
