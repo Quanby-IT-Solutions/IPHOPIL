@@ -7,61 +7,7 @@ import { map } from 'rxjs/operators';
 import { switchMap } from 'rxjs';
 import JsBarcode from 'jsbarcode';
 import { QRCodeModule } from 'angularx-qrcode';
-
-interface Document {
-  document_id: string;
-  code: string;
-  subject: string;
-  category: string;
-  type: string;
-  attachments: File[];
-  createdBy: string;
-  dateCreated: string;
-  originOffice: string;
-  logbook: LogEntry[];
-  office_name: string; // New field for office name
-  category_name?: string; // New field for category name
-  creator_name?: string; // New field for creator name
-  type_name?: string; // New field for type name
-
-}
-
-interface LogEntry {
-  from: string;
-  to: string;
-  dateReleased: string;
-}
-
-interface NewDocument {
-  subject: string;
-  category: string;
-  type: string;
-  attachments: File[];
-}
-
-interface ReleaseDocumentInfo {
-  document_id: string;
-  code: string;
-  receivingOffice: string;
-  message: string;
-}
-
-interface Category {
-  category_id: string; // This should match the type used in `supabase.service.ts`
-  name: string;
-}
-
-interface User {
-  user: {
-    id: string;
-    // other properties if needed
-  };
-}
-
-interface Type {
-  type_id: string;
-  name: string;
-}
+import { Document, Category, Type, NewDocument, ReleaseDocumentInfo, User, LogEntry } from '../../../shared/types';
 
 @Component({
   selector: 'app-u-documents',
@@ -83,13 +29,13 @@ export class UDocumentsComponent implements OnInit {
     category: string;
     type: string;
     attachments: string[];
-    office: string; // Add this line to include 'office'
+    office: string;
   } = {
     subject: '',
     category: '',
     type: '',
     attachments: [],
-    office: '' // Initialize this property
+    office: '' 
   };
 
   documents = signal<Document[]>([]);
@@ -134,16 +80,15 @@ export class UDocumentsComponent implements OnInit {
     this.supabaseService.types$.subscribe(types => this.types = types);
     this.supabaseService.types$.subscribe((types: Type[]) => {
       if (types) {
-        // Ensure 'types' is properly typed
         const names = types.map(type => type.name);
-        this.types = types; // Update the local types array if needed
+        this.types = types; 
       }
     });
   }
 
   onCategoryChange(categoryId: string): void {
     this.newDocument.update(doc => ({ ...doc, category: categoryId }));
-    this.supabaseService.fetchTypesByCategory(categoryId); // Fetch types based on selected category
+    this.supabaseService.fetchTypesByCategory(categoryId); 
   }
 
   fetchOffices(): void {
@@ -158,7 +103,6 @@ export class UDocumentsComponent implements OnInit {
     const userId = await this.supabaseService.getCurrentUserId();
     if (userId) {
       console.log('Current User ID:', userId);
-      // You can use the userId to associate the new document with the current user
     } else {
       console.error('Unable to fetch current user ID.');
     }
@@ -238,13 +182,12 @@ export class UDocumentsComponent implements OnInit {
 
   async createNewDocument(): Promise<void> {
     try {
-      const userId = await this.supabaseService.getCurrentUserId(); // Get current user ID
+      const userId = await this.supabaseService.getCurrentUserId();
       if (!userId) {
         window.alert('Failed to determine the current user.');
         return;
       }
-  
-      // Ensure that all fields are properly populated
+
       if (!this.newDocumentData.subject) {
         window.alert('Subject/Title is required.');
         return;
@@ -257,16 +200,15 @@ export class UDocumentsComponent implements OnInit {
         window.alert('Type is required.');
         return;
       }
-  
-      // Generate a unique code
+
       const uniqueCode = this.generateUniqueCode();
   
       const documentData = {
-        code: uniqueCode, // Assign the generated unique code here
+        code: uniqueCode,
         subject_title: this.newDocumentData.subject,
         category_id: this.newDocumentData.category,
         type_id: this.newDocumentData.type,
-        created_by: userId, // Use the current user ID
+        created_by: userId,
         attachments: this.newDocumentData.attachments,
         created_at: new Date().toISOString()
       };
@@ -280,7 +222,7 @@ export class UDocumentsComponent implements OnInit {
       }
   
       window.alert('Document created successfully!');
-      this.loadDocuments(); // Reload the documents list
+      this.loadDocuments();
     } catch (err) {
       if (err instanceof Error) {
         console.error('Unexpected error:', err.message);
@@ -292,7 +234,6 @@ export class UDocumentsComponent implements OnInit {
     }
   }
 
-  // Example SupabaseService method for getting current user
   async getCurrentUser(): Promise<User | null> {
     if (!this.supabase) {
       console.error('Supabase client not initialized.');
@@ -332,7 +273,6 @@ get currentUser() {
 }
 
 generateUniqueCode(): string {
-  // Generate an 8-character alphanumeric code
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';
   for (let i = 0; i < 8; i++) {
@@ -343,16 +283,13 @@ generateUniqueCode(): string {
 
 
   async getCurrentOffice(): Promise<string> {
-    // Implement this method based on how you store and retrieve office information
-    // For now, returning a placeholder value
     return 'Current Office';
   }
 
   async releaseDocument(): Promise<void> {
     const currentUser = await this.getCurrentUser();
     const currentOffice = await this.getCurrentOffice();
-  
-    // Update the documents state
+
     this.documents.update(docs =>
       docs.map(doc => {
         if (doc.code === this.releaseDocumentInfo().code) {
@@ -370,27 +307,24 @@ generateUniqueCode(): string {
       })
     );
   
-    // Save the released document to the database
+
     await this.saveReleasedDocumentToDb({
-      documentId: this.releaseDocumentInfo().code, // Assuming this is the document ID
+      documentId: this.releaseDocumentInfo().code, 
       message: this.releaseDocumentInfo().message,
       receivingOffice: this.newDocumentData.office,
       dateReleased: new Date().toISOString()
     });
-  
-    // Clear release document info and close modal
+
     this.releaseDocumentInfo.set({ code: '', receivingOffice: '', message: '', document_id: '' });
     this.releaseDocumentModal.nativeElement.close();
   }
-  
-  // Method to save released document to the database
+
   async saveReleasedDocumentToDb(releaseData: {
     documentId: string;
     message: string;
     receivingOffice: string;
     dateReleased: string;
   }): Promise<void> {
-    // Replace with your actual database service method
     await this.supabaseService.insertOutgoingDocument(releaseData);
   }
 
@@ -433,9 +367,7 @@ generateUniqueCode(): string {
   }
 
   openReleaseModal(documentCode: string): void {
-    // Ensure the signal is updated before showing the modal
     this.releaseDocumentInfo.set({ code: documentCode, receivingOffice: '', message: '', document_id: '' });
-    // Show the modal after updating the signal
     this.releaseDocumentModal.nativeElement.showModal();
   }
 
@@ -444,26 +376,16 @@ generateUniqueCode(): string {
   }
 
   fetchInitialData(): void {
-    // Fetch categories
     this.supabaseService.fetchCategories();
     this.supabaseService.categories$.subscribe((categories: Category[]) => {
       this.categories = categories;
     });
 
-    // Fetch offices
     this.supabaseService.fetchOffices();
     this.supabaseService.offices$.subscribe((offices) => {
       this.offices = offices;
     });
   }
-
-
-  // onCategoryChange(categoryId: string): void {
-  //   console.log('Selected category ID:', categoryId); // Debug log
-  //   this.newDocument.update(doc => ({ ...doc, category: categoryId }));
-  //   this.supabaseService.fetchTypesByCategory(categoryId); // Fetch types based on selected category
-  // }
-
 
   applyFilter(): void {
     this.filterModal.nativeElement.close();
@@ -542,8 +464,7 @@ generateUniqueCode(): string {
       if (barcodeElement) {
         // Generate the barcode
         JsBarcode(barcodeElement, doc.code, { format: 'CODE128', width: 2, height: 40, displayValue: true });
-        
-        // Ensure the barcode is rendered before printing
+
         setTimeout(() => {
           const barcodeSvg = barcodeElement.outerHTML;
           const printWindow = window.open('', '', 'height=600,width=800');
@@ -577,9 +498,12 @@ generateUniqueCode(): string {
             printWindow.focus();
             printWindow.print();
           }
-        }, 100); // Adjust the timeout if necessary
+        }, 100); 
       }
     }
   }
-  
+
+  releaseDocuments(): void {
+    this.router.navigate(['user/release-document']);
+  }
 }
