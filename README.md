@@ -6,12 +6,14 @@
 - tRPC
 - Prisma
 - Supabase
+- [Cypress](https://www.cypress.io/)
 
 ## Todo
 
 - [ ] [Prisma](https://www.prisma.io/) Integration
 - [ ] [tRPC](https://trpc.io/) Integration
-- [/] [Cypress](https://www.cypress.io/) for Tests
+
+## 
 
 ## References
 
