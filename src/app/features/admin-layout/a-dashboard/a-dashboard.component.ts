@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ViewChild, ElementRef, OnInit, OnDestroy } fr
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Chart, ChartData, ChartOptions } from 'chart.js';
+import { SupabaseService } from '../../../core/services/supabase.service';
 
 @Component({
   selector: 'app-a-dashboard',
@@ -12,145 +13,122 @@ import { Chart, ChartData, ChartOptions } from 'chart.js';
 export class ADashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
-  chart?: Chart;
+  totalDocuments: number = 0;
 
-  documentStats = [
-    { 
-      title: 'Pending Review', 
-      value: 23, 
-      icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />`, 
-      iconColor: 'text-yellow-500' 
-    },
-    { 
-      title: 'Approved', 
-      value: 45, 
-      icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />`, 
-      iconColor: 'text-green-500' 
-    },
-    { 
-      title: 'Rejected', 
-      value: 7, 
-      icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />`, 
-      iconColor: 'text-red-500' 
-    },
-    { 
-      title: 'Total Documents', 
-      value: 75, 
-      icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />`, 
-      iconColor: 'text-blue-500' 
-    }
-  ];
-
+  documentStats: { title: string; value: number; icon: string; iconColor: string }[] = [];
   alerts = [
-    { 
-      type: 'warning', 
-      title: 'Pending Approvals', 
-      message: '5 documents require immediate attention.' 
-    },
-    { 
-      type: 'info', 
-      title: 'System Update', 
-      message: 'Scheduled maintenance on Saturday, 10 PM - 2 AM.' 
-    }
+    { type: 'warning', title: 'Urgent Review Needed', message: '3 documents require immediate attention.' },
+    { type: 'info', title: 'System Update', message: 'Scheduled maintenance on Saturday, 10 PM - 2 AM.' }
   ];
 
-  quickActions = [
-    { type: 'receive', label: 'Received', bgClass: 'bg-orange-500 hover:bg-orange-600'},
-    { type: 'transmit', label: 'Released', bgClass: 'bg-green-500 hover:bg-green-600' },
-    { type: 'add', label: 'Add New', bgClass: 'bg-purple-500 hover:bg-purple-600'}
-  ];
+  private chart: Chart<"doughnut", number[], string> | null = null;
 
-  constructor(private router: Router) {}
-
-  ngOnInit(): void {}
-
-  ngAfterViewInit(): void {
-    this.initChart();
+  constructor(private router: Router, private supabaseService: SupabaseService) {}
+  ngOnDestroy(): void {
+    throw new Error('Method not implemented.');
   }
 
-  ngOnDestroy(): void {
+  ngOnInit(): void {
+    this.fetchDocumentStats();
+  }
+
+  async fetchDocumentStats(): Promise<void> {
+    try {
+      const incomingCount = await this.supabaseService.countDocuments('incoming_documents');
+      const receivedCount = await this.supabaseService.countDocuments('received_documents');
+      const outgoingCount = await this.supabaseService.countDocuments('outgoing_documents');
+      const completedCount = await this.supabaseService.countDocuments('outgoing_documents');
+
+      this.totalDocuments = incomingCount + receivedCount + outgoingCount + completedCount;
+      this.documentStats = [
+        { title: 'PENDING REVIEW', value: incomingCount, icon: 'fas fa-clock', iconColor: 'text-orange-500' }, // clock icon for pending
+        { title: 'TOTAL REJECTED', value: receivedCount, icon: 'fas fa-times-circle', iconColor: 'text-yellow-500' }, // times-circle for rejected
+        { title: 'TOTAL APPROVALS', value: outgoingCount, icon: 'fas fa-check', iconColor: 'text-blue-500' }, // check for approvals
+        { title: 'TOTAL COMPLETED', value: completedCount, icon: 'fas fa-check-circle', iconColor: 'text-red-500' } // flag-checkered for completed
+      ];
+    
+      // Initialize chart with fetched document stats
+      this.initChart(incomingCount, receivedCount, outgoingCount, completedCount);
+
+    } catch (error) {
+      console.error('Error fetching document stats:', error);
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.animateStats();
+  }
+
+  private initChart(incoming: number, received: number, outgoing: number, completed:number): void {
+    const ctx = this.chartCanvas.nativeElement.getContext('2d')!;
+    const logoImage = new Image();
+    logoImage.src = 'assets/logo/cube.png';
+
+    const centerImagePlugin = {
+      id: 'centerImage',
+      beforeDraw: function(chart: Chart<"doughnut">) {
+        const ctx = chart.ctx;
+        const { top, bottom, left, right } = chart.chartArea;
+        const xCenter = (left + right) / 2;
+        const yCenter = (top + bottom) / 2;
+    
+        // Ensure the image is fully loaded before drawing
+        if (logoImage.complete) {
+          const imgSize = 100; // Set image size
+          ctx.drawImage(logoImage, xCenter - imgSize / 2, yCenter - imgSize / 2, imgSize, imgSize);
+        }}}
+
+    
+    
+    // Destroy the existing chart if it exists to prevent memory leaks
     if (this.chart) {
       this.chart.destroy();
     }
-  }
 
-  private initChart(): void {
-    if (!this.chartCanvas) return;
-
-    const ctx = this.chartCanvas.nativeElement.getContext('2d');
-    if (!ctx) return;
-
-    const data: ChartData = {
-      labels: ['Incoming', 'Received', 'Outgoing'],
-      datasets: [{
-        data: [4, 5, 1],
-        backgroundColor: [
-          'rgba(252, 211, 77, 0.8)',  // Yellow
-          'rgba(52, 211, 153, 0.8)',   // Green
-          'rgba(248, 113, 113, 0.8)'   // Red
-        ],
-        borderColor: [
-          '#FBBF24',
-          '#10B981',
-          '#EF4444'
-        ],
-        borderWidth: 2,
-        hoverOffset: 4
-      }]
-    };
-
-    const options: ChartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: {
-            padding: 20,
-            usePointStyle: true,
-            font: {
-              size: 12,
-              family: "'Inter', sans-serif"
-            }
-          }
-        },
-        tooltip: {
-          backgroundColor: 'rgba(17, 24, 39, 0.8)',
-          padding: 12,
-          bodyFont: {
-            size: 13,
-            family: "'Inter', sans-serif"
-          },
-          callbacks: {
-            label: function(context) {
-              const label = context.label || '';
-              const value = context.raw;
-              const total = context.dataset.data.reduce((a: any, b: any) => a + b, 0);
-              const percentage = Math.round((value as number / total) * 100);
-              return `${label}: ${value} (${percentage}%)`;
-            }
-          }
-        }
-      }
-    };
-
+    // Create new donut chart
     this.chart = new Chart(ctx, {
       type: 'doughnut',
-      data: data,
-      options: options
-    } as any); // Using type assertion as a temporary fix
+      data: {
+        labels: ['Review', 'Reject', 'Approved', 'Completed'],
+        datasets: [{
+          data: [incoming, received, outgoing, completed],
+          backgroundColor: ['#FCD34D', '#34D399', '#F87171', '#EF8844'],
+          borderColor: ['#FBBF24', '#10B981', '#EF4444', '#FA7E2D'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout:'50%',
+        plugins: {
+          legend: { display: false }, // Show legend for donut chart
+          title: { display: false, text: 'Document Status Overview' }
+        }
+      },
+      plugins: [centerImagePlugin]
+    });
+  }
+
+  private animateStats(): void {
+    gsap.from('.stat-card', {
+      opacity: 0,
+      y: 20,
+      stagger: 0.1,
+      duration: 0.8,
+      ease: 'power2.out'
+    });
   }
 
   quickAction(action: string): void {
     switch (action) {
       case 'receive':
-        this.router.navigate(['/admin/a-received']);
+        this.router.navigate(['/user/received']);
         break;
       case 'transmit':
-        this.router.navigate(['/admin/a-outgoing']);
+        this.router.navigate(['/user/outgoing']);
         break;
       case 'add':
-        this.router.navigate(['/admin/a-documents']);
+        this.router.navigate(['/user/documents']);
         break;
       default:
         console.log(`Unhandled quick action: ${action}`);
