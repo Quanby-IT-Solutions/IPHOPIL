@@ -37,7 +37,7 @@ export interface ReleaseDocumentInfo {
 }
 
 export interface Category {
-  category_id: string; // This should match the type used in `supabase.service.ts`
+  category_id: string; 
   name: string;
 }
 

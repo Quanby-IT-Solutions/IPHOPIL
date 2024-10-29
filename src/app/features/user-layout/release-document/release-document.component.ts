@@ -1,11 +1,11 @@
 import { CommonModule, Location } from '@angular/common'; // Import Location
-import { Component, Inject, PLATFORM_ID, signal, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, signal, ViewChild, ElementRef, HostListener, OnInit } from '@angular/core'; // Import OnInit
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { QRCodeModule } from 'angularx-qrcode';
 import { Subject, debounceTime } from 'rxjs';
 import { SupabaseService } from '../../../core/services/supabase.service';
-import { LottieComponent, AnimationOptions } from 'ngx-lottie';
+import { LottieComponent } from 'ngx-lottie';
 import { AnimationItem } from 'lottie-web';
 
 @Component({
@@ -15,7 +15,7 @@ import { AnimationItem } from 'lottie-web';
   templateUrl: './release-document.component.html',
   styleUrls: ['./release-document.component.css']
 })
-export class UReleaseDocumentComponent {
+export class UReleaseDocumentComponent implements OnInit { // Implement OnInit
 
   styles: Partial<CSSStyleDeclaration> = {
     maxWidth: '500px',
@@ -25,16 +25,23 @@ export class UReleaseDocumentComponent {
   documentCode = signal('');
   private inputChangeSubject = new Subject<string>();
 
-  @ViewChild('documentCodeInput') documentCodeInput!: ElementRef; // Reference to input element
-  @ViewChild('activateScannerButton') activateScannerButton!: ElementRef; // Reference to button element
+  @ViewChild('documentCodeInput') documentCodeInput!: ElementRef; 
+  @ViewChild('activateScannerButton') activateScannerButton!: ElementRef; 
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object, 
     private supabaseService: SupabaseService,
     private router: Router,
-    private location: Location // Inject Location service
+    private location: Location 
   ) {
     this.inputChangeSubject.pipe(debounceTime(300)).subscribe(() => this.updateCode());
+  }
+
+  ngOnInit(): void {
+    // Automatically focus on the document code input field when the component initializes
+    setTimeout(() => {
+      this.documentCodeInput.nativeElement.focus();
+    }, 0); // Use setTimeout to ensure the view is fully initialized
   }
 
   updateCode() {
@@ -43,13 +50,13 @@ export class UReleaseDocumentComponent {
 
   activateScanner() {
     console.log('Activating QR code scanner');
-    this.activateScannerButton.nativeElement.focus(); // Focus on the button
+    this.activateScannerButton.nativeElement.focus(); 
   }
 
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     const key = event.key;
-    if (key.length === 1 || key === 'Backspace' || key === 'Delete') { // Handle normal keys and backspace
+    if (key.length === 1 || key === 'Backspace' || key === 'Delete') { 
       this.documentCodeInput.nativeElement.focus();
     }
   }
@@ -60,7 +67,7 @@ export class UReleaseDocumentComponent {
 
   cancel() {
     console.log('Cancelling');
-    this.location.back(); // Go back to the previous page
+    this.location.back(); 
   }
 
   proceed() {
@@ -73,12 +80,11 @@ export class UReleaseDocumentComponent {
   }
 
   generateQRCode() {
-    // Function to generate QR Code
+    // QR Code generation logic
   }
 
   onDocumentCodeChange(value: string) {
     this.documentCode.set(value);
-    this.inputChangeSubject.next(value); // Emit value change
+    this.inputChangeSubject.next(value); 
   }
-
 }
