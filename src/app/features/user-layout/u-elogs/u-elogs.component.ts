@@ -42,8 +42,6 @@ export class UElogsComponent implements OnInit {
   ngOnInit(): void {}
 
   loadLogs(): void {
-    this.isLoading = true;
-    // Mock logs data
     this.logs = [
       {
         action: 'Created',
@@ -82,6 +80,120 @@ export class UElogsComponent implements OnInit {
         category: 'Internal',
         type: 'Project',
         subjectTitle: 'Q3 Goals',
+      },
+      {
+        action: 'Created',
+        dateTime: '2024-09-04 08:30',
+        documentCode: 'DOC004',
+        createdBy: 'Alice Green',
+        category: 'Internal',
+        type: 'Report',
+        subjectTitle: 'Annual Budget Review',
+      },
+      {
+        action: 'Released',
+        dateTime: '2024-09-05 09:15',
+        documentCode: 'DOC005',
+        releasedTo: 'Client D',
+        releasedBy: 'Robert White',
+        category: 'External',
+        type: 'Proposal',
+        subjectTitle: 'New Project Proposal',
+      },
+      {
+        action: 'Received',
+        dateTime: '2024-09-06 12:00',
+        documentCode: 'DOC006',
+        receivedFrom: 'Team XYZ',
+        receivedBy: 'Laura Black',
+        category: 'Internal',
+        type: 'Email',
+        subjectTitle: 'Project Kickoff Details',
+      },
+      {
+        action: 'Completed',
+        dateTime: '2024-09-07 10:45',
+        documentCode: 'DOC007',
+        completedBy: 'Kevin Brown',
+        category: 'Internal',
+        type: 'Project',
+        subjectTitle: 'Website Update',
+      },
+      {
+        action: 'Created',
+        dateTime: '2024-09-08 14:00',
+        documentCode: 'DOC008',
+        createdBy: 'Sophie Turner',
+        category: 'Internal',
+        type: 'Report',
+        subjectTitle: 'Sales Performance Report',
+      },
+      {
+        action: 'Released',
+        dateTime: '2024-09-09 15:30',
+        documentCode: 'DOC009',
+        releasedTo: 'Management Team',
+        releasedBy: 'Daniel Lee',
+        category: 'Internal',
+        type: 'Presentation',
+        subjectTitle: 'Quarterly Review',
+      },
+      {
+        action: 'Received',
+        dateTime: '2024-09-10 11:00',
+        documentCode: 'DOC010',
+        receivedFrom: 'Client E',
+        receivedBy: 'Chloe White',
+        category: 'External',
+        type: 'Contract',
+        subjectTitle: 'Service Agreement',
+      },
+      {
+        action: 'Completed',
+        dateTime: '2024-09-11 13:00',
+        documentCode: 'DOC011',
+        completedBy: 'Tom Harris',
+        category: 'Internal',
+        type: 'Project',
+        subjectTitle: 'New Feature Launch',
+      },
+      {
+        action: 'Created',
+        dateTime: '2024-09-12 09:30',
+        documentCode: 'DOC012',
+        createdBy: 'Sarah Miller',
+        category: 'Internal',
+        type: 'Proposal',
+        subjectTitle: 'Budget Increase Request',
+      },
+      {
+        action: 'Released',
+        dateTime: '2024-09-13 10:00',
+        documentCode: 'DOC013',
+        releasedTo: 'External Agency F',
+        releasedBy: 'Angela Patel',
+        category: 'External',
+        type: 'Report',
+        subjectTitle: 'Market Analysis',
+      },
+      {
+        action: 'Received',
+        dateTime: '2024-09-14 14:30',
+        documentCode: 'DOC014',
+        receivedFrom: 'Vendor G',
+        receivedBy: 'David Kim',
+        category: 'External',
+        type: 'Invoice',
+        subjectTitle: 'Invoice for Services',
+      },
+      {
+        action: 'Completed',
+        dateTime: '2024-09-15 11:00',
+        documentCode: 'DOC015',
+        completedBy: 'Emily Davis',
+        category: 'Internal',
+        type: 'Project',
+        subjectTitle: 'Client Feedback Implementation',
       },
     ];
     this.filterLogs();
@@ -146,5 +258,9 @@ export class UElogsComponent implements OnInit {
 
   viewDetails(documentCode: string): void {
     this.router.navigate(['/user/view-details', documentCode]);
+  }
+
+  generateReports(): void {
+    this.router.navigate(['user/u-generate']);
   }
 }

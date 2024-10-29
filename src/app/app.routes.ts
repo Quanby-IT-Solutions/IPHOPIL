@@ -34,6 +34,8 @@ import { UReceiveDocumentProceedComponent } from './features/user-layout/receive
 import { UReceiveDocumentComponent } from './features/user-layout/receive-document/receive-document.component';
 import { UProfileComponent } from './features/user-layout/u-profile/u-profile.component';
 import { AProfileComponent } from './features/admin-layout/a-profile/a-profile.component';
+import { UGenerateComponent } from './features/user-layout/u-elogs/generate-reports/u-generate/u-generate.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -62,7 +64,8 @@ export const routes: Routes = [
       { path: 'receive-document-proceed/:documentCode', component: UReceiveDocumentProceedComponent },
       { path: 'release-document', component: UReleaseDocumentComponent },
       { path: 'view-details/:documentCode', component: ViewDetailsComponent }, // Updated route with parameter
-      { path: 'u-profile', component: UProfileComponent },    
+      { path: 'u-profile', component: UProfileComponent },
+      { path: 'u-generate', component: UGenerateComponent},    
     ],
   },
   {
