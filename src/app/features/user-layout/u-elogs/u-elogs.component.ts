@@ -1,4 +1,3 @@
-// src/app/logs/logs.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -29,9 +28,12 @@ interface LogEntry {
 export class UElogsComponent implements OnInit {
   logs: LogEntry[] = [];
   filteredLogs: LogEntry[] = [];
+  paginatedLogs: LogEntry[] = [];
   searchQuery: string = '';
+  selectedActions: Set<'Created' | 'Released' | 'Received' | 'Completed'> = new Set();
   currentPage: number = 1;
   itemsPerPage: number = 10;
+  isLoading: boolean = false;
 
   constructor(private router: Router) {
     this.loadLogs();
@@ -40,6 +42,8 @@ export class UElogsComponent implements OnInit {
   ngOnInit(): void {}
 
   loadLogs(): void {
+    this.isLoading = true;
+    // Mock logs data
     this.logs = [
       {
         action: 'Created',
@@ -79,35 +83,61 @@ export class UElogsComponent implements OnInit {
         type: 'Project',
         subjectTitle: 'Q3 Goals',
       },
-      // Additional mock logs can be added here
     ];
+    this.filterLogs();
+    this.isLoading = false;
+  }
+
+  filterByAction(action: 'Created' | 'Released' | 'Received' | 'Completed'): void {
+    if (this.selectedActions.has(action)) {
+      this.selectedActions.delete(action);
+    } else {
+      this.selectedActions.add(action);
+    }
     this.filterLogs();
   }
 
   filterLogs(): void {
-    this.filteredLogs = this.logs.filter((log) =>
-      Object.values(log).some((val) =>
-        val?.toString().toLowerCase().includes(this.searchQuery.toLowerCase())
-      )
-    );
+    this.filteredLogs = this.logs.filter((log) => {
+      const searchTerm = this.searchQuery.toLowerCase();
+      const searchFields = [
+        log.documentCode,
+        log.subjectTitle,
+        log.category,
+        log.type,
+        log.createdBy,
+        log.releasedTo,
+        log.releasedBy,
+        log.receivedFrom,
+        log.receivedBy,
+        log.completedBy,
+      ];
+
+      const matchesSearchQuery = searchTerm === '' || searchFields.some(field => 
+        field?.toLowerCase().includes(searchTerm)
+      );
+
+      const matchesAction = this.selectedActions.size === 0 || this.selectedActions.has(log.action);
+
+      return matchesSearchQuery && matchesAction;
+    });
+
+    // Reset to first page when filtering
     this.currentPage = 1;
     this.paginateLogs();
-  }
-
-  clearSearch(): void {
-    this.searchQuery = '';
-    this.filterLogs();
   }
 
   paginateLogs(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    this.filteredLogs = this.filteredLogs.slice(startIndex, endIndex);
+    this.paginatedLogs = this.filteredLogs.slice(startIndex, endIndex);
   }
 
   changePage(page: number): void {
-    this.currentPage = page;
-    this.paginateLogs();
+    if (page !== this.currentPage) {
+      this.currentPage = page;
+      this.paginateLogs();
+    }
   }
 
   get totalPages(): number {
