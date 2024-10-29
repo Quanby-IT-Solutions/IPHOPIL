@@ -15,8 +15,9 @@
                   <circle cx="17.5" cy="17.5" r="4.5" fill="currentColor" />
                   <path fill="currentColor" d="M3 13.5h8v8H3z" />
                 </svg>
-                <select id="category" class="flex-1 bg-transparent rounded-md focus:outline-none text-gray-800">
+                <select id="category" (change)="onCategoryChange($event)" class="flex-1 bg-transparent rounded-md focus:outline-none text-gray-800">
                   <option value="">Select a classification</option>
+                  <option *ngFor="let category of categories" [value]="category.category_id">{{ category.name }}</option>
                 </select>
               </div>
             </div>
@@ -31,6 +32,7 @@
                 </svg>
                 <select id="type" class="flex-1 bg-transparent rounded-md focus:outline-none text-gray-800">
                   <option value="">Select a type</option>
+                  <option *ngFor="let type of types" [value]="type.type_id">{{ type.name }}</option>
                 </select>
               </div>
             </div>

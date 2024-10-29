@@ -602,22 +602,6 @@ export class SupabaseService {
       });
   }
 
-  fetchCategories(): void {
-    if (!this.supabase) return;
-
-    this.supabase
-      .from('categories')
-      .select('category_id, name')
-      .then(({ data, error }) => {
-        if (error) {
-          console.error('Error fetching categories:', error);
-          return;
-        }
-        this.categoriesSubject.next(data as Category[] || []);
-      });
-  }
-
-
 
   // Fetch all agencies (offices)
   async getAgencies(): Promise<Office[]> {
@@ -1175,4 +1159,37 @@ export class SupabaseService {
   }
 
 
+  
+  async fetchCategories() {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return null; // Or throw an error
+    }
+
+    const { data, error } = await this.supabase
+      .from('categories')
+      .select('*');
+
+    if (error) {
+      console.error('Error fetching categories:', error);
+      return null; // or throw an error
+    }
+    return data;
+  }
+  async fetchTypes(categoryId: string) {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return null; // Or throw an error
+    }
+    const { data, error } = await this.supabase
+      .from('types')
+      .select('*')
+      .eq('category_id', categoryId);
+
+    if (error) {
+      console.error('Error fetching types:', error);
+      return null; // or throw an error
+    }
+    return data;
+  }
 }
