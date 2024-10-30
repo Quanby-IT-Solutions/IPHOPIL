@@ -34,6 +34,9 @@ interface DocumentDetails {
 })
 export class ViewDetailsComponent implements OnInit {
   documentDetails: DocumentDetails | null = null;
+  documentCode: string = '23AsC1931';
+
+
   @ViewChild('barcode', { static: false }) barcodeElement!: ElementRef<HTMLCanvasElement>;
 
   constructor(private route: ActivatedRoute, private supabaseService: SupabaseService) {}
@@ -43,6 +46,16 @@ export class ViewDetailsComponent implements OnInit {
     if (documentCode) {
       this.loadDocumentDetails(documentCode);
     }
+  }
+
+  copyCode(): void {
+    navigator.clipboard.writeText(this.documentCode)
+      .then(() => {
+        alert('Copied: ' + this.documentCode);
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+      });
   }
 
   async loadDocumentDetails(documentCode: string): Promise<void> {

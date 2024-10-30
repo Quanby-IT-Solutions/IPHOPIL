@@ -68,4 +68,16 @@ export class LoginFormComponent {
     const passwordInput = document.getElementById('password') as HTMLInputElement;
     passwordInput.type = this.isPasswordVisible ? 'text' : 'password';
   }
+
+  signInWithGoogle() {
+    // Logic for Google sign-in
+    console.log('Sign in with Google');
+    // Call the authentication service or API to perform Google login
+  }
+
+  signInWithMicrosoft() {
+    // Logic for Microsoft sign-in
+    console.log('Sign in with Microsoft');
+    // Call the authentication service or API to perform Microsoft login
+  }
 }

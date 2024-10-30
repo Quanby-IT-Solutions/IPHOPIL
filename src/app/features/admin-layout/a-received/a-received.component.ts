@@ -240,4 +240,8 @@ export class AReceivedComponent implements OnInit {
       }
     }
   }
+
+  releaseDocuments(): void {
+    this.router.navigate(['admin/document-release']);
+  }
 }

@@ -293,4 +293,6 @@ export class UserService {
   getCompletedDocuments(): Document[] {
     return this.completed_documents;
   }
+
+  
 }

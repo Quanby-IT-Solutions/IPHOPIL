@@ -12,8 +12,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userName: string | null = '';
   profileImageUrl: string = 'assets/profile/default-profile.jpg';
   userRole: string | null = '';
-  currentTime: string = ''; // New property for current time
-  private intervalId: any; // Store the interval ID
+  currentTime: string = ''; 
+  private intervalId: any; 
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 

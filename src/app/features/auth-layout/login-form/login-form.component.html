@@ -1,19 +1,15 @@
 <section class="flex flex-col max-w-[450px]">
-  <!-- <h1 class="text-2xl font-bold text-center" style="color: var(--color-primary);">Login</h1> -->
-  <form (ngSubmit)="onSubmit()" class="flex flex-col p-4 w-full bg-white rounded-lg  border-zinc-300 min-w-[330px]">
+  <form (ngSubmit)="onSubmit()" class="flex flex-col p-4 w-full bg-white rounded-lg border-zinc-300 min-w-[330px]">
 
     <div class="gap-y-1">
       <!-- Email Field -->
-      <!-- <label for="email" class="sr-only">Email</label> -->
       <div class="flex flex-col w-full">
-        <!-- <span class="leading-snug opacity-80 text-sm" style="color: var(--color-primary);">Email / Username</span> -->
         <input type="email" id="email" [(ngModel)]="email" placeholder="Enter email or username" name="email"
           class="flex overflow-hidden items-center px-3 py-2 mt-1 w-full leading-none bg-white rounded-lg border border-solid border-zinc-300 min-w-[200px] text-gray-600 text-sm"
           aria-label="Enter your email" />
       </div>
 
       <!-- Password Field -->
-      <!-- <label for="password" class="sr-only mt-4">Password</label> -->
       <div class="flex flex-col w-full relative">
         <input
           type="password"
@@ -25,7 +21,6 @@
           class="flex overflow-hidden items-center px-3 py-2 mt-1 w-full leading-none bg-white rounded-lg border border-solid border-zinc-300 min-w-[200px] text-gray-600 text-sm"
           aria-label="Enter your password"
         />
-
 
         <!-- Eye Icon for Show/Hide Password -->
         <button type="button" class="absolute right-3 top-2/4 transform -translate-y-2/4 text-gray-400"
@@ -40,9 +35,8 @@
           class="mr-2 w-4 h-4 rounded-full border-none checked:bg-blue-500 checked:border-none " />
         <label for="rememberMe" class="text-sm text-gray-600">Remember me</label>
       </div>
-
-
     </div>
+
     <!-- Sign In Button -->
     <button type="submit"
       class="flex gap-2 items-center mt-5 w-full leading-none text-white font-medium text-sm rounded-lg px-3 py-3 min-h-[40px] justify-center bg-[--color-accent-dark] hover:bg-orange-600">
@@ -60,6 +54,27 @@
         class="flex gap-2 items-center mt-2 w-full leading-none text-white font-medium text-sm rounded-lg px-3 py-3 min-h-[40px] justify-center"
         style="background-color: var(--color-primary);">
         Sign in as Admin
+      </button>
+    </div>
+
+    <!-- Separator for Social Login -->
+    <div class="flex items-center justify-center mt-4">
+      <hr class="flex-grow border-t border-zinc-300">
+      <span class="mx-2 text-gray-600">or sign in with</span>
+      <hr class="flex-grow border-t border-zinc-300">
+    </div>
+
+    <!-- Social Login Buttons -->
+    <div class="flex flex-col mt-4 w-full">
+      <button type="button" (click)="signInWithGoogle()"
+        class="flex gap-2 items-center w-full leading-none text-white font-medium text-sm rounded-lg px-3 py-3 min-h-[40px] justify-center bg-blue-600 hover:bg-blue-700">
+        <i class="fab fa-google"></i> <!-- FontAwesome Google Icon -->
+        Sign in with Google
+      </button>
+      <button type="button" (click)="signInWithMicrosoft()"
+        class="flex gap-2 items-center mt-2 w-full leading-none text-white font-medium text-sm rounded-lg px-3 py-3 min-h-[40px] justify-center bg-[#0078D4] hover:bg-[#005A9E]">
+        <i class="fab fa-microsoft"></i> <!-- FontAwesome Microsoft Icon -->
+        Sign in with Microsoft
       </button>
     </div>
   </form>

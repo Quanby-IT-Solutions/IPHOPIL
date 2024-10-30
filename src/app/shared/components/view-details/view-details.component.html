@@ -1,121 +1,286 @@
-<div class="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-4xl mx-auto">
-    <h2 class="text-3xl font-bold text-gray-700 mb-8 text-center">Document Details</h2>
+<div class="h-full  w-full p-5">
+  <div class="mb-5 h-screen  w-full">
 
-    <div *ngIf="documentDetails" class="bg-white shadow-xl rounded-lg overflow-hidden">
-      <!-- Header Section -->
-      <div class="bg-indigo-600 px-6 py-4 flex justify-between items-center">
-        <h3 class="text-xl font-semibold text-white">{{ documentDetails.subjectTitle || 'No Subject' }}</h3>
-        <span class="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-          {{ documentDetails.status || 'N/A' }}
-        </span>
-        <div class="flex flex-col items-center">
-          <span class="text-white font-semibold mb-2">QR Code:</span>
-          <div class="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-            <qrcode [qrdata]="documentDetails.qrCode" [width]="100" [margin]="0" [errorCorrectionLevel]="'M'"></qrcode>
-          </div>
-        </div>
-        <div class="flex flex-col items-center">
-          <span class="text-white font-semibold mb-2">Barcode:</span>
-          <div class="w-40 h-24 bg-gray-100 rounded-lg flex items-center justify-center">
-            <img *ngIf="documentDetails.barcode" [src]="documentDetails.barcode" alt="Barcode" />
-          </div>
-        </div>
-      </div>
+    <h1 class="text-3xl font-bold text-gray-800 text-center mt-3 mb-5">Document Details</h1>
 
-      <!-- Main Content -->
-      <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Left Column -->
-        <div class="space-y-6">
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-500">Document Code</span>
-            <span class="mt-1 text-lg font-semibold text-gray-900">{{ documentDetails.documentCode || 'N/A' }}</span>
-          </div>
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-500">Origin Office</span>
-            <span class="mt-1 text-lg text-gray-900">{{ documentDetails.originOffice || 'N/A' }}</span>
-          </div>
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-500">Category</span>
-            <span class="mt-1 text-lg text-gray-900">{{ documentDetails.category || 'N/A' }}</span>
-          </div>
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-500">Type</span>
-            <span class="mt-1 text-lg text-gray-900">{{ documentDetails.type || 'N/A' }}</span>
-          </div>
-        </div>
+    <div class="flex flex-row gap-x-5 ml-5">
+      <div class="flex flex-row  h-screen w-full rounded-lg shadow-lg  mb-5 p-8 bg-white">
 
-        <!-- Right Column -->
-        <div class="space-y-6">
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-500">Created By</span>
-            <span class="mt-1 text-lg text-gray-900">{{ documentDetails.createdBy || 'N/A' }}</span>
-          </div>
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-500">Date Created</span>
-            <span class="mt-1 text-lg text-gray-900">{{ documentDetails.dateCreated || 'N/A' }}</span>
-          </div>
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-500">Current Location</span>
-            <span class="mt-1 text-lg text-gray-900">{{ documentDetails.currentLocation || 'N/A' }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Document Logbook -->
-      <div class="px-6 py-4">
-        <h4 class="text-lg font-semibold text-gray-900 mb-4">Document Logbook</h4>
-        <ul class="space-y-3" *ngIf="documentDetails.logbook && documentDetails.logbook.length > 0; else noLogbook">
-          <li *ngFor="let log of documentDetails.logbook" class="bg-gray-50 rounded-lg p-3 text-sm text-gray-700">
-            <div class="flex justify-between items-center mb-1">
-              <span class="font-medium">{{ log.date || 'N/A' }}</span>
-              <span class="text-indigo-600">{{ log.from || 'N/A' }} → {{ log.to || 'N/A' }}</span>
+        <div class="w-full h-full flex flex-col gap-y-5 ">
+          
+          <div class="flex flex-row justify-between gap-x-5">
+            <div class="flex flex-col w-full">
+              <label class="font-bold text-lg mb-1">Document Code:</label>
+              <div class="flex flex-row items-center">
+                <div class="w-full h-8 border border-gray-400 flex items-center rounded-md">
+                  <span class="text-gray-900 text-base ml-2 select-text">{{documentCode}}</span>
+                </div>
+                <button class="h-5 w-5 ml-2" (click)="copyCode()">
+                  <img src="https://icon-library.com/images/copy-icon/copy-icon-15.jpg" alt="Copy">
+                </button>
+              </div>
             </div>
-            <p class="text-gray-600">{{ log.messageRemarks || 'No remarks' }}</p>
-          </li>
-        </ul>
-        <ng-template #noLogbook>
-          <p class="text-gray-500">No logbook entries available.</p>
-        </ng-template>
-      </div>
 
-      <!-- Attachments -->
-      <div class="px-6 py-4 bg-gray-50">
-        <h4 class="text-lg font-semibold text-gray-900 mb-4">Attachments</h4>
-        <div class="flex flex-wrap gap-2" *ngIf="documentDetails.attachments && documentDetails.attachments.length > 0; else noAttachments">
-          <a *ngFor="let attachment of documentDetails.attachments" 
-             [href]="attachment" 
-             target="_blank" 
-             class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800 hover:bg-indigo-200 transition-colors duration-200">
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-            </svg>
-            {{ attachment }}
-          </a>
+            <div class="w-full"> 
+              <label class="font-bold text-lg mb-1">Remarks:</label>
+              <div class="w-full h-8 border border-gray-400 flex items-center rounded-md">
+                <span class="text-gray-900 text-base ml-2 select-text">Misinformation</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- QR --> 
+          <div class="flex flex-col h-full w-full">
+            <label class="font-bold text-lg mb-1">Document QR Code:</label>
+            <div class="flex flex-row items-center gap-x-5">
+              <!--QR here-->
+              <div class="bg-white h-80 w-80 p-2 border border-gray-400 rounded-lg">
+                <img src="assets/logo/qr-code.png" class="w-full h-full">
+              </div>
+              <div class="flex flex-col gap-y-2">
+                <button class="bg-emerald-400 rounded-lg w-40 h-8 text-white flex items-center justify-center gap-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 32 32"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 22V5M9 16l7 7l7-7M9 27h14"/></svg>
+                  Download QR
+                </button>
+                <button class="bg-blue-400 rounded-lg w-40 h-8 text-white flex items-center justify-center gap-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32"><path fill="currentColor" d="M9 4v7H7c-1.645 0-3 1.355-3 3v10h5v4h14v-4h5V14c0-1.645-1.355-3-3-3h-2V4zm2 2h10v5H11zm-4 7h18c.566 0 1 .434 1 1v8h-3v-4H9v4H6v-8c0-.566.434-1 1-1m1 1c-.55 0-1 .45-1 1s.45 1 1 1s1-.45 1-1s-.45-1-1-1m3 6h10v6H11z"/></svg>                Print QR
+                </button>
+              </div>
+              
+            </div>
+          </div>
+
+          <!-- BARCODE -->
+          <div class="flex flex-col h-full w-full">
+            <h2 class="font-bold text-lg mb-1">Document Barcode:</h2>
+            <div class="flex flex-row items-center gap-x-5">
+              <!--Barcode here-->
+              <div class="bg-white h-40 w-80 p-2 border border-gray-400 rounded-lg">
+                <img src="assets/logo/barcode.png" class="w-full h-full">
+              </div>
+              <div class="flex flex-col gap-y-2">
+                <button class="bg-emerald-400 rounded-lg w-40 h-8 text-white flex items-center justify-center gap-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 32 32"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 22V5M9 16l7 7l7-7M9 27h14"/></svg>
+                  Download
+                </button>
+                <button class="bg-blue-400 rounded-lg w-40 h-8 text-white flex items-center justify-center gap-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32"><path fill="currentColor" d="M9 4v7H7c-1.645 0-3 1.355-3 3v10h5v4h14v-4h5V14c0-1.645-1.355-3-3-3h-2V4zm2 2h10v5H11zm-4 7h18c.566 0 1 .434 1 1v8h-3v-4H9v4H6v-8c0-.566.434-1 1-1m1 1c-.55 0-1 .45-1 1s.45 1 1 1s1-.45 1-1s-.45-1-1-1m3 6h10v6H11z"/></svg>                
+                  Print Barcode
+                </button>
+              </div>
+              
+            </div>
+          </div>
+            
         </div>
-        <ng-template #noAttachments>
-          <p class="text-gray-500">No attachments available.</p>
-        </ng-template>
+
       </div>
 
-      <!-- Received Information -->
-      <div *ngIf="documentDetails.receivedFrom || documentDetails.receivedBy || documentDetails.receivedDate" class="px-6 py-4 border-t border-gray-200">
-        <h4 class="text-lg font-semibold text-gray-900 mb-4">Received Information</h4>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <span class="font-medium text-gray-500">Received From:</span>
-            <p class="mt-1 text-gray-900">{{ documentDetails.receivedFrom || 'N/A' }}</p>
+      <div class="flex flex-row  h-screen w-full rounded-lg shadow-lg  mb-5 p-8 bg-white">
+        <div class="w-full h-full   flex flex-col gap-y-5">
+          <div class="flex flex-row  w-full gap-x-5">
+            <div class="flex flex-col w-full ">
+              <label class="font-bold text-lg mb-1">Enrolled by:</label>
+              <div class="flex flex-row items-center">
+                <div class="w-full h-8 border border-gray-400 flex items-center rounded-md">
+                  <span class="text-gray-900 text-base ml-2 select-text">Kenneth Felix John Aycardo</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col w-full">
+              <label class="font-bold text-lg mb-1">Subject/Title:</label>
+              <div class="flex flex-row items-center w-full">
+                <div class="w-full h-8 border border-gray-400 flex items-center rounded-md">
+                  <span class="text-gray-900 text-base ml-2 select-text">Angat Buhay para sa Lahat</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <span class="font-medium text-gray-500">Received By:</span>
-            <p class="mt-1 text-gray-900">{{ documentDetails.receivedBy || 'N/A' }}</p>
+
+          <div class="flex flex-row  w-full gap-x-5">
+            <div class="flex flex-col w-full ">
+              <label class="font-bold text-lg mb-1">Origin Office:</label>
+              <div class="flex flex-row items-center">
+                <div class="w-full h-8 border border-gray-400 flex items-center rounded-md">
+                  <span class="text-gray-900 text-base ml-2 select-text">Daraga, Albay</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col w-full">
+              <label class="font-bold text-lg mb-1">Date Enrolled:</label>
+              <div class="flex flex-row items-center w-full">
+                <div class="w-full h-8 border border-gray-400 flex items-center rounded-md">
+                  <span class="text-gray-900 text-base ml-2 select-text">October 30,2024</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <span class="font-medium text-gray-500">Received Date:</span>
-            <p class="mt-1 text-gray-900">{{ documentDetails.receivedDate || 'N/A' }}</p>
+
+          <div class="flex flex-row  w-full gap-x-5">
+            <div class="flex flex-col w-full ">
+              <label class="font-bold text-lg mb-1">Classification:</label>
+              <div class="flex flex-row items-center">
+                <div class="w-full h-8 border border-gray-400 flex items-center rounded-md">
+                  <span class="text-gray-900 text-base ml-2 select-text"></span>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col w-full">
+              <label class="font-bold text-lg mb-1">Originating Agency:</label>
+              <div class="flex flex-row items-center w-full">
+                <div class="w-full h-8 border border-gray-400 flex items-center rounded-md">
+                  <span class="text-gray-900 text-base ml-2 select-text">Intellectual Property Office</span>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <div class="flex flex-row  w-full gap-x-5">
+            <div class="flex flex-col w-full ">
+              <label class="font-bold text-lg mb-1">Type:</label>
+              <div class="flex flex-row items-center">
+                <div class="w-full h-8 border border-gray-400 flex items-center rounded-md">
+                  <span class="text-gray-900 text-base ml-2 select-text"></span>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col w-full">
+              <label class="font-bold text-lg mb-1">Current Location:</label>
+              <div class="flex flex-row items-center w-full">
+                <div class="w-full h-8 border border-gray-400 flex items-center rounded-md">
+                  <span class="text-gray-900 text-base ml-2 select-text">Tabaco City, Albay</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="flex flex-col w-full">
+            <label class="font-bold text-lg mb-1">Tags:</label>
+            <div class="flex flex-row gap-x-2 w-full">
+              <div class="flex flex-row items-center w-1/6">
+                <div class="relative w-20 h-5 bg-orange-400 flex items-center justify-center rounded-lg">
+                  <span class="text-white text-base select-text">Type 1</span>
+                </div>
+              </div>
+              
+              <div class="flex flex-row items-center w-1/6">
+                <div class="relative w-20 h-5 bg-emerald-400 flex items-center justify-center rounded-lg">
+                  <span class="text-white text-base select-text">Type 2</span>
+                </div>
+              </div> 
+              
+              <div class="flex flex-row items-center w-1/6">
+                <div class="relative w-20 h-5 bg-blue-400 flex items-center justify-center rounded-lg">
+                  <span class="text-white text-base select-text">Type 3</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col mt-5 w-full">
+            <div class="flex flex-row items-center justify-between mr-2">
+              <label class="font-bold text-lg mb-1">Annexes and Attachments:</label>
+              <button class="h-6 w-6 bg-orange-400 hover:bg-orange-600 rounded-md flex items-center justify-center" title="Add file">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" d="M6 12h12m-6 6V6"/></svg>
+              </button>
+            </div>
+
+            <div class="flex flex-col h-2/3 w-full mt-1 overflow-y-auto gap-y-2">
+              <div class="flex-row flex gap-x-5">
+                <div class="w-full h-10 border border-gray-400 rounded-lg flex items-center justify-center">
+                  <span class="text-base text-gray-800">Attachment1.pdf</span>
+                </div>
+                <div class="flex flex-row gap-x-3">
+                  <button class="h-10 w-10 bg-indigo-400 hover:bg-indigo-600 rounded-md flex items-center justify-center text-white" title="View file">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                    </svg>                  </button>
+                  <button class="h-10 w-10 bg-red-400 hover:bg-red-600 rounded-md flex items-center justify-center text-white" title="Delete file">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="currentColor" d="m15.241 3.721l.293 2.029H19.5a.75.75 0 0 1 0 1.5h-.769l-.873 10.185c-.053.62-.096 1.13-.165 1.542c-.07.429-.177.813-.386 1.169a3.25 3.25 0 0 1-1.401 1.287c-.372.177-.764.25-1.198.284c-.417.033-.928.033-1.55.033h-2.316c-.622 0-1.133 0-1.55-.033c-.434-.034-.826-.107-1.198-.284a3.25 3.25 0 0 1-1.401-1.287c-.21-.356-.315-.74-.386-1.169c-.069-.413-.112-.922-.165-1.542L5.269 7.25H4.5a.75.75 0 0 1 0-1.5h3.966l.293-2.029l.011-.061c.182-.79.86-1.41 1.71-1.41h3.04c.85 0 1.528.62 1.71 1.41zM9.981 5.75h4.037l-.256-1.776c-.048-.167-.17-.224-.243-.224h-3.038c-.073 0-.195.057-.243.224zm1.269 4.75a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0zm3 0a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0z"/></svg>                 </button>
+                </div>
+              </div>
+
+              <div class="flex-row flex gap-x-5">
+                <div class="w-full h-10 border border-gray-400 rounded-lg flex items-center justify-center">
+                  <span class="text-base text-gray-800">Attachment1.pdf</span>
+                </div>
+                <div class="flex flex-row gap-x-3">
+                  <button class="h-10 w-10 bg-indigo-400 hover:bg-indigo-600 rounded-md flex items-center justify-center text-white" title="View file">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                    </svg>                  </button>
+                  <button class="h-10 w-10 bg-red-400 hover:bg-red-600 rounded-md flex items-center justify-center text-white" title="Delete file">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="currentColor" d="m15.241 3.721l.293 2.029H19.5a.75.75 0 0 1 0 1.5h-.769l-.873 10.185c-.053.62-.096 1.13-.165 1.542c-.07.429-.177.813-.386 1.169a3.25 3.25 0 0 1-1.401 1.287c-.372.177-.764.25-1.198.284c-.417.033-.928.033-1.55.033h-2.316c-.622 0-1.133 0-1.55-.033c-.434-.034-.826-.107-1.198-.284a3.25 3.25 0 0 1-1.401-1.287c-.21-.356-.315-.74-.386-1.169c-.069-.413-.112-.922-.165-1.542L5.269 7.25H4.5a.75.75 0 0 1 0-1.5h3.966l.293-2.029l.011-.061c.182-.79.86-1.41 1.71-1.41h3.04c.85 0 1.528.62 1.71 1.41zM9.981 5.75h4.037l-.256-1.776c-.048-.167-.17-.224-.243-.224h-3.038c-.073 0-.195.057-.243.224zm1.269 4.75a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0zm3 0a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0z"/></svg>                 </button>
+                </div>
+              </div>
+
+              <div class="flex-row flex gap-x-5">
+                <div class="w-full h-10 border border-gray-400 rounded-lg flex items-center justify-center">
+                  <span class="text-base text-gray-800">Attachment1.pdf</span>
+                </div>
+                <div class="flex flex-row gap-x-3">
+                  <button class="h-10 w-10 bg-indigo-400 hover:bg-indigo-600 rounded-md flex items-center justify-center text-white" title="View file">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                    </svg>                  </button>
+                  <button class="h-10 w-10 bg-red-400 hover:bg-red-600 rounded-md flex items-center justify-center text-white" title="Delete file">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="currentColor" d="m15.241 3.721l.293 2.029H19.5a.75.75 0 0 1 0 1.5h-.769l-.873 10.185c-.053.62-.096 1.13-.165 1.542c-.07.429-.177.813-.386 1.169a3.25 3.25 0 0 1-1.401 1.287c-.372.177-.764.25-1.198.284c-.417.033-.928.033-1.55.033h-2.316c-.622 0-1.133 0-1.55-.033c-.434-.034-.826-.107-1.198-.284a3.25 3.25 0 0 1-1.401-1.287c-.21-.356-.315-.74-.386-1.169c-.069-.413-.112-.922-.165-1.542L5.269 7.25H4.5a.75.75 0 0 1 0-1.5h3.966l.293-2.029l.011-.061c.182-.79.86-1.41 1.71-1.41h3.04c.85 0 1.528.62 1.71 1.41zM9.981 5.75h4.037l-.256-1.776c-.048-.167-.17-.224-.243-.224h-3.038c-.073 0-.195.057-.243.224zm1.269 4.75a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0zm3 0a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0z"/></svg>                 </button>
+                </div>
+              </div>
+
+              <div class="flex-row flex gap-x-5">
+                <div class="w-full h-10 border border-gray-400 rounded-lg flex items-center justify-center">
+                  <span class="text-base text-gray-800">Attachment1.pdf</span>
+                </div>
+                <div class="flex flex-row gap-x-3">
+                  <button class="h-10 w-10 bg-indigo-400 hover:bg-indigo-600 rounded-md flex items-center justify-center text-white" title="View file">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                    </svg>                  </button>
+                  <button class="h-10 w-10 bg-red-400 hover:bg-red-600 rounded-md flex items-center justify-center text-white" title="Delete file">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="currentColor" d="m15.241 3.721l.293 2.029H19.5a.75.75 0 0 1 0 1.5h-.769l-.873 10.185c-.053.62-.096 1.13-.165 1.542c-.07.429-.177.813-.386 1.169a3.25 3.25 0 0 1-1.401 1.287c-.372.177-.764.25-1.198.284c-.417.033-.928.033-1.55.033h-2.316c-.622 0-1.133 0-1.55-.033c-.434-.034-.826-.107-1.198-.284a3.25 3.25 0 0 1-1.401-1.287c-.21-.356-.315-.74-.386-1.169c-.069-.413-.112-.922-.165-1.542L5.269 7.25H4.5a.75.75 0 0 1 0-1.5h3.966l.293-2.029l.011-.061c.182-.79.86-1.41 1.71-1.41h3.04c.85 0 1.528.62 1.71 1.41zM9.981 5.75h4.037l-.256-1.776c-.048-.167-.17-.224-.243-.224h-3.038c-.073 0-.195.057-.243.224zm1.269 4.75a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0zm3 0a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0z"/></svg>                 </button>
+                </div>
+              </div>
+
+              <div class="flex-row flex gap-x-5">
+                <div class="w-full h-10 border border-gray-400 rounded-lg flex items-center justify-center">
+                  <span class="text-base text-gray-800">Attachment1.pdf</span>
+                </div>
+                <div class="flex flex-row gap-x-3">
+                  <button class="h-10 w-10 bg-indigo-400 hover:bg-indigo-600 rounded-md flex items-center justify-center text-white" title="View file">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                    </svg>                  </button>
+                  <button class="h-10 w-10 bg-red-400 hover:bg-red-600 rounded-md flex items-center justify-center text-white" title="Delete file">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="currentColor" d="m15.241 3.721l.293 2.029H19.5a.75.75 0 0 1 0 1.5h-.769l-.873 10.185c-.053.62-.096 1.13-.165 1.542c-.07.429-.177.813-.386 1.169a3.25 3.25 0 0 1-1.401 1.287c-.372.177-.764.25-1.198.284c-.417.033-.928.033-1.55.033h-2.316c-.622 0-1.133 0-1.55-.033c-.434-.034-.826-.107-1.198-.284a3.25 3.25 0 0 1-1.401-1.287c-.21-.356-.315-.74-.386-1.169c-.069-.413-.112-.922-.165-1.542L5.269 7.25H4.5a.75.75 0 0 1 0-1.5h3.966l.293-2.029l.011-.061c.182-.79.86-1.41 1.71-1.41h3.04c.85 0 1.528.62 1.71 1.41zM9.981 5.75h4.037l-.256-1.776c-.048-.167-.17-.224-.243-.224h-3.038c-.073 0-.195.057-.243.224zm1.269 4.75a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0zm3 0a.75.75 0 0 0-1.5 0v5a.75.75 0 0 0 1.5 0z"/></svg>                 </button>
+                </div>
+              </div>
+
+
+
+            </div>
+
+
+          </div>
+          
+          
+          
+
+
+
+
+
+
+
         </div>
       </div>
     </div>
+    
   </div>
 </div>
