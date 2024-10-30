@@ -72,15 +72,12 @@ export class ADashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         const xCenter = (left + right) / 2;
         const yCenter = (top + bottom) / 2;
     
-        // Ensure the image is fully loaded before drawing
         if (logoImage.complete) {
           const imgSize = 100; // Set image size
           ctx.drawImage(logoImage, xCenter - imgSize / 2, yCenter - imgSize / 2, imgSize, imgSize);
         }}}
 
     
-    
-    // Destroy the existing chart if it exists to prevent memory leaks
     if (this.chart) {
       this.chart.destroy();
     }
@@ -101,7 +98,7 @@ export class ADashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         responsive: true,
         cutout:'50%',
         plugins: {
-          legend: { display: false }, // Show legend for donut chart
+          legend: { display: false }, 
           title: { display: false, text: 'Document Status Overview' }
         }
       },
