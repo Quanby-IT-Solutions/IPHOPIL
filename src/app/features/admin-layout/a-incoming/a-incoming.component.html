@@ -2,12 +2,12 @@
   <div class="w-full mx-auto p-6 bg-white rounded-lg shadow-lg">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold text-gray-800">Incoming Documents</h1>
-      <a [routerLink]="['/admin/receive-document']" class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition duration-300 flex items-center">
+      <button (click)="receiveDocuments()" class="px-4 mb-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd" />
         </svg>
         Receive Document
-      </a>
+      </button>
     </div>
   
     <div class="flex mb-4">

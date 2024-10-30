@@ -75,7 +75,7 @@
                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
                   </svg>
                 </button>
-                <button class="text-red-400 hover:text-red-800 transition duration-300" title="Undo">
+                <button (click)="openUndoConfirmation()" class="text-red-400 hover:text-red-800 transition duration-300" title="Undo">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 512 512">
                     <path fill="currentColor" d="M256 48C141.13 48 48 141.13 48 256s93.13 208 208 208s208-93.13 208-208S370.87 48 256 48m-9.17 241.14V344L146 248l100.83-96v54.86c96.5 0 119.17 69 119.17 137.14c-27.85-35.57-52.48-54.86-119.17-54.86" />
                   </svg>
@@ -156,6 +156,28 @@
           Apply Filter
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div *ngIf="showUndoConfirmationModal" 
+     class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+     (click)="closeUndoConfirmation()">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-full max-w-md mx-auto transform transition-all duration-300 ease-out"
+       [ngClass]="{'translate-y-0 opacity-100': showUndoConfirmationModal, '-translate-y-4 opacity-0': !showUndoConfirmationModal}"
+       (click)="$event.stopPropagation()">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Are you sure?</h3>
+    <p class="text-gray-600 dark:text-gray-300 mb-8">Do you want to undo the completion of this document?</p>
+    <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
+      <button 
+        (click)="confirmUndo()"
+        class="w-full sm:w-auto px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-300 transform hover:scale-105"
+        aria-label="Confirm undo action">Confirm</button>
+      <button 
+        (click)="closeUndoConfirmation()"
+        class="w-full sm:w-auto px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-colors duration-300 transform hover:scale-105 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+        aria-label="Cancel undo action">Cancel</button>
     </div>
   </div>
 </div>

@@ -34,6 +34,8 @@ export class UCompletedComponent implements OnInit {
   currentPage = signal(1);
   itemsPerPage = signal(5);
 
+  showUndoConfirmationModal: boolean = false;
+
   totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
 
   showFilterModal = signal(false);
@@ -228,5 +230,17 @@ export class UCompletedComponent implements OnInit {
         }, 100); // Adjust the timeout if necessary
       }
     }
+  }
+
+  openUndoConfirmation(): void {
+    this.showUndoConfirmationModal = true;
+  }
+
+  closeUndoConfirmation(): void {
+    this.showUndoConfirmationModal = false;
+  }
+
+  confirmUndo(): void {
+    this.showUndoConfirmationModal = false;
   }
 }

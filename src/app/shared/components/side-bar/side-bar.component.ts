@@ -2,6 +2,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, Output, EventEmitter, OnInit } from 
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SidebarServiceService } from '../../../core/services/SidebarService/sidebar-service.service';
+import { SupabaseService } from '../../../core/services/supabase.service';
 
 interface MenuItem {
   label: string;
@@ -131,17 +132,23 @@ export class SideBarComponent implements OnInit {
   ];
 
   generalMenu: MenuItem[] = [
-    // { label: 'Report a Problem', icon: 'ic:baseline-report-problem', route: '/report' },
     { label: 'Sign Out', icon: 'ic:outline-logout', route: '/login' },
   ];
 
   currentMenu: MenuItem[] = [];
   othersMenu: MenuItem[] = [];
 
-  constructor(private router: Router, private sidebarService: SidebarServiceService) {}
+  constructor(
+    private router: Router,
+    private sidebarService: SidebarServiceService,
+    private supabaseService: SupabaseService  // Add SupabaseService here
+  ) {}
+  
 
   ngOnInit() {
     this.setMenuByRole();
+    this.getCurrentUser(); 
+  
     this.sidebarService.isCollapsed$.subscribe(
       isCollapsed => {
         this.isCollapsed = isCollapsed;
@@ -149,6 +156,7 @@ export class SideBarComponent implements OnInit {
       }
     );
   }
+  
 
   toggleDropdown(label: string): void {
     this.isDropdownOpen[label] = !this.isDropdownOpen[label];
@@ -160,11 +168,11 @@ export class SideBarComponent implements OnInit {
     switch (userRole) {
       case 'user':
         this.currentMenu = [...this.UserMenu];
-        this.title = 'Document Management System'; // Set title for user menu
+        this.title = 'Document Management System'; 
         break;
       case 'admin':
         this.currentMenu = [...this.AdminMenu];
-        this.title = 'Admin Portal'; // Set title for admin menu
+        this.title = 'Admin Portal'; 
         break;
       default:
         console.error('Invalid role');
@@ -200,11 +208,19 @@ export class SideBarComponent implements OnInit {
   }
 
   navigateToProfile() {
-    // Navigate based on the user's role
     if (this.userRole === 'admin') {
       this.router.navigate(['/admin/a-profile']);
     } else {
       this.router.navigate(['/user/u-profile']);
     }
   }
+  async getCurrentUser() {
+    const user = await this.supabaseService.getCurrentUser();
+    if (user) {
+      this.userName = user.name;     
+      this.userRole = user.role;            
+      this.profileImageUrl = user.profile_image || 'assets/profile/default-profile.jpg'; 
+    }
+  }
+  
 }

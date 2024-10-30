@@ -240,4 +240,8 @@ export class UReceivedComponent implements OnInit {
       }
     }
   }
+
+  releaseDocuments(): void {
+    this.router.navigate(['user/document-release']);
+  }
 }

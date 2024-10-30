@@ -19,38 +19,29 @@ import { isPlatformBrowser } from '@angular/common';
   styleUrl: './receive-document.component.css'
 })
 export class ReceiveDocumentComponent implements OnInit, AfterViewInit {
-
-  // title = 'ejemplo_lottie';
-
-  // options: AnimationOptions = {
-  //   path: './assets/lottie/scanqr.json',
-  // };
-
-  // animationCreated(animationItem: AnimationItem): void {
-  //   console.log(animationItem);
-  // }
-
+ 
   styles: Partial<CSSStyleDeclaration> = {
     maxWidth: '500px',
     margin: '0 auto',
   };
 
   ngOnInit(): void {
-    // No lottie-web initialization here
   }
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      this.documentCodeInput.nativeElement.focus();
       import('lottie-web').then((lottie) => {
-        // Initialize lottie-web here if needed
       });
     }
   }
+
+  
   documentCode = signal('');
   private inputChangeSubject = new Subject<string>();
 
-  @ViewChild('documentCodeInput') documentCodeInput!: ElementRef; // Reference to input element
-  @ViewChild('activateScannerButton') activateScannerButton!: ElementRef; // Reference to button element
+  @ViewChild('documentCodeInput') documentCodeInput!: ElementRef;
+  @ViewChild('activateScannerButton') activateScannerButton!: ElementRef; 
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object, 
@@ -62,35 +53,30 @@ export class ReceiveDocumentComponent implements OnInit, AfterViewInit {
 
   updateCode() {
     this.generateQRCode();
-    // Removed generateBarcode() call
+
   }
 
   activateScanner() {
     console.log('Activating QR code scanner');
-    // Set up key event listeners to type in the input box
-    this.activateScannerButton.nativeElement.focus(); // Focus on the button
+
+    this.activateScannerButton.nativeElement.focus();
   }
 
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    // Capture typing input and direct it to the input field
+  
     const key = event.key;
-    if (key.length === 1 || key === 'Backspace' || key === 'Delete') { // Handle normal keys and backspace
+    if (key.length === 1 || key === 'Backspace' || key === 'Delete') { 
       this.documentCodeInput.nativeElement.focus();
     }
   }
 
   scanQRCode() {
-    // Implement QR code scanning logic here
     console.log('Scanning QR Code');
-    // After scanning, update the documentCode
-    // this.documentCode.set(scannedCode);
   }
 
   cancel() {
     console.log('Cancelling');
-    // Navigate back or to a specific page
-    // this.router.navigate(['/some-page']);
   }
 
   proceed() {
@@ -103,12 +89,11 @@ export class ReceiveDocumentComponent implements OnInit, AfterViewInit {
   }
 
   generateQRCode() {
-    // Function to generate QR Code
   }
 
   onDocumentCodeChange(value: string) {
     this.documentCode.set(value);
-    this.inputChangeSubject.next(value); // Emit value change
+    this.inputChangeSubject.next(value); 
   }
 
 }

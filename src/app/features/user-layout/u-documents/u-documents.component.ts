@@ -504,6 +504,6 @@ generateUniqueCode(): string {
   }
 
   releaseDocuments(): void {
-    this.router.navigate(['user/release-document']);
+    this.router.navigate(['user/document-release']);
   }
 }
