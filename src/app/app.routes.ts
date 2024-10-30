@@ -32,6 +32,7 @@ import { AProfileComponent } from './features/admin-layout/a-profile/a-profile.c
 import { UGenerateComponent } from './features/user-layout/u-elogs/generate-reports/u-generate/u-generate.component';
 import { ReceiveDocumentComponent } from './shared/components/receive-document/receive-document.component';
 import { ReleaseDocumentComponent } from './shared/components/release-document/release-document.component';
+import { AGenerateComponent } from './features/admin-layout/a-reports/a-generate/a-generate/a-generate.component';
 
 export const routes: Routes = [
   {
@@ -88,7 +89,8 @@ export const routes: Routes = [
       { path: 'view-details/:documentCode', component: ViewDetailsComponent }, // Updated route with parameter
       { path: 'a-profile', component: AProfileComponent },   
       { path: 'documents-receive', component: ReceiveDocumentComponent},
-      { path: 'document-release', component: ReleaseDocumentComponent},       
+      { path: 'document-release', component: ReleaseDocumentComponent},
+      { path: 'a-generate', component: AGenerateComponent},       
     ],
   },
   {

@@ -87,11 +87,11 @@ export class SideBarComponent implements OnInit {
         },
       ]
     },
-    {
-      label: 'E-logs',
-      icon: 'ic:baseline-list-alt',
-      route: '/admin/a-logs',
-    },
+    // {
+    //   label: 'E-logs',
+    //   icon: 'ic:baseline-list-alt',
+    //   route: '/admin/a-logs',
+    // },
   ];
 
   UserMenu: MenuItem[] = [
