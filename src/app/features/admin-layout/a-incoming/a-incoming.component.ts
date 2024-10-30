@@ -230,4 +230,8 @@ export class AIncomingComponent implements OnInit {
       }
     }
   }
+
+  receiveDocuments(): void {
+    this.router.navigate(['admin/documents-receive']);
+  }
 }

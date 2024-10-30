@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UReceiveDocumentComponent } from './receive-document.component';
+import { AGenerateComponent } from './a-generate.component';
 
-describe('UReceiveDocumentComponent', () => {
-  let component: UReceiveDocumentComponent;
-  let fixture: ComponentFixture<UReceiveDocumentComponent>;
+describe('AGenerateComponent', () => {
+  let component: AGenerateComponent;
+  let fixture: ComponentFixture<AGenerateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UReceiveDocumentComponent]
+      imports: [AGenerateComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(UReceiveDocumentComponent);
+    fixture = TestBed.createComponent(AGenerateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

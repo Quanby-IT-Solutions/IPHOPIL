@@ -27,13 +27,13 @@ import { OfficeEditComponent } from './features/admin-layout/office-management/o
 import { UCompletedComponent } from './features/user-layout/u-completed/u-completed.component';
 import { CreateUserComponent } from './features/admin-layout/user-management/create-user/create-user.component';
 import { ACompletedComponent } from './features/admin-layout/a-completed/a-completed.component';
-import { AReceiveDocumentComponent } from './features/admin-layout/receive-document/receive-document.component';
-import { AReleaseDocumentComponent } from './features/admin-layout/release-document/release-document.component';
-import { UReleaseDocumentComponent } from './features/user-layout/release-document/release-document.component';
-import { UReceiveDocumentProceedComponent } from './features/user-layout/receive-document/receive-document-proceed/receive-document-proceed.component';
-import { UReceiveDocumentComponent } from './features/user-layout/receive-document/receive-document.component';
 import { UProfileComponent } from './features/user-layout/u-profile/u-profile.component';
 import { AProfileComponent } from './features/admin-layout/a-profile/a-profile.component';
+import { UGenerateComponent } from './features/user-layout/u-elogs/generate-reports/u-generate/u-generate.component';
+import { ReceiveDocumentComponent } from './shared/components/receive-document/receive-document.component';
+import { ReleaseDocumentComponent } from './shared/components/release-document/release-document.component';
+import { AGenerateComponent } from './features/admin-layout/a-reports/a-generate/a-generate/a-generate.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -58,11 +58,11 @@ export const routes: Routes = [
       { path: 'outgoing', component: UOutgoingComponent },
       { path: 'completed', component: UCompletedComponent},
       { path: 'e-logs', component: UElogsComponent },
-      { path: 'receive-document', component: UReceiveDocumentComponent },
-      { path: 'receive-document-proceed/:documentCode', component: UReceiveDocumentProceedComponent },
-      { path: 'release-document', component: UReleaseDocumentComponent },
       { path: 'view-details/:documentCode', component: ViewDetailsComponent }, // Updated route with parameter
-      { path: 'u-profile', component: UProfileComponent },    
+      { path: 'u-profile', component: UProfileComponent },
+      { path: 'u-generate', component: UGenerateComponent},
+      { path: 'documents-receive', component: ReceiveDocumentComponent},  
+      { path: 'document-release', component: ReleaseDocumentComponent},  
     ],
   },
   {
@@ -86,10 +86,11 @@ export const routes: Routes = [
       { path: 'user-detail/:id', component: UserDetailComponent },
       { path: 'office-edit/:id', component: OfficeEditComponent },
       { path: 'create-user', component: CreateUserComponent},
-      { path: 'receive-document', component: AReceiveDocumentComponent },
-      { path: 'release-document', component: AReleaseDocumentComponent },
       { path: 'view-details/:documentCode', component: ViewDetailsComponent }, // Updated route with parameter
-      { path: 'a-profile', component: AProfileComponent },    
+      { path: 'a-profile', component: AProfileComponent },   
+      { path: 'documents-receive', component: ReceiveDocumentComponent},
+      { path: 'document-release', component: ReleaseDocumentComponent},
+      { path: 'a-generate', component: AGenerateComponent},       
     ],
   },
   {

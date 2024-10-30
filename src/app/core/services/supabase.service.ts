@@ -560,27 +560,21 @@ export class SupabaseService {
   }
 
 
-  async fetchOffices(): Promise<void> {
+  async fetchOffices(): Promise<any[] | null> {
     if (!this.supabase) {
       console.error('Supabase client not initialized.');
-      return;
+      return null;
     }
-
-    try {
-      const { data, error } = await this.supabase
-        .from('office')
-        .select('*')
-        .order('office_name', { ascending: true });
-
-      if (error) {
-        console.error('Error fetching offices:', error.message);
-        return;
-      }
-
-      this.officesSubject.next(data ?? []);
-    } catch (error) {
-      console.error('Unexpected error:', (error as Error).message);
+  
+    const { data, error } = await this.supabase
+      .from('office')
+      .select('*');
+  
+    if (error) {
+      console.error('Error fetching offices:', error);
+      return null;
     }
+    return data;
   }
 
 
@@ -601,22 +595,6 @@ export class SupabaseService {
         this.typesSubject.next(data || []);
       });
   }
-
-  fetchCategories(): void {
-    if (!this.supabase) return;
-
-    this.supabase
-      .from('categories')
-      .select('category_id, name')
-      .then(({ data, error }) => {
-        if (error) {
-          console.error('Error fetching categories:', error);
-          return;
-        }
-        this.categoriesSubject.next(data as Category[] || []);
-      });
-  }
-
 
 
   // Fetch all agencies (offices)
@@ -1173,6 +1151,38 @@ export class SupabaseService {
     // Use optional chaining to safely return count or 0
     return count ?? 0;
   }
+  
+  
+  async fetchCategories() {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return null; // Or throw an error
+    }
 
+    const { data, error } = await this.supabase
+      .from('categories')
+      .select('*');
 
+    if (error) {
+      console.error('Error fetching categories:', error);
+      return null; // or throw an error
+    }
+    return data;
+  }
+  async fetchTypes(categoryId: string) {
+    if (!this.supabase) {
+      console.error('Supabase client not initialized.');
+      return null; // Or throw an error
+    }
+    const { data, error } = await this.supabase
+      .from('types')
+      .select('*')
+      .eq('category_id', categoryId);
+
+    if (error) {
+      console.error('Error fetching types:', error);
+      return null; // or throw an error
+    }
+    return data;
+  }
 }

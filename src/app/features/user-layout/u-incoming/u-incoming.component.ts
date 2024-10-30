@@ -231,4 +231,9 @@ export class UIncomingComponent implements OnInit {
       }
     }
   }
+
+  receiveDocuments(): void {
+    this.router.navigate(['user/documents-receive']);
+  }
 }
+

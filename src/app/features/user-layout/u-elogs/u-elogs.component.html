@@ -1,65 +1,141 @@
-<div class="px-5 mr-3">
-  <!-- src/app/logs/logs.component.html -->
-  <div class="w-full mx-auto p-8 bg-white rounded-lg shadow-lg mt-5 mb-5">
-    <!-- Search and Clear Section -->
-    <div class="flex items-center mb-4 space-x-4">
-      <input
-        type="text"
-        placeholder="Search Logs..."
-        [(ngModel)]="searchQuery"
-        (input)="filterLogs()"
-        class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <button
-        (click)="clearSearch()"
-        class="p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
-      >
-        Clear
-      </button>
+<div class="min-h-screen myColor py-8">
+  <div class="max-w-full mx-auto px-6 sm:px-8 lg:px-12">
+    
+    <!-- Futuristic Light Mode Search and Filter Buttons Section -->
+    <div class="mb-8 flex items-center space-x-6">
+      <!-- Futuristic Search Bar -->
+      <div class="flex-grow">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <!-- <input
+            type="text"
+            placeholder="Search by document code, subject, or category..."
+            [(ngModel)]="searchQuery"
+            (input)="filterLogs()"
+            class="w-full pl-10 pr-4 py-3 rounded-lg bg-white border border-blue-400 text-gray-700 shadow-md placeholder-gray-400 focus:ring-2 focus:ring-blue-300 focus:border-blue-300 transition duration-300 ease-in-out neon-border-light"
+          /> -->
+          <input
+          type="text"
+          placeholder="Kay Anton ine trippings lang nguna"
+          [(ngModel)]="searchQuery"
+          (input)="filterLogs()"
+          class="w-full pl-10 pr-4 py-3 rounded-lg bg-white border border-blue-400 text-gray-700 shadow-md placeholder-gray-400 focus:ring-2 focus:ring-blue-300 focus:border-blue-300 transition duration-300 ease-in-out neon-border-light"
+        />
+        </div>
+      </div>
+      
+      <!-- Futuristic Neon Action Buttons in Light Mode -->
+      <div class="flex space-x-4">
+        <button (click)="filterByAction('Created')" 
+                [ngClass]="{'neon-active-light bg-blue-100': selectedActions.has('Created')}"
+                class="px-4 py-2 rounded-lg border-2 border-blue-500 text-blue-500 hover:text-blue-700 hover:border-blue-700 neon-button-light transition duration-300 ease-in-out">
+          <span class="flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Created</span>
+          </span>
+        </button>
+        <button (click)="filterByAction('Released')" 
+                [ngClass]="{'neon-active-light bg-green-100': selectedActions.has('Released')}"
+                class="px-4 py-2 rounded-lg border-2 border-green-500 text-green-500 hover:text-green-700 hover:border-green-700 neon-button-light transition duration-300 ease-in-out">
+          <span class="flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            <span>Released</span>
+          </span>
+        </button>
+        <button (click)="filterByAction('Received')" 
+                [ngClass]="{'neon-active-light bg-yellow-100': selectedActions.has('Received')}"
+                class="px-4 py-2 rounded-lg border-2 border-yellow-500 text-yellow-500 hover:text-yellow-700 hover:border-yellow-700 neon-button-light transition duration-300 ease-in-out">
+          <span class="flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 3H4a2 2 0 00-2 2v14a2 2 0 002 2h16a2 2 0 002-2V5a2 2 0 00-2-2zm0 16H4V7h16v12z" />
+            </svg>
+            <span>Received</span>
+          </span>
+        </button>
+        <button (click)="filterByAction('Completed')" 
+                [ngClass]="{'neon-active-light bg-purple-100': selectedActions.has('Completed')}"
+                class="px-4 py-2 rounded-lg border-2 border-purple-500 text-purple-500 hover:text-purple-700 hover:border-purple-700 neon-button-light transition duration-300 ease-in-out">
+          <span class="flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>Completed</span>
+          </span>
+        </button>
+        <button (click)="generateReports()" class="p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 ml-5 flex items-center">
+          <i class="fas fa-file-alt mr-2"></i> Generate Reports </button>
+      </div>
     </div>
 
-    <!-- Logs List -->
-    <div *ngIf="filteredLogs.length > 0; else noData">
+    <!-- Futuristic Light Mode Table Section -->
+    <div class="bg-white rounded-xl overflow-hidden shadow-lg neon-border-light">
       <div class="overflow-x-auto">
-        <table class="min-w-full text-left bg-white">
-          <thead>
-            <tr class="border-b border-gray-200 bg-gray-100">
-              <th class="py-2 px-4 text-sm font-semibold text-gray-600">Action</th>
-              <th class="py-2 px-4 text-sm font-semibold text-gray-600">Document Code</th>
-              <th class="py-2 px-4 text-sm font-semibold text-gray-600">Details</th>
-              <th class="py-2 px-4 text-sm font-semibold text-gray-600">Subject/Title</th>
-              <th class="py-2 px-4 text-sm font-semibold text-gray-600">Category</th>
-              <th class="py-2 px-4 text-sm font-semibold text-gray-600">Type</th>
-              <th class="py-2 px-4 text-sm font-semibold text-gray-600">Date and Time</th>
-              <th class="py-2 px-4 text-sm font-semibold text-gray-600">Actions</th>
+        <table class="min-w-full bg-transparent text-gray-700">
+          <thead class="bg-gray-200 border-b border-gray-300">
+            <tr>
+              <th class="px-6 py-5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
+              <th class="px-6 py-5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Document Code</th>
+              <th class="px-6 py-5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Details</th>
+              <th class="px-6 py-5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Subject/Title</th>
+              <th class="px-6 py-5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Category</th>
+              <th class="px-6 py-5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+              <th class="px-6 py-5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date and Time</th>
+              <th class="px-6 py-5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let log of filteredLogs" class="border-b border-gray-200 hover:bg-gray-50">
-              <td class="py-2 px-4 text-sm text-gray-800">{{ log.action }}</td>
-              <td class="py-2 px-4 text-sm text-gray-800">{{ log.documentCode }}</td>
-              <td class="py-2 px-4 text-sm text-gray-800">
+            <tr *ngFor="let log of paginatedLogs; let i = index" 
+                class="hover:bg-gray-100 transition duration-150 animate-fade-in"
+                [ngStyle]="{'animation-delay': (i * 100) + 'ms'}">
+              <td class="px-6 py-4 whitespace-nowrap flex items-center">
+                <span [ngClass]="{
+                  'px-3 py-1 text-xs font-medium rounded-full': true,
+                  'bg-blue-100 text-blue-600 neon-glow-light': log.action === 'Created',
+                  'bg-green-100 text-green-600 neon-glow-light': log.action === 'Released',
+                  'bg-yellow-100 text-yellow-600 neon-glow-light': log.action === 'Received',
+                  'bg-purple-100 text-purple-600 neon-glow-light': log.action === 'Completed'
+                }">
+                  {{ log.action }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{{ log.documentCode }}</td>
+              <td class="px-6 py-4 text-sm">
                 <ng-container [ngSwitch]="log.action">
-                  <span *ngSwitchCase="'Created'">Created By: {{ log.createdBy }}</span>
-                  <span *ngSwitchCase="'Released'">Released To: {{ log.releasedTo }}, Released By: {{ log.releasedBy }}</span>
-                  <span *ngSwitchCase="'Received'">Received From: {{ log.receivedFrom }}, Received By: {{ log.receivedBy }}</span>
-                  <span *ngSwitchCase="'Completed'">Completed By: {{ log.completedBy }}</span>
+                  <span *ngSwitchCase="'Created'" class="text-sm">
+                    <span class="font-medium text-gray-800">Created By:</span> {{ log.createdBy }}
+                  </span>
+                  <span *ngSwitchCase="'Released'" class="text-sm">
+                    <span class="font-medium text-gray-800">Released To:</span> {{ log.releasedTo }}<br>
+                    <span class="font-medium text-gray-800">Released By:</span> {{ log.releasedBy }}
+                  </span>
+                  <span *ngSwitchCase="'Received'" class="text-sm">
+                    <span class="font-medium text-gray-800">Received From:</span> {{ log.receivedFrom }}<br>
+                    <span class="font-medium text-gray-800">Received By:</span> {{ log.receivedBy }}
+                  </span>
+                  <span *ngSwitchCase="'Completed'" class="text-sm">
+                    <span class="font-medium text-gray-800">Completed By:</span> {{ log.completedBy }}
+                  </span>
                 </ng-container>
               </td>
-              <td class="py-2 px-4 text-sm text-gray-800">{{ log.subjectTitle }}</td>
-              <td class="py-2 px-4 text-sm text-gray-800">{{ log.category }}</td>
-              <td class="py-2 px-4 text-sm text-gray-800">{{ log.type }}</td>
-              <td class="py-2 px-4 text-sm text-gray-800">{{ log.dateTime }}</td>
-              <td class="py-2 px-4 text-sm">
-                <!-- View Details Icon Button -->
+              <td class="px-6 py-4 text-sm">{{ log.subjectTitle }}</td>
+              <td class="px-6 py-4 text-sm">{{ log.category }}</td>
+              <td class="px-6 py-4 text-sm">{{ log.type }}</td>
+              <td class="px-6 py-4 text-sm">{{ log.dateTime }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button
-                  class="text-blue-500 hover:text-blue-600 transition duration-300"
                   (click)="viewDetails(log.documentCode)"
-                  title="View Details"
-                >
-                  <!-- Eye Icon for "View Details" -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12m0 0a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
+                  class="text-blue-500 hover:text-blue-700 transition duration-200 p-1 neon-glow-light">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
                   </svg>
                 </button>
               </td>
@@ -67,26 +143,6 @@
           </tbody>
         </table>
       </div>
-
-      <!-- Pagination Controls -->
-      <div class="mt-4 flex justify-center space-x-2">
-        <button
-          *ngFor="let page of [].constructor(totalPages); let i = index"
-          (click)="changePage(i + 1)"
-          class="px-4 py-2 rounded-lg border border-gray-300 transition duration-300"
-          [ngClass]="{
-            'bg-blue-500 text-white': currentPage === i + 1,
-            'bg-white text-gray-700': currentPage !== i + 1
-          }"
-        >
-          {{ i + 1 }}
-        </button>
-      </div>
     </div>
-
-    <!-- No Data Template -->
-    <ng-template #noData>
-      <p class="text-center text-gray-500">No logs found.</p>
-    </ng-template>
   </div>
 </div>

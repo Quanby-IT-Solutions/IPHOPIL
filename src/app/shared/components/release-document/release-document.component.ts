@@ -21,15 +21,6 @@ import { AnimationItem } from 'lottie-web';
 
 export class ReleaseDocumentComponent {
 
-  // title = 'ejemplo_lottie';
-
-  // options: AnimationOptions = {
-  //   path: '/assets/lottie/scanqr.json',
-  // };
-
-  // animationCreated(animationItem: AnimationItem): void {
-  //   console.log(animationItem);
-  // }
 
   styles: Partial<CSSStyleDeclaration> = {
     maxWidth: '500px',
@@ -51,14 +42,17 @@ export class ReleaseDocumentComponent {
     this.inputChangeSubject.pipe(debounceTime(300)).subscribe(() => this.updateCode());
   }
 
+  ngAfterViewInit() {
+    this.documentCodeInput.nativeElement.focus();
+    this.documentCodeInput.nativeElement.select();
+  }
+
   updateCode() {
     this.generateQRCode();
-    // Removed generateBarcode() call
   }
   
   activateScanner() {
     console.log('Activating QR code scanner');
-    // Set up key event listeners to type in the input box
     this.activateScannerButton.nativeElement.focus(); // Focus on the button
   }
 
@@ -72,18 +66,14 @@ export class ReleaseDocumentComponent {
   }
 
   scanQRCode() {
-    // Implement QR code scanning logic here
     console.log('Scanning QR Code');
-    // After scanning, update the documentCode
-    // this.documentCode.set(scannedCode);
+
   }
 
   
 
   cancel() {
     console.log('Cancelling');
-    // Navigate back or to a specific page
-    // this.router.navigate(['/user/documents']);
     this.location.back();
 
   }
@@ -98,7 +88,6 @@ export class ReleaseDocumentComponent {
   }
 
   generateQRCode() {
-    // Function to generate QR Code
   }
 
   onDocumentCodeChange(value: string) {

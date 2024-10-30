@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UReleaseDocumentComponent } from './release-document.component';
+import { UGenerateComponent } from './u-generate.component';
 
-describe('UReleaseDocumentComponent', () => {
-  let component: UReleaseDocumentComponent;
-  let fixture: ComponentFixture<UReleaseDocumentComponent>;
+describe('UGenerateComponent', () => {
+  let component: UGenerateComponent;
+  let fixture: ComponentFixture<UGenerateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UReleaseDocumentComponent]
+      imports: [UGenerateComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(UReleaseDocumentComponent);
+    fixture = TestBed.createComponent(UGenerateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

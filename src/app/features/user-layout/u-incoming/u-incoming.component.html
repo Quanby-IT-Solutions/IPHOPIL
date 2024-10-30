@@ -4,12 +4,12 @@
 
       <h1 class="text-3xl font-bold text-gray-700 flex items-center text-start ml-3 mb-3">Incoming Documents</h1>
 
-      <a [routerLink]="['/user/receive-document']" class="px-4 mb-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center">
+      <button (click)="receiveDocuments()" class="px-4 mb-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd" />
         </svg>
         Receive Document
-      </a>
+      </button>
     </div>
 
     <div class="shadow-lg rounded-lg bg-white p-3">

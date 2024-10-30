@@ -553,5 +553,8 @@ generateUniqueCode(): string {
     }
   }
   
+  releaseDocuments(): void {
+    this.router.navigate(['admin/document-release']);
+  }
 }
 
