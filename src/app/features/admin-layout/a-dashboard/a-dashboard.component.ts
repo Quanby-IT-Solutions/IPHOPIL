@@ -1,8 +1,8 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Chart, ChartData, ChartOptions } from 'chart.js';
-import { SupabaseService } from '../../../core/services/supabase.service';
+import { Chart } from 'chart.js';
+import gsap from 'gsap';
 
 @Component({
   selector: 'app-a-dashboard',
@@ -21,68 +21,90 @@ export class ADashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     { type: 'info', title: 'System Update', message: 'Scheduled maintenance on Saturday, 10 PM - 2 AM.' }
   ];
 
+  myDocuments = [
+    {
+      title: "Angat Buhay",
+      classification: "Classification",
+      type: "Type",
+      currentOffice: "Daraga Albay"
+    },
+    {
+      title: "Jeremiah's Payroll",
+      classification: "Classification",
+      type: "Type",
+      currentOffice: "Daraga Albay"
+    },
+    {
+      title: "Anton's ORCR",
+      classification: "Classification",
+      type: "Type",
+      currentOffice: "Daraga Albay"
+    }
+  ];
+
   private chart: Chart<"doughnut", number[], string> | null = null;
 
-  constructor(private router: Router, private supabaseService: SupabaseService) {}
-  ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
-  }
+  constructor(private router: Router) {}
+
+  ngOnDestroy(): void {}
 
   ngOnInit(): void {
     this.fetchDocumentStats();
   }
 
-  async fetchDocumentStats(): Promise<void> {
-    try {
-      const incomingCount = await this.supabaseService.countDocuments('incoming_documents');
-      const receivedCount = await this.supabaseService.countDocuments('received_documents');
-      const outgoingCount = await this.supabaseService.countDocuments('outgoing_documents');
-      const completedCount = await this.supabaseService.countDocuments('outgoing_documents');
-
-      this.totalDocuments = incomingCount + receivedCount + outgoingCount + completedCount;
-      this.documentStats = [
-        { title: 'PENDING REVIEW', value: incomingCount, icon: 'fas fa-clock', iconColor: 'text-orange-500' }, // clock icon for pending
-        { title: 'TOTAL REJECTED', value: receivedCount, icon: 'fas fa-times-circle', iconColor: 'text-yellow-500' }, // times-circle for rejected
-        { title: 'TOTAL APPROVALS', value: outgoingCount, icon: 'fas fa-check', iconColor: 'text-blue-500' }, // check for approvals
-        { title: 'TOTAL COMPLETED', value: completedCount, icon: 'fas fa-check-circle', iconColor: 'text-red-500' } // flag-checkered for completed
-      ];
-    
-      // Initialize chart with fetched document stats
-      this.initChart(incomingCount, receivedCount, outgoingCount, completedCount);
-
-    } catch (error) {
-      console.error('Error fetching document stats:', error);
+  ngAfterViewInit(): void {
+    if (this.chartCanvas) {
+      this.initChart(15, 10, 8, 20); // Sample data, replace with actual fetched data
+      this.animateStats();
+    } else {
+      console.error('Chart canvas is not initialized.');
     }
   }
 
-  ngAfterViewInit(): void {
-    this.animateStats();
+  fetchDocumentStats(): void {
+    const incomingCount = 15;
+    const receivedCount = 10;
+    const outgoingCount = 8;
+    const completedCount = 20;
+
+    this.totalDocuments = incomingCount + receivedCount + outgoingCount + completedCount;
+    this.documentStats = [
+      { title: 'PENDING REVIEW', value: incomingCount, icon: 'fas fa-clock', iconColor: 'text-orange-500' },
+      { title: 'TOTAL REJECTED', value: receivedCount, icon: 'fas fa-times-circle', iconColor: 'text-yellow-500' },
+      { title: 'TOTAL APPROVALS', value: outgoingCount, icon: 'fas fa-check', iconColor: 'text-blue-500' },
+      { title: 'TOTAL COMPLETED', value: completedCount, icon: 'fas fa-check-circle', iconColor: 'text-red-500' }
+    ];
   }
 
-  private initChart(incoming: number, received: number, outgoing: number, completed:number): void {
+  private initChart(incoming: number, received: number, outgoing: number, completed: number): void {
+    if (!this.chartCanvas || !this.chartCanvas.nativeElement) {
+      console.error('Chart canvas is not initialized.');
+      return;
+    }
+
     const ctx = this.chartCanvas.nativeElement.getContext('2d')!;
     const logoImage = new Image();
     logoImage.src = 'assets/logo/cube.png';
 
     const centerImagePlugin = {
       id: 'centerImage',
-      beforeDraw: function(chart: Chart<"doughnut">) {
+      beforeDraw: function (chart: Chart<"doughnut">) {
         const ctx = chart.ctx;
         const { top, bottom, left, right } = chart.chartArea;
         const xCenter = (left + right) / 2;
         const yCenter = (top + bottom) / 2;
-    
-        if (logoImage.complete) {
-          const imgSize = 100; // Set image size
-          ctx.drawImage(logoImage, xCenter - imgSize / 2, yCenter - imgSize / 2, imgSize, imgSize);
-        }}}
 
-    
+        if (logoImage.complete) {
+          const imgSize = 100;
+          ctx.drawImage(logoImage, xCenter - imgSize / 2, yCenter - imgSize / 2, imgSize, imgSize);
+        }
+      }
+    };
+
     if (this.chart) {
       this.chart.destroy();
     }
 
-    // Create new donut chart
     this.chart = new Chart(ctx, {
       type: 'doughnut',
       data: {
@@ -96,10 +118,10 @@ export class ADashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       options: {
         responsive: true,
-        cutout:'50%',
+        cutout: '50%',
         plugins: {
-          legend: { display: false }, 
-          title: { display: false, text: 'Document Status Overview' }
+          legend: { display: false },
+          title: { display: false }
         }
       },
       plugins: [centerImagePlugin]
