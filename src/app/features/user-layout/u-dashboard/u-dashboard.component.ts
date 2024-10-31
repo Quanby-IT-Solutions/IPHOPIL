@@ -1,97 +1,89 @@
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 import { gsap } from 'gsap';
-import { SupabaseService } from '../../../core/services/supabase.service';
-
+import { CommonModule } from '@angular/common';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-u-dashboard',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
   templateUrl: './u-dashboard.component.html',
-  styleUrls: ['./u-dashboard.component.css']
+  styleUrls: ['./u-dashboard.component.css'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class UDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
   totalDocuments: number = 0;
-
   documentStats: { title: string; value: number; icon: string; iconColor: string }[] = [];
   alerts = [
     { type: 'warning', title: 'Urgent Review Needed', message: '3 documents require immediate attention.' },
     { type: 'info', title: 'System Update', message: 'Scheduled maintenance on Saturday, 10 PM - 2 AM.' }
   ];
-
+  myDocuments = [
+    { title: "Jeremiah's Payroll", classification: "Classification", type: "Type", currentOffice: "Daraga Albay" },
+    { title: "Angat Buhay", classification: "Classification", type: "Type", currentOffice: "Daraga Albay" },
+    { title: "Anton's ORCR", classification: "Classification", type: "Type", currentOffice: "Daraga Albay" }
+  ];
   private chart: Chart<"doughnut", number[], string> | null = null;
 
-  constructor(private router: Router, private supabaseService: SupabaseService) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.fetchDocumentStats();
   }
 
-  async fetchDocumentStats(): Promise<void> {
-    try {
-      const incomingCount = await this.supabaseService.countDocuments('incoming_documents');
-      const receivedCount = await this.supabaseService.countDocuments('received_documents');
-      const outgoingCount = await this.supabaseService.countDocuments('outgoing_documents');
-      const completedCount = await this.supabaseService.countDocuments('outgoing_documents');
+  fetchDocumentStats(): void {
+    const incomingCount = 15;
+    const receivedCount = 10;
+    const outgoingCount = 8;
+    const completedCount = 20;
 
-      this.totalDocuments = incomingCount + receivedCount + outgoingCount + completedCount;
-
-      this.documentStats = [
-        //{ title: 'Total Documents', value: incomingCount + receivedCount + outgoingCount, icon: 'fas fa-file-alt', iconColor: 'text-emerald-500' }, // file icon
-        { title: 'TOTAL INCOMING', value: incomingCount, icon: 'fas fa-inbox', iconColor: 'text-orange-500' }, // inbox icon
-        { title: 'TOTAL RECEIVED', value: receivedCount, icon: 'fas fa-folder-open', iconColor: 'text-yellow-500' }, // folder-open icon
-        { title: 'TOTAL OUTGOING', value: outgoingCount, icon: 'fas fa-paper-plane', iconColor: 'text-blue-500' }, // paper-plane icon
-        { title: 'TOTAL COMPLETED', value: completedCount, icon: 'fas fa-check-circle', iconColor: 'text-red-500' } // check-circle icon
-      ];
-      
-      
-
-      // Initialize chart with fetched document stats
-      this.initChart(incomingCount, receivedCount, outgoingCount, completedCount);
-
-    } catch (error) {
-      console.error('Error fetching document stats:', error);
-    }
+    this.totalDocuments = incomingCount + receivedCount + outgoingCount + completedCount;
+    this.documentStats = [
+      { title: 'TOTAL INCOMING', value: incomingCount, icon: 'fas fa-inbox', iconColor: 'text-orange-500' },
+      { title: 'TOTAL RECEIVED', value: receivedCount, icon: 'fas fa-folder-open', iconColor: 'text-yellow-500' },
+      { title: 'TOTAL OUTGOING', value: outgoingCount, icon: 'fas fa-paper-plane', iconColor: 'text-blue-500' },
+      { title: 'TOTAL COMPLETED', value: completedCount, icon: 'fas fa-check-circle', iconColor: 'text-red-500' }
+    ];
   }
 
   ngAfterViewInit(): void {
+    this.initChart(15, 10, 8, 20);
     this.animateStats();
   }
 
-  private initChart(incoming: number, received: number, outgoing: number, completed:number): void {
+  private initChart(incoming: number, received: number, outgoing: number, completed: number): void {
+    if (!this.chartCanvas || !this.chartCanvas.nativeElement) {
+      console.error('Chart canvas is not initialized.');
+      return;
+    }
+
     const ctx = this.chartCanvas.nativeElement.getContext('2d')!;
     const logoImage = new Image();
     logoImage.src = 'assets/logo/cube.png';
 
     const centerImagePlugin = {
       id: 'centerImage',
-      beforeDraw: function(chart: Chart<"doughnut">) {
+      beforeDraw: function (chart: Chart<"doughnut">) {
         const ctx = chart.ctx;
         const { top, bottom, left, right } = chart.chartArea;
         const xCenter = (left + right) / 2;
         const yCenter = (top + bottom) / 2;
-    
-        // Ensure the image is fully loaded before drawing
-        if (logoImage.complete) {
-          const imgSize = 100; // Set image size
-          ctx.drawImage(logoImage, xCenter - imgSize / 2, yCenter - imgSize / 2, imgSize, imgSize);
-        }}}
 
-    
-    
-    // Destroy the existing chart if it exists to prevent memory leaks
+        if (logoImage.complete) {
+          const imgSize = 100;
+          ctx.drawImage(logoImage, xCenter - imgSize / 2, yCenter - imgSize / 2, imgSize, imgSize);
+        }
+      }
+    };
+
     if (this.chart) {
       this.chart.destroy();
     }
 
-    // Create new donut chart
     this.chart = new Chart(ctx, {
       type: 'doughnut',
       data: {
@@ -105,10 +97,10 @@ export class UDashboardComponent implements OnInit, AfterViewInit {
       },
       options: {
         responsive: true,
-        cutout:'50%',
+        cutout: '50%',
         plugins: {
-          legend: { display: false }, // Show legend for donut chart
-          title: { display: false, text: 'Document Status Overview' }
+          legend: { display: false },
+          title: { display: false }
         }
       },
       plugins: [centerImagePlugin]
