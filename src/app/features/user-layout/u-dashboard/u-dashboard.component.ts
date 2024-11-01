@@ -16,7 +16,7 @@ Chart.register(...registerables);
 export class UDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
-  totalDocuments: number = 0;
+  totalDocuments = 0;
   documentStats: { title: string; value: number; icon: string; iconColor: string }[] = [];
   alerts = [
     { type: 'warning', title: 'Urgent Review Needed', message: '3 documents require immediate attention.' },

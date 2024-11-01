@@ -13,9 +13,9 @@ import { RouterModule, Router } from '@angular/router';
 export class UserManagementComponent implements OnInit {
   users: User[] = [];
   displayedUsers: User[] = [];
-  currentPage: number = 1;
-  itemsPerPage: number = 10;
-  totalPages: number = 0;
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalPages = 0;
   visibleSubMenuUserId: number | null = null;
   isDeleteModalVisible = false;
   userToDelete: User | null = null;  // Store the user to be deleted

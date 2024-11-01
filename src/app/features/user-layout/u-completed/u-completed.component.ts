@@ -34,7 +34,7 @@ export class UCompletedComponent implements OnInit {
   currentPage = signal(1);
   itemsPerPage = signal(5);
 
-  showUndoConfirmationModal: boolean = false;
+  showUndoConfirmationModal = false;
 
   totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
 

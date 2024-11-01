@@ -17,7 +17,7 @@ interface DocumentDetails {
   dateCreated: string;
   currentLocation: string;
   status: string;
-  logbook: Array<{ date: string; from: string; to: string; messageRemarks: string }>;
+  logbook: { date: string; from: string; to: string; messageRemarks: string }[];
   attachments: string[];
   receivedFrom?: string;
   receivedBy?: string;
@@ -34,7 +34,7 @@ interface DocumentDetails {
 })
 export class ViewDetailsComponent implements OnInit {
   documentDetails: DocumentDetails | null = null;
-  documentCode: string = '23AsC1931';
+  documentCode = '23AsC1931';
 
 
   @ViewChild('barcode', { static: false }) barcodeElement!: ElementRef<HTMLCanvasElement>;

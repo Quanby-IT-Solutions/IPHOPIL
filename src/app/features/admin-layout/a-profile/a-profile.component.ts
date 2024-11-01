@@ -9,7 +9,7 @@ import { SupabaseService } from '../../../core/services/supabase.service';
   standalone: true,
   imports: [HeaderComponent]
 })
-export class AProfileComponent {
+export class AProfileComponent implements OnInit {
   user: {
     userName: string | null;
     profile_image: string;

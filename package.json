@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:eyepopil": "node dist/eyepopil/server/server.mjs",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -47,9 +48,11 @@
     "@types/jasmine": "~5.1.4",
     "@types/jsbarcode": "^3.11.4",
     "@types/node": "^18.19.50",
+    "angular-eslint": "18.4.0",
     "autoprefixer": "^10.4.20",
     "chai-sorted": "^0.2.0",
     "cypress": "^13.15.0",
+    "eslint": "^9.13.0",
     "jasmine-core": "~5.1.2",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
@@ -58,6 +61,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.12",
-    "typescript": "~5.4.5"
+    "typescript": "~5.4.5",
+    "typescript-eslint": "8.10.0"
   }
 }

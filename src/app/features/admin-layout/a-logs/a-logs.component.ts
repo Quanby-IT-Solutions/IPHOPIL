@@ -29,9 +29,9 @@ interface LogEntry {
 export class AlogsComponent implements OnInit {
   logs: LogEntry[] = [];
   filteredLogs: LogEntry[] = [];
-  searchQuery: string = '';
-  currentPage: number = 1;
-  itemsPerPage: number = 10;
+  searchQuery = '';
+  currentPage = 1;
+  itemsPerPage = 10;
 
   constructor(private router: Router) {
     this.loadLogs();

@@ -13,7 +13,7 @@ import gsap from 'gsap';
 export class ADashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
-  totalDocuments: number = 0;
+  totalDocuments = 0;
 
   documentStats: { title: string; value: number; icon: string; iconColor: string }[] = [];
   alerts = [

@@ -20,12 +20,12 @@ export class OfficeManagementComponent implements OnInit {
   totalPages = 1;
   openSubmenuId: number | null = null;
   
-  searchTerm: string = '';   // Holds the search query
-  newAgencyName: string = ''; // Holds the new agency name
+  searchTerm = '';   // Holds the search query
+  newAgencyName = ''; // Holds the new agency name
 
   notifications: { message: string, type: 'success' | 'error' }[] = [];
 
-  isModalVisible: boolean = false;
+  isModalVisible = false;
 
   constructor(private supabaseService: SupabaseService, private router: Router) { }
 

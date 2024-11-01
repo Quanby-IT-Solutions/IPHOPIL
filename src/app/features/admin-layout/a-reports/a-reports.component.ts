@@ -29,11 +29,11 @@ export class AReportsComponent implements OnInit {
   logs: LogEntry[] = [];
   filteredLogs: LogEntry[] = [];
   paginatedLogs: LogEntry[] = [];
-  searchQuery: string = '';
-  selectedActions: Set<'Created' | 'Released' | 'Received' | 'Completed'> = new Set();
-  currentPage: number = 1;
-  itemsPerPage: number = 10;
-  isLoading: boolean = false;
+  searchQuery = '';
+  selectedActions = new Set<'Created' | 'Released' | 'Received' | 'Completed'>();
+  currentPage = 1;
+  itemsPerPage = 10;
+  isLoading = false;
 
   constructor(private router: Router) {
     this.loadLogs();

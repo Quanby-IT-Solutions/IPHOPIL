@@ -12,9 +12,9 @@ import { AnimationOptions, LottieComponent } from 'ngx-lottie';
 })
 export class LottieAnimationComponent implements OnChanges {
 
-  @Input() class:string = '';
-  @Input() animation:string = '';
-  @Input() loop:boolean = true;
+  @Input() class = '';
+  @Input() animation = '';
+  @Input() loop = true;
 
   options: AnimationOptions = {
     path: `/assets/animations/loader.json`,

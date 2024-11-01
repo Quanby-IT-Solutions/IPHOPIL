@@ -35,12 +35,12 @@ import { SidebarServiceService } from '../../core/services/SidebarService/sideba
 })
 export class AdminLayoutComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
-  notification: boolean = false;
-  settings: boolean = false;
-  success: boolean = false;
-  noChanges: boolean = false;
+  notification = false;
+  settings = false;
+  success = false;
+  noChanges = false;
   isSidebarCollapsed = false;
-  isChatVisible: boolean = false;
+  isChatVisible = false;
 
   constructor(
     private sidebarService: SidebarServiceService

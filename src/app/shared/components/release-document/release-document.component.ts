@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
-import { Component, Inject, PLATFORM_ID, signal, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, signal, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { QRCodeModule } from 'angularx-qrcode';
@@ -19,7 +19,7 @@ import { AnimationItem } from 'lottie-web';
   styleUrls: ['./release-document.component.css'] // Correct: it should be `styleUrls` (plural) and an array of strings
 })
 
-export class ReleaseDocumentComponent {
+export class ReleaseDocumentComponent implements AfterViewInit {
 
 
   styles: Partial<CSSStyleDeclaration> = {
@@ -34,7 +34,7 @@ export class ReleaseDocumentComponent {
   @ViewChild('activateScannerButton') activateScannerButton!: ElementRef; // Reference to button element
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object, 
+    @Inject(PLATFORM_ID) private platformId: object, 
     private supabaseService: SupabaseService,
     private router: Router,
     private location: Location

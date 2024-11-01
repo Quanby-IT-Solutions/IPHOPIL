@@ -10,9 +10,9 @@ import { SupabaseService } from '../../../core/services/supabase.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   userName: string | null = '';
-  profileImageUrl: string = 'assets/profile/default-profile.jpg';
+  profileImageUrl = 'assets/profile/default-profile.jpg';
   userRole: string | null = '';
-  currentTime: string = ''; 
+  currentTime = ''; 
   private intervalId: any; 
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}

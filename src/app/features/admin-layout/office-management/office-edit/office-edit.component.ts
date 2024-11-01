@@ -12,7 +12,7 @@ import { SupabaseService, Office } from '../../../../core/services/supabase.serv
   styleUrls: ['./office-edit.component.css']
 })
 export class OfficeEditComponent implements OnInit {
-  agencyName: string = '';  // Holds the agency name for editing
+  agencyName = '';  // Holds the agency name for editing
   agencyId: string | null = null;  // Holds the ID of the agency being edited
 
   constructor(

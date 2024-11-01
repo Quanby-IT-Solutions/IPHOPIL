@@ -44,7 +44,7 @@ export class ReceiveDocumentComponent implements OnInit, AfterViewInit {
   @ViewChild('activateScannerButton') activateScannerButton!: ElementRef; 
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object, 
+    @Inject(PLATFORM_ID) private platformId: object, 
     private supabaseService: SupabaseService,
     private router: Router
   ) {

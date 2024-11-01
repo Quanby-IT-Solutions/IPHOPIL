@@ -22,12 +22,12 @@ interface MenuItem {
 })
 export class SideBarComponent implements OnInit {
   @Output() collapsedChange = new EventEmitter<boolean>();
-  isCollapsed: boolean = false;
-  isDropdownOpen: { [key: string]: boolean } = {};  // Track dropdown state
+  isCollapsed = false;
+  isDropdownOpen: Record<string, boolean> = {};  // Track dropdown state
 
-  title: string = ''; // New title property
+  title = ''; // New title property
   userName: string | null = ''; // Initialize as empty
-  profileImageUrl: string = 'assets/profile/default-profile.jpg'; // Default profile image
+  profileImageUrl = 'assets/profile/default-profile.jpg'; // Default profile image
   userRole: string | null = '';
 
   AdminMenu: MenuItem[] = [

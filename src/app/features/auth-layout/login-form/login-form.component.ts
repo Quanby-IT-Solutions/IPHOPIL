@@ -11,8 +11,8 @@ import { SupabaseService, User } from '../../../core/services/supabase.service';
   styleUrls: ['./login-form.component.css'],
 })
 export class LoginFormComponent {
-  email: string = '';
-  password: string = '';
+  email = '';
+  password = '';
   isPasswordVisible = false;
   rememberMe = false;
 

@@ -1,4 +1,4 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { createClient, PostgrestError, SupabaseClient, User as SupabaseUser, AuthError } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
@@ -20,7 +20,7 @@ interface AppUser extends SupabaseUser {
   user_metadata: any;
   aud: string;
   created_at: string;
-  email: string;  // Ensure email is a string and not undefined
+  email: string;
 }
 
 // Interfaces for user and office
@@ -93,7 +93,7 @@ interface OfficeData {
 @Injectable({
   providedIn: 'root',
 })
-export class SupabaseService {
+export class SupabaseService implements OnInit {
   private supabase: SupabaseClient | null = null;
   currentUser: User | null = null;  // Add this line to store the current user details
 
@@ -112,7 +112,7 @@ export class SupabaseService {
   private supabaseInitPromise: Promise<void> | null = null;
   client: any;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {
     this.supabaseInitPromise = this.initializeSupabase();
     this.initializeSupabase().then(() => {
       this.fetchDocuments();
@@ -565,11 +565,11 @@ export class SupabaseService {
       console.error('Supabase client not initialized.');
       return null;
     }
-  
+
     const { data, error } = await this.supabase
       .from('office')
       .select('*');
-  
+
     if (error) {
       console.error('Error fetching offices:', error);
       return null;
@@ -1151,8 +1151,8 @@ export class SupabaseService {
     // Use optional chaining to safely return count or 0
     return count ?? 0;
   }
-  
-  
+
+
   async fetchCategories() {
     if (!this.supabase) {
       console.error('Supabase client not initialized.');
