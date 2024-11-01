@@ -17,7 +17,7 @@
 
 ```bash
 # always do this before pushing, imbis mailing so mga linting problems sa kada file na yaon saindo jan
-ng serve --fix
+ng lint --fix
 # build, imbis mailing kung ok ini sa production na iga push nyo tapos warang error
 ng build
 ```
