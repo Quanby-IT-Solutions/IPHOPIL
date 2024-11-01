@@ -1,3 +1,6 @@
+// cypress/support/commands.ts
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// <reference types="cypress" />
 // ***********************************************
 // This example commands.ts shows you how to
@@ -35,3 +38,26 @@
 //     }
 //   }
 // }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import './index.d.ts';
+/**
+ * Login command implementation
+ * Navigates to login page and performs login with predefined credentials
+ */
+Cypress.Commands.add('login', () => {
+  // Navigate to login page
+  cy.visit('/auth/login');
+
+  // Fill in login form
+  cy.get('[data-testid="email-input"]').type(Cypress.env('USER_EMAIL') || 'test@example.com');
+  cy.get('[data-testid="password-input"]').type(Cypress.env('USER_PASSWORD') || 'password123');
+
+  // Submit form
+  cy.get('[data-testid="login-submit"]').click();
+
+  // Wait for successful login
+  cy.get('[data-testid="dashboard"]', { timeout: 10000 }).should('exist');
+});
+
+export { };
