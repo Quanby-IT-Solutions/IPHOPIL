@@ -4,35 +4,25 @@ import { AuthGuard } from './core/services/auth-guard/auth.guard'; // Import the
 
 import { AuthLayoutComponent } from './features/auth-layout/auth-layout.component';
 import { UserLayoutComponent } from './features/user-layout/user-layout.component';
-import { UDashboardComponent } from './features/user-layout/u-dashboard/u-dashboard.component';
+import { DashboardComponent } from './shared/components/dashboard/dashboard.component';
 import { AdminLayoutComponent } from './features/admin-layout/admin-layout.component';
-import { ADashboardComponent } from './features/admin-layout/a-dashboard/a-dashboard.component';
-import { UDocumentsComponent } from './features/user-layout/u-documents/u-documents.component';
-import { UIncomingComponent } from './features/user-layout/u-incoming/u-incoming.component';
-import { UReceivedComponent } from './features/user-layout/u-received/u-received.component';
-import { UOutgoingComponent } from './features/user-layout/u-outgoing/u-outgoing.component';
-import { UElogsComponent } from './features/user-layout/u-elogs/u-elogs.component';
+import { DocumentsComponent } from './shared/components/documents/documents.component';
+import { IncomingComponent } from './shared/components/incoming/incoming.component';
+import { ReceivedComponent } from './shared/components/received/received.component';
+import { OutgoingComponent } from './shared/components/outgoing/outgoing.component';
+import { ElogsComponent } from './shared/components/elogs/elogs.component';
 import { ViewDetailsComponent } from './shared/components/view-details/view-details.component';
-import { ADocumentsComponent } from './features/admin-layout/a-documents/a-documents.component';
-import { AIncomingComponent } from './features/admin-layout/a-incoming/a-incoming.component';
-import { AReceivedComponent } from './features/admin-layout/a-received/a-received.component';
-import { AOutgoingComponent } from './features/admin-layout/a-outgoing/a-outgoing.component';
-import { AlogsComponent } from './features/admin-layout/a-logs/a-logs.component';
 import { UserManagementComponent } from './features/admin-layout/user-management/user-management.component';
-import { AReportsComponent } from './features/admin-layout/a-reports/a-reports.component';
 import { OfficeManagementComponent } from './features/admin-layout/office-management/office-management.component';
 import { CatergoryManagementComponent } from './features/admin-layout/catergory-management/catergory-management.component';
 import { UserDetailComponent } from './features/admin-layout/user-management/user-detail/user-detail.component';
 import { OfficeEditComponent } from './features/admin-layout/office-management/office-edit/office-edit.component';
-import { UCompletedComponent } from './features/user-layout/u-completed/u-completed.component';
+import { CompletedComponent } from './shared/components/completed/completed.component';
 import { CreateUserComponent } from './features/admin-layout/user-management/create-user/create-user.component';
-import { ACompletedComponent } from './features/admin-layout/a-completed/a-completed.component';
-import { UProfileComponent } from './features/user-layout/u-profile/u-profile.component';
-import { AProfileComponent } from './features/admin-layout/a-profile/a-profile.component';
-import { UGenerateComponent } from './features/user-layout/u-elogs/generate-reports/u-generate/u-generate.component';
+import { ProfileComponent } from './shared/components/profile/profile.component';
+import { GenerateComponent } from './shared/components/elogs/generate/generate.component';
 import { ReceiveDocumentComponent } from './shared/components/receive-document/receive-document.component';
 import { ReleaseDocumentComponent } from './shared/components/release-document/release-document.component';
-import { AGenerateComponent } from './features/admin-layout/a-reports/a-generate/a-generate/a-generate.component';
 
 export const routes: Routes = [
   {
@@ -51,16 +41,16 @@ export const routes: Routes = [
     data: { role: 'user' }, // Only allow users with 'user' role
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: UDashboardComponent },
-      { path: 'documents', component: UDocumentsComponent },
-      { path: 'incoming', component: UIncomingComponent },
-      { path: 'received', component: UReceivedComponent },
-      { path: 'outgoing', component: UOutgoingComponent },
-      { path: 'completed', component: UCompletedComponent},
-      { path: 'e-logs', component: UElogsComponent },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'documents', component: DocumentsComponent },
+      { path: 'incoming', component: IncomingComponent },
+      { path: 'received', component: ReceivedComponent },
+      { path: 'outgoing', component: OutgoingComponent },
+      { path: 'completed', component: CompletedComponent},
+      { path: 'e-logs', component: ElogsComponent },
       { path: 'view-details/:documentCode', component: ViewDetailsComponent }, // Updated route with parameter
-      { path: 'u-profile', component: UProfileComponent },
-      { path: 'u-generate', component: UGenerateComponent},
+      { path: 'profile', component: ProfileComponent },
+      { path: 'generate', component: GenerateComponent},
       { path: 'documents-receive', component: ReceiveDocumentComponent},  
       { path: 'document-release', component: ReleaseDocumentComponent},  
     ],
@@ -72,25 +62,24 @@ export const routes: Routes = [
     data: { role: 'admin' }, // Only allow users with 'admin' role
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: ADashboardComponent },
-      { path: 'a-documents', component: ADocumentsComponent },
-      { path: 'a-incoming', component: AIncomingComponent },
-      { path: 'a-received', component: AReceivedComponent },
-      { path: 'a-outgoing', component: AOutgoingComponent },
-      { path: 'a-completed', component: ACompletedComponent },
-      { path: 'a-reports', component: AReportsComponent },
-      { path: 'a-logs', component: AlogsComponent },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'documents', component: DocumentsComponent },
+      { path: 'incoming', component: IncomingComponent },
+      { path: 'received', component: ReceivedComponent },
+      { path: 'outgoing', component: OutgoingComponent },
+      { path: 'completed', component: CompletedComponent},
+      { path: 'e-logs', component: ElogsComponent },
+      { path: 'profile', component: ProfileComponent },
+      { path: 'generate', component: GenerateComponent},
       { path: 'user-management', component: UserManagementComponent },
       { path: 'office-management', component: OfficeManagementComponent },
       { path: 'category-management', component: CatergoryManagementComponent },
       { path: 'user-detail/:id', component: UserDetailComponent },
       { path: 'office-edit/:id', component: OfficeEditComponent },
       { path: 'create-user', component: CreateUserComponent},
-      { path: 'view-details/:documentCode', component: ViewDetailsComponent }, // Updated route with parameter
-      { path: 'a-profile', component: AProfileComponent },   
+      { path: 'view-details/:documentCode', component: ViewDetailsComponent }, // Updated route with parameter 
       { path: 'documents-receive', component: ReceiveDocumentComponent},
-      { path: 'document-release', component: ReleaseDocumentComponent},
-      { path: 'a-generate', component: AGenerateComponent},       
+      { path: 'document-release', component: ReleaseDocumentComponent},    
     ],
   },
   {
