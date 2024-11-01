@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../../shared/components/header/header.component';
 import { SupabaseService } from '../../../core/services/supabase.service'; 
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-u-profile',
   templateUrl: './u-profile.component.html',
   styleUrls: ['./u-profile.component.css'],
   standalone: true,
-  imports: [HeaderComponent]
+  imports: [HeaderComponent, CommonModule]
 })
 export class UProfileComponent implements OnInit {
   user: {
@@ -19,6 +20,25 @@ export class UProfileComponent implements OnInit {
     profile_image: 'assets/profile/default-profile.jpg',// Default profile image
     userEmail: null,// Initialize role
   };
+
+  isPassModalOpen = false;
+  isProfileModalOpen = false;
+
+  openPassModal() {
+    this.isPassModalOpen = true;
+  }
+
+  closePassModal() {
+    this.isPassModalOpen = false;
+  }
+
+  openProfileModal(){
+    this.isProfileModalOpen = true;
+  }
+
+  closeProfileModal(){
+    this.isProfileModalOpen = false; 
+  }
 
   constructor(private supabaseService: SupabaseService) {}
 
