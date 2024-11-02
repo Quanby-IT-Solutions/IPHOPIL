@@ -80,7 +80,6 @@ export class DocumentsComponent implements OnInit {
     this.supabaseService.types$.subscribe(types => this.types = types);
     this.supabaseService.types$.subscribe((types: Type[]) => {
       if (types) {
-        const names = types.map(type => type.name);
         this.types = types; 
       }
     });
@@ -213,7 +212,7 @@ export class DocumentsComponent implements OnInit {
         created_at: new Date().toISOString()
       };
   
-      const { data, error } = await this.supabaseService.insertDocument(documentData);
+      const { error } = await this.supabaseService.insertDocument(documentData);
   
       if (error) {
         console.error('Error saving document:', error.message);
@@ -287,7 +286,6 @@ generateUniqueCode(): string {
   }
 
   async releaseDocument(): Promise<void> {
-    const currentUser = await this.getCurrentUser();
     const currentOffice = await this.getCurrentOffice();
 
     this.documents.update(docs =>

@@ -128,23 +128,52 @@
         </div>
 
         <div class="flex flex-row items-center justify-center w-full">
-          <div *ngFor="let item of othersMenu"
-            [routerLink]="item.route"
-            (click)="item.label === 'Sign Out' ? signOut() : null"
-            [ngClass]="getMenuItemClasses()"
-            class="relative flex items-center h-12 w-full hover:bg-[--color-error] hover:text-white">
-
-            <div class="flex items-center justify-start w-full">
-              <iconify-icon *ngIf="item.icon" [icon]="item.icon"
-                [class.rotate-180]="item.label === 'Sign Out'"
-                class="ml-0 icon-size"
-                [ngClass]="isCollapsed ? 'ml-0' : 'ml-0'" >
-              </iconify-icon>
-              <p [ngClass]="getTextClasses()" class="ml-3 text-base font-medium whitespace-nowrap">{{ item.label }}</p>
-
-            </div>
-
-            <div class="active-indicator"></div>
+          <div *ngFor="let item of othersMenu">
+            <!-- Using button for non-route items (like Sign Out) -->
+            <button *ngIf="item.label === 'Sign Out'"
+                    (click)="signOut()"
+                    (keyup.enter)="signOut()"
+                    (keyup.space)="signOut()"
+                    [ngClass]="getMenuItemClasses()"
+                    class="relative flex items-center h-12 w-full hover:bg-[--color-error] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[--color-error]"
+                    role="menuitem"
+                    tabindex="0"
+                    [attr.aria-label]="item.label">
+              <div class="flex items-center justify-start w-full">
+                <iconify-icon *ngIf="item.icon" 
+                              [icon]="item.icon"
+                              class="ml-0 icon-size rotate-180"
+                              [ngClass]="isCollapsed ? 'ml-0' : 'ml-0'">
+                </iconify-icon>
+                <p [ngClass]="getTextClasses()" 
+                   class="ml-3 text-base font-medium whitespace-nowrap">
+                  {{ item.label }}
+                </p>
+              </div>
+              <div class="active-indicator"></div>
+            </button>
+          
+            <!-- Using anchor for route items -->
+            <a *ngIf="item.label !== 'Sign Out'"
+               [routerLink]="item.route"
+               [ngClass]="getMenuItemClasses()"
+               class="relative flex items-center h-12 w-full hover:bg-[--color-error] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[--color-error]"
+               role="menuitem"
+               tabindex="0"
+               [attr.aria-label]="item.label">
+              <div class="flex items-center justify-start w-full">
+                <iconify-icon *ngIf="item.icon" 
+                              [icon]="item.icon"
+                              class="ml-0 icon-size"
+                              [ngClass]="isCollapsed ? 'ml-0' : 'ml-0'">
+                </iconify-icon>
+                <p [ngClass]="getTextClasses()" 
+                   class="ml-3 text-base font-medium whitespace-nowrap">
+                  {{ item.label }}
+                </p>
+              </div>
+              <div class="active-indicator"></div>
+            </a>
           </div>
         </div>
 

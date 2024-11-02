@@ -20,8 +20,6 @@ export interface Office {
 })
 export class DummyDataService {
 
-  constructor() { }
-
   getUsers(): User[] {
     return [
       { id: 1, name: 'Catherine Smith', email: 'catherinesmith@gmail.com', Office: 'Office1', status: 'Active', role: 'User' },

@@ -47,10 +47,14 @@
                 <div class="mb-2">
                 </div>
                 <button (click)="printQRCode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print QR code">
-                  <img src="assets/logo/qr-code.png" class="w-8 h-8">
+                  <img src="assets/logo/qr-code.png" alt="" 
+                  role="presentation"
+                  class="w-8 h-8">
                 </button>
                 <button (click)="generateAndPrintBarcode(doc)" class="text-blue-600 hover:text-blue-900 transition duration-300" title="Print barcode">
-                  <img src="assets/logo/barcode.png" class="w-8 h-8">
+                  <img src="assets/logo/barcode.png" alt="" 
+                  role="presentation"
+                  class="w-8 h-8">
                 </button>
               </td>
               
@@ -161,23 +165,52 @@
 </div>
 
 <!-- Confirmation Modal -->
+<!-- Confirmation Modal -->
 <div *ngIf="showUndoConfirmationModal" 
      class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-     (click)="closeUndoConfirmation()">
+     (click)="closeUndoConfirmation()"
+     (keydown.escape)="closeUndoConfirmation()"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="modal-title"
+     tabindex="-1">
+  
   <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-full max-w-md mx-auto transform transition-all duration-300 ease-out"
        [ngClass]="{'translate-y-0 opacity-100': showUndoConfirmationModal, '-translate-y-4 opacity-0': !showUndoConfirmationModal}"
-       (click)="$event.stopPropagation()">
-    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Are you sure?</h3>
-    <p class="text-gray-600 dark:text-gray-300 mb-8">Do you want to undo the completion of this document?</p>
+       (click)="$event.stopPropagation()"
+       (keydown.escape)="closeUndoConfirmation()"
+       tabindex="0">
+    
+    <h3 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+      Are you sure?
+    </h3>
+    
+    <p class="text-gray-600 dark:text-gray-300 mb-8" id="modal-description">
+      Do you want to undo the completion of this document?
+    </p>
+    
     <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
       <button 
         (click)="confirmUndo()"
+        (keydown.enter)="confirmUndo()"
+        (keydown.space)="confirmUndo()"
         class="w-full sm:w-auto px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-300 transform hover:scale-105"
-        aria-label="Confirm undo action">Confirm</button>
+        tabindex="0"
+        role="button"
+        aria-label="Confirm undo action">
+        Confirm
+      </button>
+      
       <button 
         (click)="closeUndoConfirmation()"
+        (keydown.enter)="closeUndoConfirmation()"
+        (keydown.space)="closeUndoConfirmation()"
         class="w-full sm:w-auto px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-colors duration-300 transform hover:scale-105 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-        aria-label="Cancel undo action">Cancel</button>
+        tabindex="0"
+        role="button"
+        aria-label="Cancel undo action">
+        Cancel
+      </button>
     </div>
   </div>
 </div>

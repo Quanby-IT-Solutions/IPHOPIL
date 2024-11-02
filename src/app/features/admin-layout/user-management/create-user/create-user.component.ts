@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SupabaseService } from '../../../../core/services/supabase.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @Component({
@@ -12,8 +11,6 @@ import { SupabaseService } from '../../../../core/services/supabase.service';
 })
 export class CreateUserComponent implements OnInit{
 
-  constructor( ) { 
-  }
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }

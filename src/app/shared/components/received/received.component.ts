@@ -6,11 +6,6 @@ import { QRCodeModule } from 'angularx-qrcode';
 import JsBarcode from 'jsbarcode';
 import { UserService } from '../../../core/services/user.service'; // Import UserService
 
-interface LogEntry {
-  from: string;
-  to: string;
-  dateReleased: string;
-}
 
 interface ReleaseDocumentInfo {
   code: string;
@@ -105,7 +100,7 @@ export class ReceivedComponent implements OnInit {
     }
   }
 
-  markAsCompleted(documentId: string, message: string): void {
+  markAsCompleted(documentId: string): void {
     // Placeholder logic for marking document as completed
     console.log('Marking document as completed. Document ID:', documentId);
   }

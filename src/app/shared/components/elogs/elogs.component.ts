@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -25,21 +25,21 @@ interface LogEntry {
   templateUrl: './elogs.component.html',
   styleUrls: ['./elogs.component.css'],
 })
-export class ElogsComponent implements OnInit {
+export class ElogsComponent  {
   logs: LogEntry[] = [];
   filteredLogs: LogEntry[] = [];
   paginatedLogs: LogEntry[] = [];
-  searchQuery: string = '';
-  selectedActions: Set<'Created' | 'Released' | 'Received' | 'Completed'> = new Set();
-  currentPage: number = 1;
-  itemsPerPage: number = 10;
-  isLoading: boolean = false;
+  searchQuery = '';
+  selectedActions = new Set<'Created' | 'Released' | 'Received' | 'Completed'>();
+  currentPage = 1;
+  itemsPerPage = 10;
+  isLoading = false;
 
   constructor(private router: Router) {
     this.loadLogs();
   }
 
-  ngOnInit(): void {}
+  
 
   loadLogs(): void {
     this.logs = [

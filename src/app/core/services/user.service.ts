@@ -272,8 +272,6 @@ export class UserService {
     },
   ];
 
-  constructor() { }
-
   // Updated method to return incoming_documents
   getIncomingDocuments(): Document[] {
     return this.incoming_documents;

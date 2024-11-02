@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../../shared/components/header/header.component';
 import { SupabaseService } from '../../../core/services/supabase.service'; 
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
   standalone: true,
-  imports: [HeaderComponent, CommonModule]
+  imports: [HeaderComponent, CommonModule,ReactiveFormsModule]
 })
 export class ProfileComponent implements OnInit {
   user: {

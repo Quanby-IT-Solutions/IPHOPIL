@@ -6,8 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { QRCodeModule } from 'angularx-qrcode';
 import { Subject, debounceTime } from 'rxjs';
 import { SupabaseService } from '../../../core/services/supabase.service';
-import { LottieComponent, AnimationOptions } from 'ngx-lottie';
-import { AnimationItem } from 'lottie-web';
+import { LottieComponent } from 'ngx-lottie';
 
 
 
@@ -41,15 +40,15 @@ export class ReleaseDocumentComponent implements AfterViewInit {
   ) {
     this.inputChangeSubject.pipe(debounceTime(300)).subscribe(() => this.updateCode());
   }
+  updateCode(): void {
+    throw new Error('Method not implemented.');
+  }
 
   ngAfterViewInit() {
     this.documentCodeInput.nativeElement.focus();
     this.documentCodeInput.nativeElement.select();
   }
 
-  updateCode() {
-    this.generateQRCode();
-  }
   
   activateScanner() {
     console.log('Activating QR code scanner');
@@ -85,9 +84,6 @@ export class ReleaseDocumentComponent implements AfterViewInit {
     } else {
       console.error('No document code entered');
     }
-  }
-
-  generateQRCode() {
   }
 
   onDocumentCodeChange(value: string) {

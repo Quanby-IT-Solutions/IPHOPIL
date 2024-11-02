@@ -5,10 +5,8 @@ import { Router, RouterLink } from '@angular/router';
 import { QRCodeModule } from 'angularx-qrcode';
 import { Subject, debounceTime } from 'rxjs';
 import { SupabaseService } from '../../../core/services/supabase.service';
-import { LottieComponent, AnimationOptions } from 'ngx-lottie';
-import { AnimationItem } from 'lottie-web';
+import { LottieComponent } from 'ngx-lottie';
 import { AfterViewInit } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 
 
 @Component({
@@ -25,17 +23,6 @@ export class ReceiveDocumentComponent implements OnInit, AfterViewInit {
     margin: '0 auto',
   };
 
-  ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.documentCodeInput.nativeElement.focus();
-      import('lottie-web').then((lottie) => {
-      });
-    }
-  }
-
   
   documentCode = signal('');
   private inputChangeSubject = new Subject<string>();
@@ -50,10 +37,14 @@ export class ReceiveDocumentComponent implements OnInit, AfterViewInit {
   ) {
     this.inputChangeSubject.pipe(debounceTime(300)).subscribe(() => this.updateCode());
   }
-
-  updateCode() {
-    this.generateQRCode();
-
+  updateCode(): void {
+    throw new Error('Method not implemented.');
+  }
+  ngAfterViewInit(): void {
+    throw new Error('Method not implemented.');
+  }
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
   }
 
   activateScanner() {
@@ -86,9 +77,6 @@ export class ReceiveDocumentComponent implements OnInit, AfterViewInit {
     } else {
       console.error('No document code entered');
     }
-  }
-
-  generateQRCode() {
   }
 
   onDocumentCodeChange(value: string) {

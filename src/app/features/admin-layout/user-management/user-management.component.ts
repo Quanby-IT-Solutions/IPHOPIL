@@ -81,7 +81,7 @@ export class UserManagementComponent implements OnInit {
     this.updateDisplayedUsers();
   }
 
-  createUser(param: string): void {
+  createUser(): void {
     this.router.navigate(['/admin/create-user']);
   }
 

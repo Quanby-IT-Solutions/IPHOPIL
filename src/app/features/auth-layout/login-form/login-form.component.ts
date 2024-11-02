@@ -21,7 +21,7 @@ export class LoginFormComponent {
   async signIn() {
     console.log('Attempting sign-in');
     try {
-      const { data, error } = await this.supabaseService.signIn(this.email, this.password);
+      const { error } = await this.supabaseService.signIn(this.email, this.password);
       if (error) {
         alert('Invalid credentials');
         console.error('Sign-in error:', error);

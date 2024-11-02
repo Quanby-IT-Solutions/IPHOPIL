@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, QueryList, ViewChildren, signal, computed } from '@angular/core';
+import { Component, OnInit, ElementRef, QueryList, ViewChildren, signal, computed } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -34,7 +34,7 @@ export class CompletedComponent implements OnInit {
   currentPage = signal(1);
   itemsPerPage = signal(5);
 
-  showUndoConfirmationModal: boolean = false;
+  showUndoConfirmationModal = false;
 
   totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
 

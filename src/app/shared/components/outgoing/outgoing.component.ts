@@ -200,10 +200,6 @@ export class OutgoingComponent implements OnInit {
     }
   }
 
-  cancelRelease(documentCode: string): void {
-
-  }
-
   generateAndPrintBarcode(doc: Document): void {
     console.log("Generate and Print Barcode:", doc);
     const barcodeContainer = this.barcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.code);
