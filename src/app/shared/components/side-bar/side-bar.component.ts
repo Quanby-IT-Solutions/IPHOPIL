@@ -209,9 +209,9 @@ export class SideBarComponent implements OnInit {
 
   navigateToProfile() {
     if (this.userRole === 'admin') {
-      this.router.navigate(['/admin/a-profile']);
+      this.router.navigate(['/admin/profile']);
     } else {
-      this.router.navigate(['/user/u-profile']);
+      this.router.navigate(['/user/profile']);
     }
   }
   async getCurrentUser() {
