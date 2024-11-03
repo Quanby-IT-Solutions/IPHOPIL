@@ -36,13 +36,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  @HostListener('document:click', ['$event'])
-  handleClickOutside(event: Event): void {
-    if (this.isDropdownOpen && !this.elementRef.nativeElement.contains(event.target)) {
-      this.isDropdownOpen = false;
-      this.showNotif = false;
-    }
-  }
+  // @HostListener('document:click', ['$event'])
+  // handleClickOutside(event: Event): void {
+  //   if (this.isDropdownOpen && !this.elementRef.nativeElement.contains(event.target)) {
+  //     this.isDropdownOpen = false;
+  //     this.showNotif = false;
+  //   }
+  // }
 
   goToProfile(): void {
     this.navigateToProfile();
