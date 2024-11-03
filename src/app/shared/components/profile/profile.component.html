@@ -1,19 +1,21 @@
 <section class="min-h-screen mt-3 px-5 rounded-lg ml-5 mb-3 text-gray-700">
   <div class="w-full h-screen flex flex-row gap-5">
 
-    <div class="w-1/2 h-full flex flex-col bg-white rounded-lg shadow-lg p-5">
-      <button class="">
+    <div class="w-1/2 h-full flex flex-col bg-white rounded-lg shadow-lg p-5 ">
+      <button (click)="goBack()">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M328 112L184 256l144 144"/></svg>
       </button>
 
       
       <div class="flex flex-col items-center justify-center mt-5 gap-5">
         <!--PROFILE PIC-->
-        <img class="h-auto w-1/2 rounded-md border border-gray-300" src="assets/logo/mango.gif" alt="profile picture"> 
+        <div class="h-auto w-1/2 border-[#3CA48E] border-2 p-2 rounded-md">
+          <img class="h-full w-full rounded-md " src="{{user.profile_image}}" alt="profile picture"> 
+        </div>
 
         <div class="gap-y-2 flex flex-col items-center justify-center">
           <!--NAME-->
-          <span class="text-3xl font-bold ">John Felix Joaquin</span>
+          <span class="text-3xl font-bold ">{{user.userName}}</span>
           <!--TITLE / POSITION / ROLE (REMOVE IF NOT NEEDED)-->
           <span class="text-base italic">Intellectual Property Lawyer</span>
           
@@ -25,18 +27,18 @@
         <div class="flex flex-row items-center gap-x-5">
           <!--EMAIL-->
           <div class="flex flex-row gap-2 items-center">
-            <svg xmlns="http://www.3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20"><path fill="currentColor" d="M19 14.5v-9c0-.83-.67-1.5-1.5-1.5H3.49c-.83 0-1.5.67-1.5 1.5v9c0 .83.67 1.5 1.5 1.5H17.5c.83 0 1.5-.67 1.5-1.5m-1.31-9.11c.33.33.15.67-.03.84L13.6 9.95l3.9 4.06c.12.14.2.36.06.51c-.13.16-.43.15-.56.05l-4.37-3.73l-2.14 1.95l-2.13-1.95l-4.37 3.73c-.13.1-.43.11-.56-.05c-.14-.15-.06-.37.06-.51l3.9-4.06l-4.06-3.72c-.18-.17-.36-.51-.03-.84s.67-.17.95.07l6.24 5.04l6.25-5.04c.28-.24.62-.4.95-.07"/></svg>
-            <span class="text-base">johnjoaquin(at)ipophil.gov.ph</span>
+            <svg xmlns="http://www.3.org/2000/svg" class="h-5 w-5 text-[#3CA48E]" viewBox="0 0 20 20"><path fill="currentColor" d="M19 14.5v-9c0-.83-.67-1.5-1.5-1.5H3.49c-.83 0-1.5.67-1.5 1.5v9c0 .83.67 1.5 1.5 1.5H17.5c.83 0 1.5-.67 1.5-1.5m-1.31-9.11c.33.33.15.67-.03.84L13.6 9.95l3.9 4.06c.12.14.2.36.06.51c-.13.16-.43.15-.56.05l-4.37-3.73l-2.14 1.95l-2.13-1.95l-4.37 3.73c-.13.1-.43.11-.56-.05c-.14-.15-.06-.37.06-.51l3.9-4.06l-4.06-3.72c-.18-.17-.36-.51-.03-.84s.67-.17.95.07l6.24 5.04l6.25-5.04c.28-.24.62-.4.95-.07"/></svg>
+            <span class="text-base">{{user.userEmail}}</span>
           </div>
           <!--PHONE NUMBER-->
           <div class="flex flex-row gap-2 items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="m3.855 7.286l1.067-.534a1 1 0 0 0 .542-1.046l-.44-2.858A1 1 0 0 0 4.036 2H3a1 1 0 0 0-1 1v2c0 .709.082 1.4.238 2.062a9.01 9.01 0 0 0 6.7 6.7A9 9 0 0 0 11 14h2a1 1 0 0 0 1-1v-1.036a1 1 0 0 0-.848-.988l-2.858-.44a1 1 0 0 0-1.046.542l-.534 1.067a7.52 7.52 0 0 1-4.86-4.859" clip-rule="evenodd"/></svg>            
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#3CA48E]" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="m3.855 7.286l1.067-.534a1 1 0 0 0 .542-1.046l-.44-2.858A1 1 0 0 0 4.036 2H3a1 1 0 0 0-1 1v2c0 .709.082 1.4.238 2.062a9.01 9.01 0 0 0 6.7 6.7A9 9 0 0 0 11 14h2a1 1 0 0 0 1-1v-1.036a1 1 0 0 0-.848-.988l-2.858-.44a1 1 0 0 0-1.046.542l-.534 1.067a7.52 7.52 0 0 1-4.86-4.859" clip-rule="evenodd"/></svg>            
             <span class="text-base">+63 9 321312311</span>
           </div>
         </div>
         <!--ADDRESS-->
         <div class="flex flex-row gap-2 items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20"><path fill="currentColor" d="m19.799 5.165l-2.375-1.83a2 2 0 0 0-.521-.237A2 2 0 0 0 16.336 3H9.5l.801 5h6.035c.164 0 .369-.037.566-.098s.387-.145.521-.236l2.375-1.832c.135-.091.202-.212.202-.334s-.067-.243-.201-.335M8.5 1h-1a.5.5 0 0 0-.5.5V5H3.664c-.166 0-.37.037-.567.099c-.198.06-.387.143-.521.236L.201 7.165C.066 7.256 0 7.378 0 7.5c0 .121.066.242.201.335l2.375 1.832c.134.091.323.175.521.235c.197.061.401.098.567.098H7v8.5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-17a.5.5 0 0 0-.5-.5"/></svg>            
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#3CA48E]" viewBox="0 0 20 20"><path fill="currentColor" d="m19.799 5.165l-2.375-1.83a2 2 0 0 0-.521-.237A2 2 0 0 0 16.336 3H9.5l.801 5h6.035c.164 0 .369-.037.566-.098s.387-.145.521-.236l2.375-1.832c.135-.091.202-.212.202-.334s-.067-.243-.201-.335M8.5 1h-1a.5.5 0 0 0-.5.5V5H3.664c-.166 0-.37.037-.567.099c-.198.06-.387.143-.521.236L.201 7.165C.066 7.256 0 7.378 0 7.5c0 .121.066.242.201.335l2.375 1.832c.134.091.323.175.521.235c.197.061.401.098.567.098H7v8.5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-17a.5.5 0 0 0-.5-.5"/></svg>            
           <span class="text-base">Mataang, Daraga, Albay</span>
         </div>
       </div>

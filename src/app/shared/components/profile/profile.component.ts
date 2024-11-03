@@ -3,6 +3,7 @@ import { HeaderComponent } from '../../../shared/components/header/header.compon
 import { SupabaseService } from '../../../core/services/supabase.service'; 
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -25,7 +26,11 @@ export class ProfileComponent implements OnInit {
   isPassModalOpen = false;
   isProfileModalOpen = false;
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private supabaseService: SupabaseService, private location: Location) {}
+
+  goBack(): void{
+    this.location.back();
+  }
 
   openPassModal(): void {
     this.isPassModalOpen = true;

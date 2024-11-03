@@ -1,4 +1,4 @@
-<div class="fixed top-0 left-0 z-50 items-center h-screen px-3 overflow-y-auto transition-all duration-300 bg-[#162239] scroll-none"
+<div class="fixed top-0 left-0 z-50 items-center h-screen px-3 overflow-y-auto transition-all duration-300 bg-[#3CA48E] scroll-none"
 
      [ngClass]="isCollapsed ? 'w-24' : 'w-64'">
   <div class="flex flex-col items-start justify-between w-full h-full px-2 py-4">
@@ -7,7 +7,7 @@
     <div class="flex items-center mb-5  border-b-2">
       <img src="assets/logo/cube.png" alt="Logo" class="w-12 h-12 mr-3 mb-2" />
       <div [ngClass]="isCollapsed ? 'hidden' : 'block'">
-        <h1 class="font-semibold text-sm text-white">Intellectual Property Office of the Philippines</h1>
+        <h1 class="font-semibold text-base text-white">IPO Philippines</h1>
         <p class="text-sm text-white mb-2">{{ title }}</p>
       </div>
     </div>
@@ -102,9 +102,9 @@
     </div>
 
     <!-- Others Menu Section -->
-    <div class="w-full mt-auto text-white justify-center border-t-2">
+    <div class="w-full mt-auto text-white justify-center">
       <div class="flex flex-col gap-3">
-        <div class="flex items-center w-full justify-center hover:bg-[--color-accent-light] rounded-md mt-2">
+        <!-- <div class="flex items-center w-full justify-center hover:bg-[--color-accent-light] rounded-md mt-2">
           <button (click)="navigateToProfile()"
             class="flex items-center w-full h-12 hover:text-white"
             [ngClass]="{
@@ -125,9 +125,9 @@
               </div>
             </div>
           </button>
-        </div>
+        </div> -->
 
-        <div class="flex flex-row items-center justify-center w-full">
+        <div class="flex flex-row items-center justify-start w-full">
           <div *ngFor="let item of othersMenu">
             <!-- Using button for non-route items (like Sign Out) -->
             <button *ngIf="item.label === 'Sign Out'"
@@ -135,7 +135,7 @@
                     (keyup.enter)="signOut()"
                     (keyup.space)="signOut()"
                     [ngClass]="getMenuItemClasses()"
-                    class="relative flex items-center h-12 w-full hover:bg-[--color-error] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[--color-error]"
+                    class="relative flex flex-1 items-center h-12 w-full hover:bg-[--color-error] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[--color-error]"
                     role="menuitem"
                     tabindex="0"
                     [attr.aria-label]="item.label">

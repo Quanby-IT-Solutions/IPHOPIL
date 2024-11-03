@@ -1,14 +1,38 @@
-<header class="flex flex-col w-full px-5 py-6 placeholder-sky-600 z-10">
+<header class="flex flex-col w-full px-10 ml-1 py-6 placeholder-sky-600 z-10">
   <div class="flex rounded-lg flex-wrap gap-10 justify-between items-center w-full  px-6 h-16 bg-white shadow-lg">
     <!-- Put Username Here -->
     <div class="flex flex-row mb-2 gap-x-5 items-center ">
-      <!-- <img class="h-14 w-14 " src="assets/logo/mango.gif" alt=""> -->
       <div class="flex flex-col text-gray-900">
         <span class="text-sm font-extralight ">User | Admin / Page</span>
         <span class="text-3xl font-medium">Page</span>
       </div>
     </div>
     
-    <span class="text-2xl font-bold text-gray-800">{{ currentTime }}</span> 
+    <button (click)="toggleDropdown()" class="hover:scale-110 transition-transform transform">
+      <img class="object-cover w-12 h-12 transition-all duration-300 border-2 rounded-full cursor-pointer" [src]="profileImageUrl" alt="User Profile"/>
+    </button>
+  
+       
   </div>
 </header>
+
+<div *ngIf="isDropdownOpen" class="dropdown-menu absolute top-20 right-14 mt-2 w-56 bg-white border rounded-lg shadow-lg z-20">
+  <ul class="p-2 font-semibold text-base">
+    <li class="flex flex-row items-center px-4 py-2 gap-3 rounded-md hover:bg-[--color-accent-light] hover:text-white cursor-pointer" (click)="goToProfile()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><path stroke-linejoin="round" d="M4 18a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><circle cx="12" cy="7" r="3"/></g></svg>
+      {{userName}}
+    </li>
+    <li class="flex flex-row items-center px-4 py-2 gap-3 rounded-md hover:bg-[--color-accent-light] hover:text-white cursor-pointer" (click)="viewNotif()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 19v-9a6 6 0 0 1 6-6v0a6 6 0 0 1 6 6v9M6 19h12M6 19H4m14 0h2m-9 3h2"/><circle cx="12" cy="3" r="1"/></g></svg>
+      Notifications
+    </li>
+    <li class="flex flex-row items-center px-4 py-2 gap-3 rounded-md hover:bg-[--color-accent-light] hover:text-white cursor-pointer" (click)="goToSettings()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M18 4a1 1 0 1 0-2 0v1H4a1 1 0 0 0 0 2h12v1a1 1 0 1 0 2 0V7h2a1 1 0 1 0 0-2h-2zM4 11a1 1 0 1 0 0 2h2v1a1 1 0 1 0 2 0v-1h12a1 1 0 1 0 0-2H8v-1a1 1 0 0 0-2 0v1zm-1 7a1 1 0 0 1 1-1h12v-1a1 1 0 1 1 2 0v1h2a1 1 0 1 1 0 2h-2v1a1 1 0 1 1-2 0v-1H4a1 1 0 0 1-1-1"/></g></svg>      
+      Settings
+    </li>
+    <li class="flex flex-row items-center px-4 py-2 gap-3 rounded-md hover:bg-[--color-accent-light] hover:text-white cursor-pointer" (click)="reportProblem()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="currentColor" d="M11 21v-2h8v-7.1q0-2.925-2.037-4.962T12 4.9T7.038 6.938T5 11.9V18H4q-.825 0-1.412-.587T2 16v-2q0-.525.263-.987T3 12.275l.075-1.325q.2-1.7.988-3.15t1.975-2.525T8.762 3.6T12 3t3.225.6t2.725 1.663t1.975 2.512t1 3.15l.075 1.3q.475.225.738.675t.262.95v2.3q0 .5-.262.95t-.738.675V19q0 .825-.587 1.413T19 21zm-2-7q-.425 0-.712-.288T8 13t.288-.712T9 12t.713.288T10 13t-.288.713T9 14m6 0q-.425 0-.712-.288T14 13t.288-.712T15 12t.713.288T16 13t-.288.713T15 14m-8.975-1.55Q5.85 9.8 7.625 7.9T12.05 6q2.225 0 3.913 1.412T18 11.026Q15.725 11 13.813 9.8t-2.938-3.25q-.4 2-1.687 3.563T6.025 12.45"/></svg>
+      Report a Problem
+    </li>
+  </ul>
+</div> 

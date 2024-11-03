@@ -1,12 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { SupabaseService } from '../../../core/services/supabase.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  standalone: true
+  standalone: true,
+  imports: [CommonModule]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   userName: string | null = '';
@@ -15,7 +17,38 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentTime = ''; 
   private intervalId: ReturnType<typeof setInterval> | null = null;
 
-  constructor(private router: Router, private supabaseService: SupabaseService) {}
+  isDropdownOpen = false;
+
+  constructor(private router: Router, private supabaseService: SupabaseService, private elementRef: ElementRef) {}
+
+  toggleDropdown(): void{
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event): void {
+    if (this.isDropdownOpen && !this.elementRef.nativeElement.contains(event.target)) {
+      this.isDropdownOpen = false;
+    }
+  }
+
+  goToProfile(): void {
+    this.navigateToProfile();
+  }
+
+  viewNotif(): void {
+    // Logic for notifications
+  }
+
+  goToSettings(): void {
+    // Navigation to settings
+  }
+
+  reportProblem(): void {
+    // Report problem logic
+  }
+
+  
 
   async ngOnInit() {
     try {
