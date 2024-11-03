@@ -9,7 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
   standalone: true,
-  imports: [HeaderComponent, CommonModule,ReactiveFormsModule]
+  imports: [HeaderComponent, CommonModule, ReactiveFormsModule]
 })
 export class ProfileComponent implements OnInit {
   user: {
@@ -18,59 +18,60 @@ export class ProfileComponent implements OnInit {
     userEmail: string | null;
   } = {
     userName: null,
-    profile_image: 'assets/profile/default-profile.jpg',// Default profile image
-    userEmail: null,// Initialize role
+    profile_image: 'assets/profile/default-profile.jpg',
+    userEmail: null,
   };
 
   isPassModalOpen = false;
   isProfileModalOpen = false;
 
-  openPassModal() {
+  constructor(private supabaseService: SupabaseService) {}
+
+  openPassModal(): void {
     this.isPassModalOpen = true;
   }
 
-  closePassModal() {
+  closePassModal(): void {
     this.isPassModalOpen = false;
   }
 
-  openProfileModal(){
+  openProfileModal(): void {
     this.isProfileModalOpen = true;
   }
 
-  closeProfileModal(){
+  closeProfileModal(): void {
     this.isProfileModalOpen = false; 
   }
 
-  constructor(private supabaseService: SupabaseService) {}
-
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     try {
-      // Fetch the current user from Supabase
       const user = await this.supabaseService.getCurrentUser();
       if (user) {
-        this.user.userName = user.name || 'Unnamed User'; // Display 'Unnamed User' if name is not set
-        this.user.profile_image = user.profile_image || 'assets/profile/default-profile.jpg'; // Use default if profile image is not set
-        this.user.userEmail = user.email || ''; // Use empty string if email is not set
+        this.user.userName = user.name || 'Unnamed User';
+        this.user.profile_image = user.profile_image || 'assets/profile/default-profile.jpg';
+        this.user.userEmail = user.email || '';
       }
-    } catch (err) {
-      console.error('Error fetching user data:', err);
+    } catch (error) {
+      console.error('Error fetching user data:', error instanceof Error ? error.message : error);
     }
   }
 
-  onChangeProfilePhoto(event: any): void {
-    const file = event.target.files[0];
+  onChangeProfilePhoto(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    
     if (file) {
-      // Logic to upload the photo and update the profile photo URL
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.user.profile_image = e.target.result;
+      reader.onload = () => {
+        if (reader.result && typeof reader.result === 'string') {
+          this.user.profile_image = reader.result;
+        }
       };
       reader.readAsDataURL(file);
     }
   }
 
   onChangePassword(): void {
-    // Logic to change the user's password
     alert('Password change functionality will be implemented here.');
   }
 }

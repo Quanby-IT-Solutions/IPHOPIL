@@ -6,6 +6,34 @@ import { QRCodeModule } from 'angularx-qrcode';
 import JsBarcode from 'jsbarcode';
 import { UserService } from '../../../core/services/user.service'; // Import UserService
 
+interface Document {
+  document_id: string;
+  code: string;
+  subject_title: string;
+  category_name: string;
+  type_name: string;
+  message: string;
+  account_name: string;
+  received_date_received: string;
+  office_name: string;
+}
+
+// If you need to extend Document for received documents
+interface ReceivedDocument extends Document {
+  document_code: string;
+  office_id?: string;
+  status?: string;
+}
+
+// Create a mapper to convert Document to ReceivedDocument
+function mapToReceivedDocument(doc: Document): ReceivedDocument {
+  return {
+    ...doc,
+    document_code: doc.code, // Map the code to document_code
+  };
+}
+
+
 
 interface ReleaseDocumentInfo {
   code: string;
@@ -25,7 +53,7 @@ export class ReceivedComponent implements OnInit {
   @ViewChildren('qrcodeContainer') qrcodeContainers!: QueryList<ElementRef>;
   @ViewChildren('barcodeContainer') barcodeContainers!: QueryList<ElementRef>;
 
-  documents = signal<any[]>([]); // Changed ReceivedDocument[] to any[]
+  documents = signal<ReceivedDocument[]>([]);
   searchQuery = signal('');
   currentPage = signal(1);
   itemsPerPage = signal(5);
@@ -38,11 +66,18 @@ export class ReceivedComponent implements OnInit {
   selectedType = signal('All Types');
   selectedOffice = signal('All Offices');
   selectedCategory = signal('All Categories');
-
+  
+  
   filteredDocuments = computed(() => {
     const query = this.searchQuery().toLowerCase();
-    return this.documents().filter((doc: any) =>
-      Object.values(doc).some((val: any) => val.toString().toLowerCase().includes(query)) &&
+    return this.documents().filter((doc) =>
+      (doc.code?.toLowerCase().includes(query) ||
+       doc.subject_title?.toLowerCase().includes(query) ||
+       doc.category_name?.toLowerCase().includes(query) ||
+       doc.type_name?.toLowerCase().includes(query) ||
+       doc.message?.toLowerCase().includes(query) ||
+       doc.account_name?.toLowerCase().includes(query) ||
+       doc.received_date_received?.toLowerCase().includes(query)) &&
       (this.selectedType() === 'All Types' || doc.type_name === this.selectedType()) &&
       (this.selectedOffice() === 'All Offices' || doc.office_name === this.selectedOffice()) &&
       (this.selectedCategory() === 'All Categories' || doc.category_name === this.selectedCategory())
@@ -57,10 +92,13 @@ export class ReceivedComponent implements OnInit {
   releaseDocumentInfo = signal<ReleaseDocumentInfo>({ code: '', receivingOffice: '', message: '' });
   totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
   
-  constructor(private router: Router, private userService: UserService) {} // Inject UserService
+  constructor(private router: Router, private userService: UserService) {}
 
   async ngOnInit(): Promise<void> {
-    this.documents.set(await this.userService.getReceivedDocuments()); // Fetch received documents
+    // Map the documents to ReceivedDocument type
+    const docs = await this.userService.getReceivedDocuments();
+    const receivedDocs = docs.map(mapToReceivedDocument);
+    this.documents.set(receivedDocs);
   }
 
   // Removed loadDocuments and loadFilterOptions methods
@@ -146,7 +184,7 @@ export class ReceivedComponent implements OnInit {
     console.log('Scanning QR Code');
   }
 
-  printQRCode(doc: any): void { // Changed ReceivedDocument to any
+  printQRCode(doc: ReceivedDocument): void {
     const qrCodeContainer = this.qrcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.document_code);
     if (qrCodeContainer) {
       const qrCodeCanvas = qrCodeContainer.nativeElement.querySelector('canvas');
@@ -188,7 +226,7 @@ export class ReceivedComponent implements OnInit {
     }
   }
 
-  generateAndPrintBarcode(doc: any): void { // Changed ReceivedDocument to any
+  generateAndPrintBarcode(doc: ReceivedDocument): void {
     console.log("Generate and Print Barcode:", doc);
     const barcodeContainer = this.barcodeContainers.find(container => container.nativeElement.getAttribute('data-doc-code') === doc.document_code);
     if (barcodeContainer) {

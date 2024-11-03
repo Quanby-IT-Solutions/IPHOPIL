@@ -8,6 +8,32 @@ import { switchMap } from 'rxjs';
 import JsBarcode from 'jsbarcode';
 import { QRCodeModule } from 'angularx-qrcode';
 import { Document, Category, Type, NewDocument, ReleaseDocumentInfo, User, LogEntry } from '../../types';
+import { SupabaseClient } from '@supabase/supabase-js';
+
+export interface Office {
+  office_id: number;  // Changed to number to match Supabase
+  office_name: string;
+}
+
+export interface AccountData {
+  account_id: number;  // Assuming this is also a number in Supabase
+  name: string;
+}
+
+interface DocumentData {
+  document_id: number;
+  code: string;
+  subject_title: string;
+  category_id: number;
+  type_id: number;
+  created_by: number;
+  created_at: string;
+  office_id?: number;
+  office_name?: string;
+}
+
+
+
 
 @Component({
   selector: 'app-documents',
@@ -44,20 +70,26 @@ export class DocumentsComponent implements OnInit {
   currentPage = signal(1);
   itemsPerPage = signal(5);
 
-  offices: any[] = [];
-
-  docs: any[] = [];
+  offices: Office[] = [];
+  docs: Document[] = [];
   categories: Category[] = [];
   types: Type[] = [];
 
   openDropdown = signal<string | null>(null);
   newDocument = signal<NewDocument>({ subject: '', category: '', type: '', attachments: [] });
-  releaseDocumentInfo = signal<ReleaseDocumentInfo>({ code: '', receivingOffice: '', message: '', document_id: '' });
+  releaseDocumentInfo = signal<ReleaseDocumentInfo>({ 
+    code: '', 
+    receivingOffice: '', 
+    message: '', 
+    document_id: '' 
+  });
 
   totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
-  supabase: any;
+  supabase: SupabaseClient;
 
-  constructor(private router: Router, private supabaseService: SupabaseService) {}
+  constructor(private router: Router, private supabaseService: SupabaseService) {
+    this.supabase = this.supabaseService.supabase as SupabaseClient;
+  }
 
   ngOnInit(): void {
     this.loadDocuments();
@@ -90,13 +122,13 @@ export class DocumentsComponent implements OnInit {
     this.supabaseService.fetchTypesByCategory(categoryId); 
   }
 
-  fetchOffices(): void {
-    this.supabaseService.getAgencies().then(offices => {
-      this.offices = offices;
-    }).catch(error => {
-      console.error('Error fetching offices:', error);
-    });
-  }
+  // fetchOffices(): void {
+  //   this.supabaseService.getAgencies().then(offices => {
+  //     this.offices = offices;
+  //   }).catch(error => {
+  //     console.error('Error fetching offices:', error);
+  //   });
+  // }
 
   async onNewDocumentClick(): Promise<void> {
     const userId = await this.supabaseService.getCurrentUserId();
@@ -110,18 +142,19 @@ export class DocumentsComponent implements OnInit {
   loadDocuments(): void {
     this.supabaseService.fetchAllData().pipe(
       switchMap(({ categories, types, account, office }) => {
-        const categoryMap = new Map(categories.map((cat: any) => [cat.category_id, cat.name]));
-        const typeMap = new Map(types.map((type: any) => [type.type_id, type.name]));
-        const accountMap = new Map(account.map((acc: any) => [acc.account_id, acc.name]));
-        const officeMap = new Map(office.map((acc: any) => [acc.office_id, acc.office_name]));
+        // Create maps using number keys
+        const categoryMap = new Map(categories.map(cat => [Number(cat.category_id), cat.name]));
+        const typeMap = new Map(types.map(type => [Number(type.type_id), type.name]));
+        const accountMap = new Map(account.map(acc => [Number(acc.account_id), acc.name]));
+        const officeMap = new Map(office.map(off => [Number(off.office_id), off.office_name]));
   
         return this.supabaseService.documents$.pipe(
-          map((data: any[]) => {
+          map((data: DocumentData[]) => {
             const uniqueDocuments = Array.from(
               new Map(data.map(doc => [doc.code, doc])).values()
             );
-            return uniqueDocuments.map((doc: any): Document => ({
-              document_id: doc.document_id,
+            return uniqueDocuments.map((doc): Document => ({
+              document_id: doc.document_id.toString(),
               code: doc.code,
               subject: doc.subject_title,
               category: categoryMap.get(doc.category_id) || 'Unknown',
@@ -130,8 +163,8 @@ export class DocumentsComponent implements OnInit {
               dateCreated: doc.created_at,
               logbook: [],
               attachments: [],
-              originOffice: officeMap.get(doc.office_id) || 'Unknown',
-              office_name: doc.office_name
+              originOffice: doc.office_id ? officeMap.get(doc.office_id) || 'Unknown' : 'Unknown',
+              office_name: doc.office_name || 'Unknown'
             }));
           })
         );
@@ -141,6 +174,15 @@ export class DocumentsComponent implements OnInit {
         this.docs = documents;
         this.filteredDocuments.set(documents);
       }
+    });
+  }
+
+  // Update fetchOffices method
+  fetchOffices(): void {
+    this.supabaseService.getAgencies().then((offices: Office[]) => {
+      this.offices = offices;
+    }).catch(error => {
+      console.error('Error fetching offices:', error);
     });
   }
 
@@ -233,25 +275,60 @@ export class DocumentsComponent implements OnInit {
     }
   }
 
+  // async getCurrentUser(): Promise<User | null> {
+  //   if (!this.supabase) {
+  //     console.error('Supabase client not initialized.');
+  //     return null;
+  //   }
+  
+  //   // Check session
+  //   const session = this.supabase.auth.session();
+  //   if (!session) {
+  //     console.error('No active session found.');
+  //     return null;
+  //   }
+  
+  //   try {
+  //     const { data, error } = await this.supabase.auth.getUser();
+  //     console.log('Supabase getUser response:', data, error);
+      
+  //     if (error) {
+  //       console.error('Error fetching user:', error.message);
+  //       return null;
+  //     }
+  
+  //     return data?.user ? { user: { id: data.user.id } } : null;
+  //   } catch (err) {
+  //     if (err instanceof Error) {
+  //       console.error('Unexpected error occurred while fetching user:', err.message);
+  //     } else {
+  //       console.error('Unexpected error occurred while fetching user:', err);
+  //     }
+  //     return null;
+  //   }
+  // }
+  
+  
+  // Update getCurrentUser method to use getSession instead of session()
   async getCurrentUser(): Promise<User | null> {
     if (!this.supabase) {
       console.error('Supabase client not initialized.');
       return null;
     }
   
-    // Check session
-    const session = this.supabase.auth.session();
-    if (!session) {
-      console.error('No active session found.');
-      return null;
-    }
-  
     try {
-      const { data, error } = await this.supabase.auth.getUser();
-      console.log('Supabase getUser response:', data, error);
+      // Use getSession instead of session()
+      const { data: { session }, error } = await this.supabase.auth.getSession();
+      if (!session || error) {
+        console.error('No active session found or error:', error?.message);
+        return null;
+      }
+  
+      const { data, error: userError } = await this.supabase.auth.getUser();
+      console.log('Supabase getUser response:', data, userError);
       
-      if (error) {
-        console.error('Error fetching user:', error.message);
+      if (userError) {
+        console.error('Error fetching user:', userError.message);
         return null;
       }
   
@@ -266,11 +343,10 @@ export class DocumentsComponent implements OnInit {
     }
   }
   
-  
-get currentUser() {
-  return this.supabase.auth.getUser();
-}
-
+  // Update currentUser getter to use getUser
+  get currentUser() {
+    return this.supabase.auth.getUser();
+  }
 generateUniqueCode(): string {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let result = '';

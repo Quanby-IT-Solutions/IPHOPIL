@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   profileImageUrl = 'assets/profile/default-profile.jpg';
   userRole: string | null = '';
   currentTime = ''; 
-  private intervalId: any; 
+  private intervalId: ReturnType<typeof setInterval> | null = null;
 
   constructor(private router: Router, private supabaseService: SupabaseService) {}
 
@@ -26,28 +26,36 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.profileImageUrl = user.profile_image || 'assets/profile/default-profile.jpg';
         this.userRole = user.role || '';
       }
-    } catch (err) {
-      console.error('Error fetching user data:', err);
+    } catch (error) {
+      console.error('Error fetching user data:', error instanceof Error ? error.message : error);
     }
 
-    this.updateCurrentTime(); // Initialize the time display
-    this.intervalId = setInterval(() => this.updateCurrentTime(), 1000); // Update time every second
+    this.updateCurrentTime();
+    this.intervalId = setInterval(() => this.updateCurrentTime(), 1000);
   }
 
   ngOnDestroy() {
-    clearInterval(this.intervalId); // Clear interval when component is destroyed
+    if (this.intervalId !== null) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
   }
 
-  updateCurrentTime() {
+  updateCurrentTime(): void {
     const now = new Date();
-    this.currentTime = now.toLocaleTimeString(); // Format time as needed
+    this.currentTime = now.toLocaleTimeString('en-US', {
+      hour12: true,
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit'
+    });
   }
 
-  navigateToProfile() {
+  navigateToProfile(): void {
     if (this.userRole === 'admin') {
-      this.router.navigate(['/admin/a-profile']);
+      this.router.navigate(['/admin/profile']);
     } else {
-      this.router.navigate(['/user/u-profile']);
+      this.router.navigate(['/user/profile']);
     }
   }
 }

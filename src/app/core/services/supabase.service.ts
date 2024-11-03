@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { createClient, PostgrestError, SupabaseClient, User as SupabaseUser, AuthError } from '@supabase/supabase-js';
+import { createClient, PostgrestError, SupabaseClient, User as SupabaseUser } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
@@ -94,7 +94,7 @@ interface OfficeData {
   providedIn: 'root',
 })
 export class SupabaseService implements OnInit {
-  private supabase: SupabaseClient | null = null;
+  public supabase: SupabaseClient | null = null;
   currentUser: User | null = null;  // Add this line to store the current user details
 
   private documentsSubject = new BehaviorSubject<any[]>([]);
@@ -120,8 +120,9 @@ export class SupabaseService implements OnInit {
     }).catch(error => {
       console.error('Error during Supabase initialization:', error);
     });
-    this.checkSession(); //Added
+    this.checkSession();
   }
+
 
   fetchAllData(): Observable<{ categories: any[]; types: any[]; account: any[]; office: any[] }> {
     if (!this.supabase) {
@@ -266,6 +267,12 @@ export class SupabaseService implements OnInit {
     }
   }
 
+  public getSupabaseClient(): SupabaseClient {
+    if (!this.supabase) {
+      throw new Error('Supabase client is not initialized');
+    }
+    return this.supabase;
+  }
   private async ensureSupabaseInitialized(): Promise<void> {
     if (this.supabaseInitPromise) {
       // Wait for the initialization promise to complete
@@ -1078,7 +1085,7 @@ export class SupabaseService implements OnInit {
       throw new Error('Supabase client is not initialized.');
     }
 
-    const { data, error } = await this.supabase
+    const { error } = await this.supabase
       .from('outgoing_documents')
       .insert([
         {

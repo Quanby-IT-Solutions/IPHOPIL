@@ -32,7 +32,9 @@ export class OutgoingComponent implements OnInit {
   searchQuery = signal('');
   currentPage = signal(1);
   itemsPerPage = signal(20);
-  autoRefreshInterval: any;
+  
+  // Replace any with NodeJS.Timer
+  private autoRefreshInterval: NodeJS.Timer | null = null;
 
   totalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.itemsPerPage()));
 
@@ -79,6 +81,19 @@ export class OutgoingComponent implements OnInit {
       console.error('Error loading filter options:', error);
     }
   }
+
+  cancelRelease(code: string): void {
+    // Update documents list to remove the cancelled document
+    this.documents.update(docs => docs.filter(doc => doc.code !== code));
+    this.filterDocuments(); // Re-filter documents after cancellation
+    
+    // You might want to add additional logic here:
+    // - Call a service method to update the backend
+    // - Show a confirmation message
+    // - Handle any errors
+    console.log(`Cancelling release for document: ${code}`);
+  }
+
 
   filterDocuments(): void {
     const filtered = this.documents().filter((doc) => {
