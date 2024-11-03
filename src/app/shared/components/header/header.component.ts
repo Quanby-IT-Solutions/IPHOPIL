@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy, HostListener, ElementRef } from '@angular
 import { Router } from '@angular/router';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   userName: string | null = '';
@@ -18,8 +19,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private intervalId: ReturnType<typeof setInterval> | null = null;
 
   isDropdownOpen = false;
+  showNotif = false;
+  isReportModalOpen = false;
 
-  constructor(private router: Router, private supabaseService: SupabaseService, private elementRef: ElementRef) {}
+  reportForm: FormGroup;
+
+  constructor(private router: Router, private supabaseService: SupabaseService, private elementRef: ElementRef, private fb: FormBuilder) {
+    this.reportForm = this.fb.group({
+      feature: [''],
+      type: [''],
+      comment: ['']
+    });
+  }
 
   toggleDropdown(): void{
     this.isDropdownOpen = !this.isDropdownOpen;
@@ -29,6 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   handleClickOutside(event: Event): void {
     if (this.isDropdownOpen && !this.elementRef.nativeElement.contains(event.target)) {
       this.isDropdownOpen = false;
+      this.showNotif = false;
     }
   }
 
@@ -37,18 +49,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   viewNotif(): void {
-    // Logic for notifications
+    this.isDropdownOpen = false;
+    this.showNotif = true;
+  }
+
+  goToMainMenu() {
+    this.showNotif = false;
+    this.toggleDropdown();
   }
 
   goToSettings(): void {
-    // Navigation to settings
+    
   }
 
   reportProblem(): void {
-    // Report problem logic
+    this.isReportModalOpen = true;
   }
 
+  closeReportModal(): void {
+    this.isReportModalOpen = false;
+  }
   
+  submitReport(): void {
+    console.log('Report Submitted:', this.reportForm.value);
+    this.closeReportModal();
+  }
 
   async ngOnInit() {
     try {
