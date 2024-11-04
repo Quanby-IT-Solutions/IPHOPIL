@@ -63,7 +63,7 @@ export class SideBarComponent implements OnInit {
     {
       label: 'REPORTS',
       icon: 'ic:baseline-assessment',
-      route: '/admin/reports',
+      route: '/admin/e-logs',
     },
     {
       label: 'SYSTEM SETTINGS',
