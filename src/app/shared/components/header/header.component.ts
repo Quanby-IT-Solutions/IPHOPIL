@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { CommonModule } from '@angular/common';

@@ -39,31 +39,31 @@ export class SideBarComponent implements OnInit {
     {
       label: 'DOCUMENTS',
       icon: 'ic:sharp-description',
-      route: '/admin/a-documents',
+      route: '/admin/documents',
     },
     { label: 'INCOMING', 
       icon: 'ic:sharp-move-to-inbox', 
-      route: '/admin/a-incoming' 
+      route: '/admin/incoming' 
     },
     {
       label: 'RECEIVED',
       icon: 'ri:folder-received-fill',
-      route: '/admin/a-received',
+      route: '/admin/received',
     },
     {
       label: 'OUTGOING',
       icon: 'ic:sharp-shortcut',
-      route: '/admin/a-outgoing',
+      route: '/admin/outgoing',
     },
     {
       label: 'COMPLETED',
       icon: 'ic:sharp-check-circle',
-      route: '/admin/a-completed',
+      route: '/admin/completed',
     },
     {
       label: 'REPORTS',
       icon: 'ic:baseline-assessment',
-      route: '/admin/a-reports',
+      route: '/admin/reports',
     },
     {
       label: 'SYSTEM SETTINGS',
